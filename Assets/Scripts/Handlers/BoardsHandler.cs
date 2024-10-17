@@ -1,3 +1,4 @@
+using Game;
 using Pieces;
 using UnityEngine;
 using Utils;
@@ -43,6 +44,7 @@ namespace Handlers
             };
             
             DisplayMatrix();
+            WhoseTurnIsIt();
         }
 
         public void DisplayMatrix()
@@ -53,7 +55,7 @@ namespace Handlers
             {
                 for (int j = 0; j < Pieces.GetLength(1); j++)
                 {
-                    GameObject newPiece = null;
+                    GameObject newPiece;
                     
                     if (Pieces[i, j] != null)
                     {
@@ -78,6 +80,44 @@ namespace Handlers
             {
                 Destroy(child.gameObject);
             }
+        }
+
+        public void WhoseTurnIsIt()
+        {
+            Debug.Log(" Whose Turn is it witch?");
+            
+            foreach (GameObject piece in PiecesDisplay)
+            {
+                Debug.Log(" coucou ");
+                if (piece != CompareTag("Player"))
+                {
+                    if (GameManager.Instance.isWhiteTurn)
+                    {
+                        if (piece.GetComponent<PieceHandler>().Piece.isWhite == false)
+                        {
+                            piece.GetComponent<PieceHandler>().enabled = false;
+                        }
+                        else
+                        {
+                            piece.GetComponent<PieceHandler>().enabled = true;
+                        }
+                    }
+                    else
+                    {
+                        if (piece.GetComponent<PieceHandler>().Piece.isWhite)
+                        {
+                            piece.GetComponent<PieceHandler>().enabled = false;
+                        }
+                        else
+                        {
+                            piece.GetComponent<PieceHandler>().enabled = true;
+                        }
+                    }
+                }
+            }
+            
+            Debug.Log(" hola ");
+            GameManager.Instance.isWhiteTurn = !GameManager.Instance.isWhiteTurn;
         }
     }
 }
