@@ -32,6 +32,8 @@ namespace Handlers
 
         private void Start()
         {
+            Time.timeScale = 1;
+            
             Pieces = new Piece[,]
             {
                 { blackRook, blackKnight, blackBishop, blackQueen, blackKing, blackBishop, blackKnight, blackRook },
@@ -126,11 +128,13 @@ namespace Handlers
 
             if (GameManager.Instance.isBlackKing == false)
             {
+                Time.timeScale = 0;
                 GameManager.Instance.endGamePanel.SetActive(true);
                 GameManager.Instance.endGameText.text = " Victory White Player ! ";
             }
             if (GameManager.Instance.isWhiteKing == false)
             {
+                Time.timeScale = 0;
                 GameManager.Instance.endGamePanel.SetActive(true);
                 GameManager.Instance.endGameText.text = " Victory Black Player ! ";
             }
