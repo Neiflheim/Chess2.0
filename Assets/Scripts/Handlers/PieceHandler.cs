@@ -56,6 +56,10 @@ namespace Handlers
             
             if (_isMovement)
             {
+                // Audio
+                GameManager.Instance.audioManager.GetComponent<AudioSource>().Play();
+                
+                // Movement
                 Vector2Int lastPosition = GameManager.Instance.lastClickGameObject._position;
                 BoardsHandler.Instance.Pieces[lastPosition.x, lastPosition.y] = null;
                 BoardsHandler.Instance.Pieces[_position.x, _position.y] = GameManager.Instance.lastClickGameObject.Piece;

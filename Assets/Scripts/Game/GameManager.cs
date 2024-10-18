@@ -14,6 +14,9 @@ namespace Game
         [Header("End Game")]
         public GameObject endGamePanel;
         public Text endGameText;
+
+        [Header("Sound")]
+        public GameObject audioManager;
         
         [Header("Data")]
         public bool isWhiteTurn = true;
