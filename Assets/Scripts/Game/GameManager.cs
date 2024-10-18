@@ -1,13 +1,17 @@
 using Handlers;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 using Utils;
 
 namespace Game
 {
     public class GameManager : MonoBehaviourSingleton<GameManager>
     {
+        [Header("Selected Piece")]
         public PieceHandler lastClickGameObject;
+        
+        [Header("Data")]
         public bool isWhiteTurn = true;
         public bool endGame;
 
@@ -15,18 +19,8 @@ namespace Game
         {
             if (Input.GetButtonDown("Cancel"))
             {
-                LoadSceneByIndex(0);
+                SceneManager.LoadScene(0);
             }
-        }
-        
-        public void LoadSceneByIndex(int sceneIndex)
-        {
-            SceneManager.LoadScene(sceneIndex);
-        }
-
-        public void QuitApplication()
-        {
-            Application.Quit();
         }
     }
 }
