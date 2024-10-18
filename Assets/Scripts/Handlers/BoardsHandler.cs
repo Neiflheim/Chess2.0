@@ -1,3 +1,4 @@
+using Game;
 using Pieces;
 using UnityEngine;
 using Utils;
@@ -25,6 +26,7 @@ namespace Handlers
         [SerializeField] private GameObject transparentPrefab;
         [SerializeField] private Transform gridParent;
 
+        [Header("Matrix")]
         public Piece[,] Pieces;
         public GameObject[,] PiecesDisplay;
 
@@ -50,7 +52,6 @@ namespace Handlers
             PiecesDisplay = new GameObject[Pieces.GetLength(0), Pieces.GetLength(1)];
             
             PawnToQueen();
-            IsEndGame();
             
             for (int i = 0; i < Pieces.GetLength(0); i++)
             {
@@ -73,6 +74,8 @@ namespace Handlers
                     PiecesDisplay[i, j] = newPiece;
                 }
             }
+            
+            IsEndGame();
         }
 
         public void ResetMatrix()
@@ -103,24 +106,34 @@ namespace Handlers
 
         public void IsEndGame()
         {
+            GameManager.Instance.isBlackKing = false;
+            GameManager.Instance.isWhiteKing = false;
+            
             for (int i = 0; i < Pieces.GetLength(0); i++)
             {
                 for (int j = 0; j < Pieces.GetLength(1); j++)
                 {
                     if (Pieces[i, j] == blackKing)
                     {
-                        Debug.Log(" Still blackKing ");
+                        GameManager.Instance.isBlackKing = true;
                     }
-
                     if (Pieces[i, j] == whiteKing)
                     {
-                        Debug.Log(" Still whiteKing ");
-                        return;
+                        GameManager.Instance.isWhiteKing = true;
                     }
                 }
             }
 
-            Debug.Log(" End Game ");
+            if (GameManager.Instance.isBlackKing == false)
+            {
+                GameManager.Instance.endGamePanel.SetActive(true);
+                GameManager.Instance.endGameText.text = " Victory White Player ! ";
+            }
+            if (GameManager.Instance.isWhiteKing == false)
+            {
+                GameManager.Instance.endGamePanel.SetActive(true);
+                GameManager.Instance.endGameText.text = " Victory Black Player ! ";
+            }
         }
     }
 }

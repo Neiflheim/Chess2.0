@@ -10,10 +10,15 @@ namespace Game
     {
         [Header("Selected Piece")]
         public PieceHandler lastClickGameObject;
+
+        [Header("End Game")]
+        public GameObject endGamePanel;
+        public Text endGameText;
         
         [Header("Data")]
         public bool isWhiteTurn = true;
-        public bool endGame;
+        public bool isBlackKing;
+        public bool isWhiteKing;
 
         private void Update()
         {
