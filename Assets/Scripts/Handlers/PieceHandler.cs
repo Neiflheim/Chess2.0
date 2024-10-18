@@ -33,25 +33,28 @@ namespace Handlers
 
         public void OnPointerClick(PointerEventData eventData)
         {
-            if (_isMovement == false)
+            if (Piece != null && GameManager.Instance.isWhiteTurn == Piece.isWhite)
             {
-                GameManager.Instance.lastClickGameObject = gameObject.GetComponent<PieceHandler>();
-                
-                BoardsHandler.Instance.ResetMatrix();
-                BoardsHandler.Instance.DisplayMatrix();
-            
-                List<Vector2Int> availableMovements = Piece.AvailableMovements(_position);
-                Debug.Log(" Available movements : " + availableMovements.Count);
-            
-                foreach (Vector2Int availableMovement in availableMovements)
+                if (_isMovement == false)
                 {
-                    BoardsHandler.Instance.PiecesDisplay[availableMovement.x, availableMovement.y].GetComponent<PieceHandler>()._isMovement = true;
-                    BoardsHandler.Instance.PiecesDisplay[availableMovement.x, availableMovement.y].GetComponent<Image>().color = new Color(1, 1, 0, 0.5f);
-                }
+                    GameManager.Instance.lastClickGameObject = gameObject.GetComponent<PieceHandler>();
                 
-                availableMovements.Clear();
+                    BoardsHandler.Instance.ResetMatrix();
+                    BoardsHandler.Instance.DisplayMatrix();
+            
+                    List<Vector2Int> availableMovements = Piece.AvailableMovements(_position);
+            
+                    foreach (Vector2Int availableMovement in availableMovements)
+                    {
+                        BoardsHandler.Instance.PiecesDisplay[availableMovement.x, availableMovement.y].GetComponent<PieceHandler>()._isMovement = true;
+                        BoardsHandler.Instance.PiecesDisplay[availableMovement.x, availableMovement.y].GetComponent<Image>().color = new Color(1, 1, 0, 0.5f);
+                    }
+                
+                    availableMovements.Clear();
+                }
             }
-            else
+            
+            if (_isMovement)
             {
                 Vector2Int lastPosition = GameManager.Instance.lastClickGameObject._position;
                 BoardsHandler.Instance.Pieces[lastPosition.x, lastPosition.y] = null;
@@ -59,8 +62,8 @@ namespace Handlers
                 
                 BoardsHandler.Instance.ResetMatrix();
                 BoardsHandler.Instance.DisplayMatrix();
-                
-                BoardsHandler.Instance.WhoseTurnIsIt();
+
+                GameManager.Instance.isWhiteTurn = !GameManager.Instance.isWhiteTurn;
             }
         }
     }

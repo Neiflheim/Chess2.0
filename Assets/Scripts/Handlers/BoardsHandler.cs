@@ -1,4 +1,3 @@
-using Game;
 using Pieces;
 using UnityEngine;
 using Utils;
@@ -44,12 +43,14 @@ namespace Handlers
             };
             
             DisplayMatrix();
-            WhoseTurnIsIt();
         }
 
         public void DisplayMatrix()
         {
             PiecesDisplay = new GameObject[Pieces.GetLength(0), Pieces.GetLength(1)];
+            
+            PawnToQueen();
+            IsEndGame();
             
             for (int i = 0; i < Pieces.GetLength(0); i++)
             {
@@ -82,42 +83,44 @@ namespace Handlers
             }
         }
 
-        public void WhoseTurnIsIt()
+        private void PawnToQueen()
         {
-            Debug.Log(" Whose Turn is it witch?");
-            
-            foreach (GameObject piece in PiecesDisplay)
+            for (int i = 0; i < Pieces.GetLength(0); i++)
             {
-                Debug.Log(" coucou ");
-                if (piece != CompareTag("Player"))
+                if (Pieces[0, i] == whitePawn)
                 {
-                    if (GameManager.Instance.isWhiteTurn)
+                    Pieces[0, i] = whiteQueen;
+                }
+            }
+            for (int i = 0; i < Pieces.GetLength(0); i++)
+            {
+                if (Pieces[7, i] == blackPawn)
+                {
+                    Pieces[7, i] = blackQueen;
+                }
+            }
+        }
+
+        public void IsEndGame()
+        {
+            for (int i = 0; i < Pieces.GetLength(0); i++)
+            {
+                for (int j = 0; j < Pieces.GetLength(1); j++)
+                {
+                    if (Pieces[i, j] == blackKing)
                     {
-                        if (piece.GetComponent<PieceHandler>().Piece.isWhite == false)
-                        {
-                            piece.GetComponent<PieceHandler>().enabled = false;
-                        }
-                        else
-                        {
-                            piece.GetComponent<PieceHandler>().enabled = true;
-                        }
+                        Debug.Log(" Still blackKing ");
                     }
-                    else
+
+                    if (Pieces[i, j] == whiteKing)
                     {
-                        if (piece.GetComponent<PieceHandler>().Piece.isWhite)
-                        {
-                            piece.GetComponent<PieceHandler>().enabled = false;
-                        }
-                        else
-                        {
-                            piece.GetComponent<PieceHandler>().enabled = true;
-                        }
+                        Debug.Log(" Still whiteKing ");
+                        return;
                     }
                 }
             }
-            
-            Debug.Log(" hola ");
-            GameManager.Instance.isWhiteTurn = !GameManager.Instance.isWhiteTurn;
+
+            Debug.Log(" End Game ");
         }
     }
 }
