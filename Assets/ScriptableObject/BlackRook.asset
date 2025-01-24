@@ -12,5 +12,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 02ba6b24075543d696471b5e2b4bfca4, type: 3}
   m_Name: BlackRook
   m_EditorClassIdentifier: 
-  sprite: {fileID: -1530378629, guid: 062360b186018484da07e2259b01c197, type: 3}
-  isWhite: 0
+  Sprite: {fileID: -1530378629, guid: 062360b186018484da07e2259b01c197, type: 3}
+  IsWhite: 0
+  Value: 5

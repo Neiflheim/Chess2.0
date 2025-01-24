@@ -32,7 +32,7 @@ namespace Pieces
                     movements.Add(new Vector2Int(testDirection.x, testDirection.y)); 
                     continue;
                 } 
-                if (BoardsHandler.Instance.Pieces[testDirection.x, testDirection.y].isWhite != isWhite)
+                if (BoardsHandler.Instance.Pieces[testDirection.x, testDirection.y].IsWhite != IsWhite)
                 { 
                     movements.Add(new Vector2Int(testDirection.x, testDirection.y)); 
                     continue;

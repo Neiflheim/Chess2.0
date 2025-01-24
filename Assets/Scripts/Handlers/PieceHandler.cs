@@ -22,7 +22,7 @@ namespace Handlers
         public void Setup(Piece piece, Vector2Int position)
         {
             Piece = piece;
-            _image.sprite = piece.sprite;
+            _image.sprite = piece.Sprite;
             _position = position;
         }
 
@@ -33,7 +33,7 @@ namespace Handlers
 
         public void OnPointerClick(PointerEventData eventData)
         {
-            if (Piece != null && GameManager.Instance.isWhiteTurn == Piece.isWhite)
+            if (Piece != null && GameManager.Instance.isWhiteTurn == Piece.IsWhite)
             {
                 if (_isMovement == false)
                 {

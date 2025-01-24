@@ -23,7 +23,7 @@ namespace Pieces
 
             int i;
 
-            if (isWhite == false)
+            if (IsWhite == false)
             {
                 if (position.x == 1)
                 {
@@ -70,7 +70,7 @@ namespace Pieces
                         continue;
                     }
 
-                    if (BoardsHandler.Instance.Pieces[testDirection.x, testDirection.y].isWhite != isWhite)
+                    if (BoardsHandler.Instance.Pieces[testDirection.x, testDirection.y].IsWhite != IsWhite)
                     {
                         movements.Add(new Vector2Int(testDirection.x, testDirection.y));
                         continue;
@@ -126,7 +126,7 @@ namespace Pieces
                         continue;
                     }
 
-                    if (BoardsHandler.Instance.Pieces[testDirection.x, testDirection.y].isWhite != isWhite)
+                    if (BoardsHandler.Instance.Pieces[testDirection.x, testDirection.y].IsWhite != IsWhite)
                     {
                         movements.Add(new Vector2Int(testDirection.x, testDirection.y));
                         continue;

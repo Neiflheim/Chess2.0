@@ -12,5 +12,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 25bf4048c8b34b0081b811787bdcd474, type: 3}
   m_Name: WhitePawn
   m_EditorClassIdentifier: 
-  sprite: {fileID: 966966545, guid: 062360b186018484da07e2259b01c197, type: 3}
-  isWhite: 1
+  Sprite: {fileID: 966966545, guid: 062360b186018484da07e2259b01c197, type: 3}
+  IsWhite: 1
+  Value: 1
