@@ -10,8 +10,8 @@ namespace Handlers
     public class PieceHandler : MonoBehaviour, IPointerClickHandler
     {
         public Piece Piece;
+        public Vector2Int Position;
         private Image _image;
-        private Vector2Int _position;
         private bool _isMovement;
 
         private void Awake()
@@ -23,26 +23,26 @@ namespace Handlers
         {
             Piece = piece;
             _image.sprite = piece.Sprite;
-            _position = position;
+            Position = position;
         }
 
         public void SetupTransparent(Vector2Int position)
         {
-            _position = position;
+            Position = position;
         }
 
         public void OnPointerClick(PointerEventData eventData)
         {
-            if (Piece != null && GameManager.Instance.isWhiteTurn == Piece.IsWhite)
+            if (Piece != null && GameManager.Instance.IsWhiteTurn == Piece.IsWhite)
             {
                 if (_isMovement == false)
                 {
-                    GameManager.Instance.lastClickGameObject = gameObject.GetComponent<PieceHandler>();
+                    GameManager.Instance.LastClickGameObject = gameObject.GetComponent<PieceHandler>();
                 
                     BoardsHandler.Instance.ResetMatrix();
                     BoardsHandler.Instance.DisplayMatrix();
             
-                    List<Vector2Int> availableMovements = Piece.AvailableMovements(_position);
+                    List<Vector2Int> availableMovements = Piece.AvailableMovements(Position);
             
                     foreach (Vector2Int availableMovement in availableMovements)
                     {
@@ -57,17 +57,17 @@ namespace Handlers
             if (_isMovement)
             {
                 // Audio
-                GameManager.Instance.audioManager.GetComponent<AudioSource>().Play();
+                // GameManager.Instance.AudioManager.GetComponent<AudioSource>().Play();
                 
                 // Movement
-                Vector2Int lastPosition = GameManager.Instance.lastClickGameObject._position;
+                Vector2Int lastPosition = GameManager.Instance.LastClickGameObject.Position;
                 BoardsHandler.Instance.Pieces[lastPosition.x, lastPosition.y] = null;
-                BoardsHandler.Instance.Pieces[_position.x, _position.y] = GameManager.Instance.lastClickGameObject.Piece;
+                BoardsHandler.Instance.Pieces[Position.x, Position.y] = GameManager.Instance.LastClickGameObject.Piece;
                 
                 BoardsHandler.Instance.ResetMatrix();
                 BoardsHandler.Instance.DisplayMatrix();
 
-                GameManager.Instance.isWhiteTurn = !GameManager.Instance.isWhiteTurn;
+                GameManager.Instance.IsWhiteTurn = !GameManager.Instance.IsWhiteTurn;
             }
         }
     }

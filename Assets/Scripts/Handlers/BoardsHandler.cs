@@ -108,8 +108,8 @@ namespace Handlers
 
         public void IsEndGame()
         {
-            GameManager.Instance.isBlackKing = false;
-            GameManager.Instance.isWhiteKing = false;
+            GameManager.Instance.IsBlackKing = false;
+            GameManager.Instance.IsWhiteKing = false;
             
             for (int i = 0; i < Pieces.GetLength(0); i++)
             {
@@ -117,26 +117,26 @@ namespace Handlers
                 {
                     if (Pieces[i, j] == blackKing)
                     {
-                        GameManager.Instance.isBlackKing = true;
+                        GameManager.Instance.IsBlackKing = true;
                     }
                     if (Pieces[i, j] == whiteKing)
                     {
-                        GameManager.Instance.isWhiteKing = true;
+                        GameManager.Instance.IsWhiteKing = true;
                     }
                 }
             }
 
-            if (GameManager.Instance.isBlackKing == false)
+            if (GameManager.Instance.IsBlackKing == false)
             {
                 Time.timeScale = 0;
-                GameManager.Instance.endGamePanel.SetActive(true);
-                GameManager.Instance.endGameText.text = " Victory White Player ! ";
+                GameManager.Instance.EndGamePanel.SetActive(true);
+                GameManager.Instance.EndGameText.text = " Victory White Player ! ";
             }
-            if (GameManager.Instance.isWhiteKing == false)
+            if (GameManager.Instance.IsWhiteKing == false)
             {
                 Time.timeScale = 0;
-                GameManager.Instance.endGamePanel.SetActive(true);
-                GameManager.Instance.endGameText.text = " Victory Black Player ! ";
+                GameManager.Instance.EndGamePanel.SetActive(true);
+                GameManager.Instance.EndGameText.text = " Victory Black Player ! ";
             }
         }
     }

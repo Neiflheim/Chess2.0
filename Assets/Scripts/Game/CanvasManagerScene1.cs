@@ -28,7 +28,7 @@ namespace Game
             
             if (_startTimers)
             {
-                if (GameManager.Instance.isWhiteTurn)
+                if (GameManager.Instance.IsWhiteTurn)
                 {
                     _whiteElapsedTime += Time.deltaTime;
                     UpdateWhiteTimerText(_whiteElapsedTime);
@@ -65,7 +65,7 @@ namespace Game
         // Turn
         public void PlayerTurnText()
         {
-            if (GameManager.Instance.isWhiteTurn)
+            if (GameManager.Instance.IsWhiteTurn)
             {
                 playerTurnText.text = " White Player Turn ";
             }
