@@ -17,7 +17,7 @@ namespace MinMax
         
         public bool IsTerminal()
         {
-            return false;
+            return HeuristicValue() >= 100 || HeuristicValue() <= 100;
         }
         
         public int HeuristicValue()
