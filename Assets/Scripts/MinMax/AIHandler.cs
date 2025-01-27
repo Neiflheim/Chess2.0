@@ -14,35 +14,27 @@ namespace MinMax
 
             if (maximizingPlayer)
             {
-                float heuristicValue = -Mathf.Infinity;
+                int heuristicValue = int.MinValue;
                 
                 List<Node> nodeChildren = node.Children();
                 foreach (Node child in nodeChildren)
                 {
-                    int childHeuristicValue = MinMax(child, depth - 1, false);
-                    if (childHeuristicValue > heuristicValue)
-                    {
-                        heuristicValue = childHeuristicValue;
-                    }
+                    heuristicValue = Mathf.Max(heuristicValue, MinMax(child, depth - 1, false));
                 }
                 
-                return Mathf.RoundToInt(heuristicValue);
+                return heuristicValue;
             }
             else
             {
-                float heuristicValue = Mathf.Infinity;
+                int heuristicValue = int.MaxValue;
                 
                 List<Node> nodeChildren = node.Children();
                 foreach (Node child in nodeChildren)
                 {
-                    int childHeuristicValue = child.HeuristicValue();
-                    if (childHeuristicValue < heuristicValue)
-                    {
-                        heuristicValue = childHeuristicValue;
-                    }
+                    heuristicValue = Mathf.Min(heuristicValue, MinMax(child, depth - 1, true));
                 }
                 
-                return Mathf.RoundToInt(heuristicValue);
+                return heuristicValue;
             }
         }
     }
