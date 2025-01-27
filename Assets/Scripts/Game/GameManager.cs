@@ -1,3 +1,4 @@
+using System;
 using Handlers;
 using MinMax;
 using UnityEngine;
@@ -23,6 +24,13 @@ namespace Game
         public bool IsWhiteTurn = true;
         public bool IsBlackKing;
         public bool IsWhiteKing;
+        
+        private AIHandler _aiHandler;
+
+        private void Awake()
+        {
+            _aiHandler = GetComponent<AIHandler>();
+        }
 
         private void Update()
         {
@@ -36,6 +44,9 @@ namespace Game
                 Node node = new Node(BoardsHandler.Instance.Pieces, IsWhiteTurn);
                 Debug.Log(node.HeuristicValue());
                 Debug.Log(node.Children().Count);
+
+                int value = _aiHandler.MinMax(node, 2, true);
+                Debug.Log("MinMax : " + value);
             }
         }
     }

@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace MinMax
@@ -14,12 +15,14 @@ namespace MinMax
             if (maximizingPlayer)
             {
                 float heuristicValue = -Mathf.Infinity;
-                foreach (Node child in node.Children())
+                
+                List<Node> nodeChildren = node.Children();
+                foreach (Node child in nodeChildren)
                 {
-                    int childHeuristicValue = child.HeuristicValue();
+                    int childHeuristicValue = MinMax(child, depth - 1, false);
                     if (childHeuristicValue > heuristicValue)
                     {
-                        heuristicValue = MinMax(child, depth - 1, false);
+                        heuristicValue = childHeuristicValue;
                     }
                 }
                 
@@ -28,12 +31,14 @@ namespace MinMax
             else
             {
                 float heuristicValue = Mathf.Infinity;
-                foreach (Node child in node.Children())
+                
+                List<Node> nodeChildren = node.Children();
+                foreach (Node child in nodeChildren)
                 {
                     int childHeuristicValue = child.HeuristicValue();
                     if (childHeuristicValue < heuristicValue)
                     {
-                        heuristicValue = MinMax(child, depth - 1, true);
+                        heuristicValue = childHeuristicValue;
                     }
                 }
                 
