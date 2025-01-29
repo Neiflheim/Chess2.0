@@ -7,7 +7,7 @@ namespace Pieces
     {
         public Sprite Sprite;
         public bool IsWhite;
-        public int Value;
+        public int BaseValue;
 
         public abstract List<Vector2Int> AvailableMovements(Vector2Int position);
     }

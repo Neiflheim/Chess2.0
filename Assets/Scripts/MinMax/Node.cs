@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using Game;
 using Pieces;
 using UnityEngine;
 
@@ -28,20 +29,90 @@ namespace MinMax
             int whiteHeuristicValue = 0;
             int blackHeuristicValue = 0;
             
-            foreach (Piece piece in Pieces)
+            for (int i = 0; i < Pieces.GetLength(0); i++)
             {
-                if (piece)
+                for (int j = 0; j < Pieces.GetLength(1); j++)
                 {
-                    if (piece.IsWhite)
+                    if (Pieces[i,j])
                     {
-                        whiteHeuristicValue += piece.Value;
-                    }
-                    else
-                    {
-                        blackHeuristicValue += piece.Value;
+                        if (Pieces[i,j].IsWhite)
+                        {
+                            int valueDependingOnPosition = 0;
+                            if (Pieces[i,j].name == "WhitePawn")
+                            {
+                                valueDependingOnPosition = ValueDependingOnPositionData.WhitePawnMatrix[i, j];
+                            }
+                            if (Pieces[i,j].name == "WhiteBishop")
+                            {
+                                valueDependingOnPosition = ValueDependingOnPositionData.WhiteBishopMatrix[i, j];
+                            }
+                            if (Pieces[i,j].name == "WhiteKnight")
+                            {
+                                valueDependingOnPosition = ValueDependingOnPositionData.WhiteKnightMatrix[i, j];
+                            }
+                            if (Pieces[i,j].name == "WhiteRook")
+                            {
+                                valueDependingOnPosition = ValueDependingOnPositionData.WhiteRookMatrix[i, j];
+                            }
+                            if (Pieces[i,j].name == "WhiteQueen")
+                            {
+                                valueDependingOnPosition = ValueDependingOnPositionData.WhiteQueenMatrix[i, j];
+                            }
+                            if (Pieces[i,j].name == "WhiteKing")
+                            {
+                                valueDependingOnPosition = ValueDependingOnPositionData.WhiteKingMatrix[i, j];
+                            }
+
+                            whiteHeuristicValue += Pieces[i, j].BaseValue + valueDependingOnPosition;
+                        }
+                        else
+                        {
+                            int valueDependingOnPosition = 0;
+                            if (Pieces[i,j].name == "BlackPawn")
+                            {
+                                valueDependingOnPosition = ValueDependingOnPositionData.BlackPawnMatrix[i, j];
+                            }
+                            if (Pieces[i,j].name == "BlackBishop")
+                            {
+                                valueDependingOnPosition = ValueDependingOnPositionData.BlackBishopMatrix[i, j];
+                            }
+                            if (Pieces[i,j].name == "BlackKnight")
+                            {
+                                valueDependingOnPosition = ValueDependingOnPositionData.BlackKnightMatrix[i, j];
+                            }
+                            if (Pieces[i,j].name == "BlackRook")
+                            {
+                                valueDependingOnPosition = ValueDependingOnPositionData.BlackRookMatrix[i, j];
+                            }
+                            if (Pieces[i,j].name == "BlackQueen")
+                            {
+                                valueDependingOnPosition = ValueDependingOnPositionData.BlackQueenMatrix[i, j];
+                            }
+                            if (Pieces[i,j].name == "BlackKing")
+                            {
+                                valueDependingOnPosition = ValueDependingOnPositionData.BlackKingMatrix[i, j];
+                            }
+
+                            blackHeuristicValue += Pieces[i, j].BaseValue + valueDependingOnPosition;
+                        }
                     }
                 }
             }
+            
+            // foreach (Piece piece in Pieces)
+            // {
+            //     if (piece)
+            //     {
+            //         if (piece.IsWhite)
+            //         {
+            //             whiteHeuristicValue += piece.BaseValue;
+            //         }
+            //         else
+            //         {
+            //             blackHeuristicValue += piece.BaseValue;
+            //         }
+            //     }
+            // }
             
             if (IsWhitePlaying)
             {
