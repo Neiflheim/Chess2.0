@@ -55,7 +55,7 @@ namespace Game
                 // Debug.Log(_index);
                 // ChangePieces(nodes[_index]);
 
-                int value = _aiHandler.MinMax(_node, 2, true);
+                int value = _aiHandler.MinMax(_node, 3, true);
                 BoardsHandler.Instance.Pieces = _aiHandler.bestChild.Pieces;
                 Debug.Log("MinMax : " + value);
                 

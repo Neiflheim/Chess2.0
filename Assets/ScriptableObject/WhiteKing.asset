@@ -14,4 +14,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Sprite: {fileID: -1405492416, guid: 062360b186018484da07e2259b01c197, type: 3}
   IsWhite: 1
-  BaseValue: 100
+  BaseValue: 20000

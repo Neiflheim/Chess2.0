@@ -20,7 +20,7 @@ namespace MinMax
         
         public bool IsTerminal()
         {
-            return HeuristicValue() >= 100 || HeuristicValue() <= -100;
+            return HeuristicValue() >= 20000 || HeuristicValue() <= -20000;
         }
         
         public int HeuristicValue()
@@ -160,7 +160,7 @@ namespace MinMax
         public Piece[,] MovePiece(Piece[,] pieces, Piece piece, Vector2Int from, Vector2Int to)
         {
             // Déplacement de la piece sur le pieces
-            Piece[,] newPieces = (Piece[,])pieces.Clone();
+            Piece[,] newPieces = (Piece[,]) pieces.Clone();
             newPieces[from.x, from.y] = null;
             newPieces[to.x, to.y] = piece;
             return newPieces;
