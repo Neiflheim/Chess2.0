@@ -1,7 +1,32 @@
+using System.Collections.Generic;
+
 namespace Game
 {
-    public static class ValueDependingOnPositionData
+    public static class ValueDependOnPositionData
     {
+        static Dictionary<string, int[,]> valuesDepandOnPosition = new Dictionary<string, int[,]>();
+
+        public static void InitializeDictionary()
+        {
+            valuesDepandOnPosition.Add("WhitePawn", WhitePawnMatrix);
+            valuesDepandOnPosition.Add("BlackPawn", BlackPawnMatrix);
+            valuesDepandOnPosition.Add("WhiteKnight", WhiteKnightMatrix);
+            valuesDepandOnPosition.Add("BlackKnight", BlackKnightMatrix);
+            valuesDepandOnPosition.Add("WhiteBishop", WhiteBishopMatrix);
+            valuesDepandOnPosition.Add("BlackBishop", BlackBishopMatrix);
+            valuesDepandOnPosition.Add("WhiteRook", WhiteRookMatrix);
+            valuesDepandOnPosition.Add("BlackRook", BlackRookMatrix);
+            valuesDepandOnPosition.Add("WhiteQueen", WhiteQueenMatrix);
+            valuesDepandOnPosition.Add("BlackQueen", BlackQueenMatrix);
+            valuesDepandOnPosition.Add("WhiteKing", WhiteKingMatrix);
+            valuesDepandOnPosition.Add("BlackKing", BlackKingMatrix);
+        }
+
+        public static int[,] GetMatrix(string name)
+        {
+            return valuesDepandOnPosition.ContainsKey(name) ? valuesDepandOnPosition[name] : null;
+        }
+        
         public static int[,] WhitePawnMatrix = new int[,]
         {
             { 0, 0, 0, 0, 0, 0, 0, 0 },

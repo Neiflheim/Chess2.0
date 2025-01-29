@@ -38,60 +38,16 @@ namespace MinMax
                         if (Pieces[i,j].IsWhite)
                         {
                             int valueDependingOnPosition = 0;
-                            if (Pieces[i,j].name == "WhitePawn")
-                            {
-                                valueDependingOnPosition = ValueDependingOnPositionData.WhitePawnMatrix[i, j];
-                            }
-                            if (Pieces[i,j].name == "WhiteBishop")
-                            {
-                                valueDependingOnPosition = ValueDependingOnPositionData.WhiteBishopMatrix[i, j];
-                            }
-                            if (Pieces[i,j].name == "WhiteKnight")
-                            {
-                                valueDependingOnPosition = ValueDependingOnPositionData.WhiteKnightMatrix[i, j];
-                            }
-                            if (Pieces[i,j].name == "WhiteRook")
-                            {
-                                valueDependingOnPosition = ValueDependingOnPositionData.WhiteRookMatrix[i, j];
-                            }
-                            if (Pieces[i,j].name == "WhiteQueen")
-                            {
-                                valueDependingOnPosition = ValueDependingOnPositionData.WhiteQueenMatrix[i, j];
-                            }
-                            if (Pieces[i,j].name == "WhiteKing")
-                            {
-                                valueDependingOnPosition = ValueDependingOnPositionData.WhiteKingMatrix[i, j];
-                            }
+                            int [,] matrix = ValueDependOnPositionData.GetMatrix(Pieces[i, j].name);
+                            valueDependingOnPosition = matrix[i,j];
 
                             whiteHeuristicValue += Pieces[i, j].BaseValue + valueDependingOnPosition;
                         }
                         else
                         {
                             int valueDependingOnPosition = 0;
-                            if (Pieces[i,j].name == "BlackPawn")
-                            {
-                                valueDependingOnPosition = ValueDependingOnPositionData.BlackPawnMatrix[i, j];
-                            }
-                            if (Pieces[i,j].name == "BlackBishop")
-                            {
-                                valueDependingOnPosition = ValueDependingOnPositionData.BlackBishopMatrix[i, j];
-                            }
-                            if (Pieces[i,j].name == "BlackKnight")
-                            {
-                                valueDependingOnPosition = ValueDependingOnPositionData.BlackKnightMatrix[i, j];
-                            }
-                            if (Pieces[i,j].name == "BlackRook")
-                            {
-                                valueDependingOnPosition = ValueDependingOnPositionData.BlackRookMatrix[i, j];
-                            }
-                            if (Pieces[i,j].name == "BlackQueen")
-                            {
-                                valueDependingOnPosition = ValueDependingOnPositionData.BlackQueenMatrix[i, j];
-                            }
-                            if (Pieces[i,j].name == "BlackKing")
-                            {
-                                valueDependingOnPosition = ValueDependingOnPositionData.BlackKingMatrix[i, j];
-                            }
+                            int [,] matrix = ValueDependOnPositionData.GetMatrix(Pieces[i, j].name);
+                            valueDependingOnPosition = matrix[i,j];
 
                             blackHeuristicValue += Pieces[i, j].BaseValue + valueDependingOnPosition;
                         }

@@ -1,6 +1,8 @@
+using System;
 using System.Collections.Generic;
 using Handlers;
 using MinMax;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
@@ -35,6 +37,11 @@ namespace Game
         private void Awake()
         {
             _aiHandler = GetComponent<AIHandler>();
+        }
+
+        private void Start()
+        {
+            ValueDependOnPositionData.InitializeDictionary();
         }
 
         private void Update()
