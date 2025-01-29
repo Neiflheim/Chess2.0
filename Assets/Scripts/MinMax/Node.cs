@@ -13,7 +13,7 @@ namespace MinMax
         
         public Node(Piece[,] pieces, bool isWhiteTurn, bool isWhitePlaying)
         {
-            Pieces = pieces;
+            Pieces = (Piece[,]) pieces.Clone();
             IsWhiteTurn = isWhiteTurn;
             IsWhitePlaying = isWhitePlaying;
         }
@@ -145,9 +145,10 @@ namespace MinMax
                     
                         foreach (Vector2Int movement in availableMovements)
                         {
-                            Piece[,] pieces = CreateCopy();
-                            pieces = MovePiece(pieces, piece, position, movement);
-                            Node node = new Node(pieces, !IsWhiteTurn, IsWhitePlaying); 
+                            Piece[,] pieces = Pieces;
+                            // pieces = MovePiece(pieces, piece, position, movement);
+                            Node node = new Node(pieces, !IsWhiteTurn, IsWhitePlaying);
+                            node.MovePiece(piece, position, movement);
                             children.Add(node);
                         }
                     }
@@ -157,35 +158,34 @@ namespace MinMax
             return children;
         }
         
-        public Piece[,] MovePiece(Piece[,] pieces, Piece piece, Vector2Int from, Vector2Int to)
+        public void MovePiece(Piece piece, Vector2Int from, Vector2Int to)
         {
             // Déplacement de la piece sur le pieces
-            Piece[,] newPieces = (Piece[,]) pieces.Clone();
-            newPieces[from.x, from.y] = null;
-            newPieces[to.x, to.y] = piece;
-            return newPieces;
+            // Piece[,] newPieces = (Piece[,]) pieces.Clone();
+            Pieces[from.x, from.y] = null;
+            Pieces[to.x, to.y] = piece;
         }
         
-        private Piece[,] CreateCopy()
-        {
-            if (Pieces == null) return null;
-
-            int rows = Pieces.GetLength(0);
-            int cols = Pieces.GetLength(1);
-            Piece[,] newPieces = new Piece[rows, cols];
-
-            for (int row = 0; row < rows; row++)
-            {
-                for (int col = 0; col < cols; col++)
-                {
-                    if (Pieces[row, col] != null)
-                    {
-                        newPieces[row, col] = Pieces[row, col];
-                    }
-                }
-            }
-            
-            return newPieces;
-        }
+        // private Piece[,] CreateCopy()
+        // {
+        //     if (Pieces == null) return null;
+        //
+        //     int rows = Pieces.GetLength(0);
+        //     int cols = Pieces.GetLength(1);
+        //     Piece[,] newPieces = new Piece[rows, cols];
+        //
+        //     for (int row = 0; row < rows; row++)
+        //     {
+        //         for (int col = 0; col < cols; col++)
+        //         {
+        //             if (Pieces[row, col] != null)
+        //             {
+        //                 newPieces[row, col] = Pieces[row, col];
+        //             }
+        //         }
+        //     }
+        //     
+        //     return newPieces;
+        // }
     }
 }
