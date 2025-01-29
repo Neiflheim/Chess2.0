@@ -8,11 +8,13 @@ namespace MinMax
     {
         public Piece[,] Pieces;
         public bool IsWhiteTurn;
+        public bool IsWhitePlaying;
         
-        public Node(Piece[,] pieces, bool isWhiteTurn)
+        public Node(Piece[,] pieces, bool isWhiteTurn, bool isWhitePlaying)
         {
             Pieces = pieces;
             IsWhiteTurn = isWhiteTurn;
+            IsWhitePlaying = isWhitePlaying;
         }
         
         public bool IsTerminal()
@@ -41,7 +43,7 @@ namespace MinMax
                 }
             }
             
-            if (IsWhiteTurn)
+            if (IsWhitePlaying)
             {
                 boardHeuristicValue = whiteHeuristicValue - blackHeuristicValue;
             }
@@ -67,7 +69,6 @@ namespace MinMax
                         Piece piece = Pieces[i,j];
                         Vector2Int position = new Vector2Int(i, j);
                         List<Vector2Int> availableMovements = piece.AvailableMovements(position);
-                        Debug.Log("Piece type : " + piece.Sprite + " / Availables movements : " + availableMovements.Count);
                         
                         if (availableMovements.Count == 0) continue;
                     
@@ -75,7 +76,7 @@ namespace MinMax
                         {
                             Piece[,] pieces = CreateCopy();
                             pieces = MovePiece(pieces, piece, position, movement);
-                            Node node = new Node(pieces, !IsWhiteTurn); 
+                            Node node = new Node(pieces, !IsWhiteTurn, IsWhitePlaying); 
                             children.Add(node);
                         }
                     }

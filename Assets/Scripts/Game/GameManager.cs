@@ -47,27 +47,29 @@ namespace Game
 
             if (Input.GetButtonDown("Fire1"))
             {
-                if (_node == null)
-                {
-                    _node = new Node(BoardsHandler.Instance.Pieces, IsWhiteTurn);
-                    nodes = _node.Children();
-                    Debug.Log("Actual heuristic value : " + _node.HeuristicValue());
-                    Debug.Log("Child number : " + _node.Children().Count);
-                }
+                _node = new Node(BoardsHandler.Instance.Pieces, IsWhiteTurn, IsWhiteTurn);
+                nodes = _node.Children();
+                Debug.Log("Actual heuristic value : " + _node.HeuristicValue());
+                Debug.Log("Child number : " + _node.Children().Count);
                 
                 _index += 1;
-                Debug.Log(_index);
-                ChangePieces(nodes[_index]);
+                // Debug.Log(_index);
+                // ChangePieces(nodes[_index]);
 
-                // int value = _aiHandler.MinMax(node, 1, true);
-                // BoardsHandler.Instance.Pieces = _aiHandler.bestChild.Pieces;
-                // Debug.Log("MinMax : " + value);
+                int value = _aiHandler.MinMax(_node, 2, true);
+                BoardsHandler.Instance.Pieces = _aiHandler.bestChild.Pieces;
+                Debug.Log("MinMax : " + value);
+                
+                BoardsHandler.Instance.ResetMatrix();
+                BoardsHandler.Instance.DisplayMatrix();
+                Instance.IsWhiteTurn = !Instance.IsWhiteTurn;
             }
         }
 
         private void ChangePieces(Node node)
         {
             BoardsHandler.Instance.Pieces = node.Pieces;
+            Debug.Log("Child value : " + node.HeuristicValue());
                 
             BoardsHandler.Instance.ResetMatrix();
             BoardsHandler.Instance.DisplayMatrix();
