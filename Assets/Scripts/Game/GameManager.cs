@@ -1,4 +1,5 @@
-using System;
+using System.Collections;
+using System.Collections.Generic;
 using Handlers;
 using MinMax;
 using UnityEngine;
@@ -26,6 +27,11 @@ namespace Game
         public bool IsWhiteKing;
         
         private AIHandler _aiHandler;
+        
+        
+        private Node _node = null;
+        private int _index = -1;
+        private List<Node> nodes = new List<Node>();
 
         private void Awake()
         {
@@ -41,13 +47,31 @@ namespace Game
 
             if (Input.GetButtonDown("Fire1"))
             {
-                Node node = new Node(BoardsHandler.Instance.Pieces, IsWhiteTurn);
-                Debug.Log(node.HeuristicValue());
-                Debug.Log(node.Children().Count);
+                if (_node == null)
+                {
+                    _node = new Node(BoardsHandler.Instance.Pieces, IsWhiteTurn);
+                    nodes = _node.Children();
+                    Debug.Log("Actual heuristic value : " + _node.HeuristicValue());
+                    Debug.Log("Child number : " + _node.Children().Count);
+                }
+                
+                _index += 1;
+                Debug.Log(_index);
+                ChangePieces(nodes[_index]);
 
-                int value = _aiHandler.MinMax(node, 2, true);
-                Debug.Log("MinMax : " + value);
+                // int value = _aiHandler.MinMax(node, 1, true);
+                // BoardsHandler.Instance.Pieces = _aiHandler.bestChild.Pieces;
+                // Debug.Log("MinMax : " + value);
             }
+        }
+
+        private void ChangePieces(Node node)
+        {
+            BoardsHandler.Instance.Pieces = node.Pieces;
+                
+            BoardsHandler.Instance.ResetMatrix();
+            BoardsHandler.Instance.DisplayMatrix();
+            // Instance.IsWhiteTurn = !Instance.IsWhiteTurn;
         }
     }
 }

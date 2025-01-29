@@ -5,36 +5,54 @@ namespace MinMax
 {
     public class AIHandler : MonoBehaviour
     {
+        public Node bestChild = null;
+        
         public int MinMax(Node node, int depth, bool maximizingPlayer)
         {
             if (depth == 0 || node.IsTerminal())
             {
                 return node.HeuristicValue();
             }
-
+            
             if (maximizingPlayer)
             {
-                int heuristicValue = int.MinValue;
+                int maxHeuristicValue = int.MinValue;
                 
                 List<Node> nodeChildren = node.Children();
                 foreach (Node child in nodeChildren)
                 {
-                    heuristicValue = Mathf.Max(heuristicValue, MinMax(child, depth - 1, false));
+                    int heuristicValue = MinMax(child, depth - 1, false);
+
+                    if (heuristicValue > maxHeuristicValue)
+                    {
+                        maxHeuristicValue = heuristicValue;
+                        bestChild = child;
+                    }
+                    
+                    // maxHeuristicValue = Mathf.Max(maxHeuristicValue, MinMax(child, depth - 1, false));
                 }
                 
-                return heuristicValue;
+                return maxHeuristicValue;
             }
             else
             {
-                int heuristicValue = int.MaxValue;
+                int maxHeuristicValue = int.MaxValue;
                 
                 List<Node> nodeChildren = node.Children();
                 foreach (Node child in nodeChildren)
                 {
-                    heuristicValue = Mathf.Min(heuristicValue, MinMax(child, depth - 1, true));
+                    int heuristicValue = MinMax(child, depth - 1, true);
+
+                    if (heuristicValue < maxHeuristicValue)
+                    {
+                        maxHeuristicValue = heuristicValue;
+                        bestChild = child;
+                    }
+                    
+                    // heuristicValue = Mathf.Min(heuristicValue, MinMax(child, depth - 1, true));
                 }
                 
-                return heuristicValue;
+                return maxHeuristicValue;
             }
         }
     }

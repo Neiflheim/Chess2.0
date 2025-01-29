@@ -56,23 +56,25 @@ namespace MinMax
         public List<Node> Children()
         {
             List<Node> children = new List<Node>();
-            children.Clear();
             
             // Crée une Node pour chaque mouvements disponibles de chaque piece de la couleur dont c'est le tour
             for (int i = 0; i < Pieces.GetLength(0); i++)
             {
-                for (int j = 0; j < Pieces.GetLength(0); j++)
+                for (int j = 0; j < Pieces.GetLength(1); j++)
                 {
                     if (Pieces[i,j] && Pieces[i,j].IsWhite == IsWhiteTurn)
                     {
                         Piece piece = Pieces[i,j];
                         Vector2Int position = new Vector2Int(i, j);
-                        List<Vector2Int> availableMovements = piece.AvailableMovements(new Vector2Int(i, j));
+                        List<Vector2Int> availableMovements = piece.AvailableMovements(position);
+                        Debug.Log("Piece type : " + piece.Sprite + " / Availables movements : " + availableMovements.Count);
+                        
+                        if (availableMovements.Count == 0) continue;
                     
                         foreach (Vector2Int movement in availableMovements)
                         {
                             Piece[,] pieces = CreateCopy();
-                            MovePiece(pieces, piece, position, movement);
+                            pieces = MovePiece(pieces, piece, position, movement);
                             Node node = new Node(pieces, !IsWhiteTurn); 
                             children.Add(node);
                         }
@@ -86,9 +88,10 @@ namespace MinMax
         public Piece[,] MovePiece(Piece[,] pieces, Piece piece, Vector2Int from, Vector2Int to)
         {
             // Déplacement de la piece sur le pieces
-            pieces[from.x, from.y] = null;
-            pieces[to.x, to.y] = piece;
-            return pieces;
+            Piece[,] newPieces = (Piece[,])pieces.Clone();
+            newPieces[from.x, from.y] = null;
+            newPieces[to.x, to.y] = piece;
+            return newPieces;
         }
         
         private Piece[,] CreateCopy()
