@@ -35,30 +35,30 @@ namespace Handlers
             Time.timeScale = 1;
             
             // BASEBOARD
-            // Pieces = new Piece[,]
-            // {
-            //     { blackRook, blackKnight, blackBishop, blackQueen, blackKing, blackBishop, blackKnight, blackRook },
-            //     { blackPawn, blackPawn, blackPawn, blackPawn, blackPawn, blackPawn, blackPawn, blackPawn },
-            //     { null, null, null, null, null, null, null, null },
-            //     { null, null, null, null, null, null, null, null },
-            //     { null, null, null, null, null, null, null, null },
-            //     { null, null, null, null, null, null, null, null },
-            //     { whitePawn, whitePawn, whitePawn, whitePawn, whitePawn, whitePawn, whitePawn, whitePawn },
-            //     { whiteRook, whiteKnight, whiteBishop, whiteQueen, whiteKing, whiteBishop, whiteKnight, whiteRook },
-            // };
-            
-            // TEST MAT EN DEUX COUPS
             Pieces = new Piece[,]
             {
+                { blackRook, blackKnight, blackBishop, blackQueen, blackKing, blackBishop, blackKnight, blackRook },
+                { blackPawn, blackPawn, blackPawn, blackPawn, blackPawn, blackPawn, blackPawn, blackPawn },
                 { null, null, null, null, null, null, null, null },
                 { null, null, null, null, null, null, null, null },
                 { null, null, null, null, null, null, null, null },
                 { null, null, null, null, null, null, null, null },
-                { null, whiteBishop, null, null, null, null, null, null },
-                { whiteKnight, whiteKnight, null, null, null, null, null, null },
-                { blackPawn, blackKing, null, whiteKing, null, null, null, null },
-                { null, null, null, null, null, null, null, null },
+                { whitePawn, whitePawn, whitePawn, whitePawn, whitePawn, whitePawn, whitePawn, whitePawn },
+                { whiteRook, whiteKnight, whiteBishop, whiteQueen, whiteKing, whiteBishop, whiteKnight, whiteRook },
             };
+            
+            // TEST MAT EN DEUX COUPS
+            // Pieces = new Piece[,]
+            // {
+            //     { null, null, null, null, null, null, null, null },
+            //     { null, null, null, null, null, null, null, null },
+            //     { null, null, null, null, null, null, null, null },
+            //     { null, null, null, null, null, null, null, null },
+            //     { null, whiteBishop, null, null, null, null, null, null },
+            //     { whiteKnight, whiteKnight, null, null, null, null, null, null },
+            //     { blackPawn, blackKing, null, whiteKing, null, null, null, null },
+            //     { null, null, null, null, null, null, null, null },
+            // };
             
             // Pieces = new Piece[,]
             // {

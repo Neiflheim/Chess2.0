@@ -10,7 +10,6 @@ namespace MinMax
         public Piece[,] Pieces;
         public bool IsWhiteTurn;
         public bool IsWhitePlaying;
-        
         public Node(Piece[,] pieces, bool isWhiteTurn, bool isWhitePlaying)
         {
             Pieces = (Piece[,]) pieces.Clone();
@@ -20,7 +19,9 @@ namespace MinMax
         
         public bool IsTerminal()
         {
-            return HeuristicValue() >= 15000 || HeuristicValue() <= -15000;
+            bool isTerminal = HeuristicValue() >= 10000 || HeuristicValue() <= -10000;
+            
+            return isTerminal;
         }
         
         public int HeuristicValue()
@@ -59,7 +60,7 @@ namespace MinMax
                 }
             }
             
-            if (IsWhitePlaying)
+            if (IsWhiteTurn)
             {
                 boardHeuristicValue = whiteHeuristicValue - blackHeuristicValue;
             }

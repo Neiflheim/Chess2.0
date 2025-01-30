@@ -1148,7 +1148,8 @@ MonoBehaviour:
   IsWhiteTurn: 1
   IsBlackKing: 0
   IsWhiteKing: 0
-  _delayMinMax: 2
+  _delayMinMax: 0.3
+  _depth: 2
 --- !u!114 &324137484
 MonoBehaviour:
   m_ObjectHideFlags: 0

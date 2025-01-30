@@ -1,9 +1,6 @@
-using System;
-using System.Collections;
 using System.Collections.Generic;
 using Handlers;
 using MinMax;
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
@@ -30,6 +27,7 @@ namespace Game
         
         [Header("Selected Piece")]
         [SerializeField] private float _delayMinMax;
+        [SerializeField] private int _depth;
         
         private AIHandler _aiHandler;
         
@@ -45,7 +43,6 @@ namespace Game
         private void Start()
         {
             ValueDependOnPositionData.InitializeDictionary();
-            // StartCoroutine(Coroutine(_delayMinMax));
         }
 
         private void Update()
@@ -55,28 +52,39 @@ namespace Game
                 SceneManager.LoadScene(0);
             }
 
-            if (Input.GetButtonDown("Fire1"))
+            if (Input.GetButtonDown("Fire3"))
             {
                 // Pour tester et voir les enfants
+                if (_node == null)
+                {
+                    _node = new Node(BoardsHandler.Instance.Pieces, IsWhiteTurn, IsWhiteTurn);
+                    nodes = _node.Children();
+                    Debug.Log("Actual heuristic value : " + _node.HeuristicValue());
+                    Debug.Log("Child number : " + _node.Children().Count);
+                }
+                _index += 1;
+                if (_index <= _node.Children().Count - 1)
+                {
+                    ChangePieces(nodes[_index]);
+                }
+                else
+                {
+                    BoardsHandler.Instance.Pieces = _node.Pieces;
                 
-                // if (_node == null)
-                // {
-                //     _node = new Node(BoardsHandler.Instance.Pieces, !IsWhiteTurn, !IsWhiteTurn);
-                //     nodes = _node.Children();
-                //     Debug.Log("Actual heuristic value : " + _node.HeuristicValue());
-                //     Debug.Log("Child number : " + _node.Children().Count);
-                // }
-                // _index += 1;
-                // ChangePieces(nodes[_index]);
+                    BoardsHandler.Instance.ResetMatrix();
+                    BoardsHandler.Instance.DisplayMatrix();
+                    _index = -1;
+                }
                 
-                
-                
+            }
+
+            if (Input.GetButtonDown("Fire2"))
+            {
                 // Pour tester le MinMax
-                
                 _node = new Node(BoardsHandler.Instance.Pieces, IsWhiteTurn, IsWhiteTurn);
                 nodes = _node.Children();
                 
-                int value = _aiHandler.MinMax(_node, 3, true, true);
+                int value = _aiHandler.MinMax(_node, _depth, true, true);
                 BoardsHandler.Instance.Pieces = _aiHandler.BestChild.Pieces;
                 Debug.Log("MinMax Value : " + value);
                 Debug.Log("BestChild Value : " + _aiHandler.BestChild.HeuristicValue());
@@ -85,23 +93,26 @@ namespace Game
                 BoardsHandler.Instance.DisplayMatrix();
                 Instance.IsWhiteTurn = !Instance.IsWhiteTurn;
             }
+
+            if (Input.GetButtonDown("Jump"))
+            {
+                Invoke(nameof(Play), _delayMinMax);
+            }
         }
 
-        private IEnumerator Coroutine(float delay)
+        private void Play()
         {
-            while (true)
-            {
-                Debug.Log("Play");
-                _node = new Node(BoardsHandler.Instance.Pieces, IsWhiteTurn, IsWhiteTurn);
+            Debug.Log("Play");
+            _node = new Node(BoardsHandler.Instance.Pieces, IsWhiteTurn, IsWhiteTurn);
                 
-                _aiHandler.MinMax(_node, 3, true, true);
-                BoardsHandler.Instance.Pieces = _aiHandler.BestChild.Pieces;
+            _aiHandler.MinMax(_node, _depth, true, true);
+            BoardsHandler.Instance.Pieces = _aiHandler.BestChild.Pieces;
                 
-                BoardsHandler.Instance.ResetMatrix();
-                BoardsHandler.Instance.DisplayMatrix();
-                Instance.IsWhiteTurn = !Instance.IsWhiteTurn;
-                yield return new WaitForSeconds(delay);
-            }
+            BoardsHandler.Instance.ResetMatrix();
+            BoardsHandler.Instance.DisplayMatrix();
+            Instance.IsWhiteTurn = !Instance.IsWhiteTurn;
+            
+            Invoke(nameof(Play), _delayMinMax);
         }
 
         private void ChangePieces(Node node)
@@ -111,7 +122,6 @@ namespace Game
                 
             BoardsHandler.Instance.ResetMatrix();
             BoardsHandler.Instance.DisplayMatrix();
-            // Instance.IsWhiteTurn = !Instance.IsWhiteTurn;
         }
     }
 }
