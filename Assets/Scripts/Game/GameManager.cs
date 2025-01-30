@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using Handlers;
 using MinMax;
@@ -27,8 +28,10 @@ namespace Game
         public bool IsBlackKing;
         public bool IsWhiteKing;
         
-        private AIHandler _aiHandler;
+        [Header("Selected Piece")]
+        [SerializeField] private float _delayMinMax;
         
+        private AIHandler _aiHandler;
         
         private Node _node = null;
         private int _index = -1;
@@ -42,6 +45,7 @@ namespace Game
         private void Start()
         {
             ValueDependOnPositionData.InitializeDictionary();
+            // StartCoroutine(Coroutine(_delayMinMax));
         }
 
         private void Update()
@@ -57,7 +61,7 @@ namespace Game
                 
                 // if (_node == null)
                 // {
-                //     _node = new Node(BoardsHandler.Instance.Pieces, IsWhiteTurn, IsWhiteTurn);
+                //     _node = new Node(BoardsHandler.Instance.Pieces, !IsWhiteTurn, !IsWhiteTurn);
                 //     nodes = _node.Children();
                 //     Debug.Log("Actual heuristic value : " + _node.HeuristicValue());
                 //     Debug.Log("Child number : " + _node.Children().Count);
@@ -74,11 +78,29 @@ namespace Game
                 
                 int value = _aiHandler.MinMax(_node, 3, true, true);
                 BoardsHandler.Instance.Pieces = _aiHandler.BestChild.Pieces;
-                Debug.Log("MinMax : " + value);
+                Debug.Log("MinMax Value : " + value);
+                Debug.Log("BestChild Value : " + _aiHandler.BestChild.HeuristicValue());
                 
                 BoardsHandler.Instance.ResetMatrix();
                 BoardsHandler.Instance.DisplayMatrix();
                 Instance.IsWhiteTurn = !Instance.IsWhiteTurn;
+            }
+        }
+
+        private IEnumerator Coroutine(float delay)
+        {
+            while (true)
+            {
+                Debug.Log("Play");
+                _node = new Node(BoardsHandler.Instance.Pieces, IsWhiteTurn, IsWhiteTurn);
+                
+                _aiHandler.MinMax(_node, 3, true, true);
+                BoardsHandler.Instance.Pieces = _aiHandler.BestChild.Pieces;
+                
+                BoardsHandler.Instance.ResetMatrix();
+                BoardsHandler.Instance.DisplayMatrix();
+                Instance.IsWhiteTurn = !Instance.IsWhiteTurn;
+                yield return new WaitForSeconds(delay);
             }
         }
 

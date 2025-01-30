@@ -1144,10 +1144,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   LastClickGameObject: {fileID: 0}
   EndGamePanel: {fileID: 831712229}
-  EndGameText: {fileID: 0}
+  EndGameText: {fileID: 554317900}
   IsWhiteTurn: 1
   IsBlackKing: 0
   IsWhiteKing: 0
+  _delayMinMax: 2
 --- !u!114 &324137484
 MonoBehaviour:
   m_ObjectHideFlags: 0

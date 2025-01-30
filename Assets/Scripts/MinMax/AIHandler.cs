@@ -17,24 +17,20 @@ namespace MinMax
             if (maximizingPlayer)
             {
                 int maxHeuristicValue = int.MinValue;
-                int bestChildHeuristicValue = 0;
+                int bestChildHeuristicValue = int.MinValue;
                 
                 List<Node> nodeChildren = node.Children();
                 foreach (Node child in nodeChildren)
                 {
                     maxHeuristicValue = Mathf.Max(maxHeuristicValue, MinMax(child, depth - 1, false, false));
-
+                
                     if (firstCall)
                     {
-                        if (bestChildHeuristicValue == 0)
+                        if (bestChildHeuristicValue < maxHeuristicValue)
                         {
                             bestChildHeuristicValue = maxHeuristicValue;
                             BestChild = child;
-                        }
-                        else if (bestChildHeuristicValue < maxHeuristicValue)
-                        {
-                            bestChildHeuristicValue = maxHeuristicValue;
-                            BestChild = child;
+                            Debug.Log("BestChildren with MinMax heuristic value : " + maxHeuristicValue + " / " + bestChildHeuristicValue);
                         }
                     }
                 }

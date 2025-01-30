@@ -20,7 +20,7 @@ namespace MinMax
         
         public bool IsTerminal()
         {
-            return HeuristicValue() >= 20000 || HeuristicValue() <= -20000;
+            return HeuristicValue() >= 15000 || HeuristicValue() <= -15000;
         }
         
         public int HeuristicValue()
@@ -40,16 +40,20 @@ namespace MinMax
                             int valueDependingOnPosition = 0;
                             int [,] matrix = ValueDependOnPositionData.GetMatrix(Pieces[i, j].name);
                             valueDependingOnPosition = matrix[i,j];
-
+                            
                             whiteHeuristicValue += Pieces[i, j].BaseValue + valueDependingOnPosition;
+                            
+                            // whiteHeuristicValue += Pieces[i, j].BaseValue;
                         }
                         else
                         {
                             int valueDependingOnPosition = 0;
                             int [,] matrix = ValueDependOnPositionData.GetMatrix(Pieces[i, j].name);
                             valueDependingOnPosition = matrix[i,j];
-
+                            
                             blackHeuristicValue += Pieces[i, j].BaseValue + valueDependingOnPosition;
+                            
+                            // blackHeuristicValue += Pieces[i, j].BaseValue;
                         }
                     }
                 }
@@ -80,6 +84,7 @@ namespace MinMax
                     {
                         Piece piece = Pieces[i,j];
                         Vector2Int position = new Vector2Int(i, j);
+                        // Debug.Log(piece.name + " : " + piece.AvailableMovements(position).Count);
                         List<Vector2Int> availableMovements = piece.AvailableMovements(position);
                         
                         if (availableMovements.Count == 0) continue;
