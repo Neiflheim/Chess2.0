@@ -7,7 +7,7 @@ namespace Pieces
     [CreateAssetMenu(fileName = "Rook", menuName = "Piece/Rook")]
     public class Rook : Piece
     {
-        public override List<Vector2Int> AvailableMovements(Vector2Int position)
+        public override List<Vector2Int> AvailableMovements(Piece[,] pieces, Vector2Int position)
         {
             List<Vector2Int> movements = new List<Vector2Int>();
 

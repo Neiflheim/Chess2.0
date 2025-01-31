@@ -4,6 +4,7 @@ using Pieces;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
+using Utils;
 
 namespace Handlers
 {
@@ -42,7 +43,7 @@ namespace Handlers
                     BoardsHandler.Instance.ResetMatrix();
                     BoardsHandler.Instance.DisplayMatrix();
             
-                    List<Vector2Int> availableMovements = Piece.AvailableMovements(Position);
+                    List<Vector2Int> availableMovements = Piece.AvailableMovements(BoardsHandler.Instance.Pieces, Position);
             
                     foreach (Vector2Int availableMovement in availableMovements)
                     {
@@ -52,6 +53,8 @@ namespace Handlers
                 
                     availableMovements.Clear();
                 }
+                Debug.Log("Is Check : " + Rules.IsCheck(BoardsHandler.Instance.Pieces, Piece, Position));
+                Debug.Log("Is CheckMate : " + Rules.IsCheckMate(BoardsHandler.Instance.Pieces, Piece, Position));
             }
             
             if (_isMovement)

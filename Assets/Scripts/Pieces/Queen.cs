@@ -19,7 +19,7 @@ namespace Pieces
         private bool _movementHautDroite = true;
         private bool _movementHautGauche = true;
         
-        public override List<Vector2Int> AvailableMovements(Vector2Int position)
+        public override List<Vector2Int> AvailableMovements(Piece[,] pieces, Vector2Int position)
         {
             _movementBasDroite = true;
             _movementBasGauche = true;

@@ -20,7 +20,8 @@ namespace MinMax
         
         public bool IsTerminal()
         {
-            bool isTerminal = HeuristicValue() >= 10000 || HeuristicValue() <= -10000;
+            bool isTerminal = Children().Count == 0;
+            Debug.Log("Is Terminal : " + isTerminal);
             
             return isTerminal;
         }
@@ -87,7 +88,7 @@ namespace MinMax
                         Piece piece = Pieces[i,j];
                         Vector2Int position = new Vector2Int(i, j);
                         // Debug.Log(piece.name + " : " + piece.AvailableMovements(position).Count);
-                        List<Vector2Int> availableMovements = piece.AvailableMovements(position);
+                        List<Vector2Int> availableMovements = piece.AvailableMovements(Pieces, position);
                         
                         if (availableMovements.Count == 0) continue;
                     

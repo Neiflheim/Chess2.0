@@ -36,19 +36,19 @@ namespace Handlers
             Time.timeScale = 1;
 
             // BASEBOARD
-            Pieces = new Piece[,]
-            {
-                { blackRook, blackKnight, blackBishop, blackQueen, blackKing, blackBishop, blackKnight, blackRook },
-                { blackPawn, blackPawn, blackPawn, blackPawn, blackPawn, blackPawn, blackPawn, blackPawn },
-                { null, null, null, null, null, null, null, null },
-                { null, null, null, null, null, null, null, null },
-                { null, null, null, null, null, null, null, null },
-                { null, null, null, null, null, null, null, null },
-                { whitePawn, whitePawn, whitePawn, whitePawn, whitePawn, whitePawn, whitePawn, whitePawn },
-                { whiteRook, whiteKnight, whiteBishop, whiteQueen, whiteKing, whiteBishop, whiteKnight, whiteRook },
-            };
+            // Pieces = new Piece[,]
+            // {
+            //     { blackRook, blackKnight, blackBishop, blackQueen, blackKing, blackBishop, blackKnight, blackRook },
+            //     { blackPawn, blackPawn, blackPawn, blackPawn, blackPawn, blackPawn, blackPawn, blackPawn },
+            //     { null, null, null, null, null, null, null, null },
+            //     { null, null, null, null, null, null, null, null },
+            //     { null, null, null, null, null, null, null, null },
+            //     { null, null, null, null, null, null, null, null },
+            //     { whitePawn, whitePawn, whitePawn, whitePawn, whitePawn, whitePawn, whitePawn, whitePawn },
+            //     { whiteRook, whiteKnight, whiteBishop, whiteQueen, whiteKing, whiteBishop, whiteKnight, whiteRook },
+            // };
             
-            // TEST BASIQUE CHOIX
+            // TEST BASIQUE CHOIX DEPTH 2
             // Pieces = new Piece[,]
             // {
             //     { null, null, whiteKing, null, null, null, null, null },
@@ -60,6 +60,19 @@ namespace Handlers
             //     { null, null, null, null, null, null, null, null },
             //     { null, null, null, null, null, null, null, null },
             // };
+            
+            // TEST BASIQUE CHOIX DEPTH 4
+            Pieces = new Piece[,]
+            {
+                { null, null, whiteKing, null, null, null, null, null },
+                { null, null, null, null, null, null, null, null },
+                { null, whiteRook, null, whiteRook, null, null, null, null },
+                { null, whiteRook, null, blackKing, null, null, null, whiteRook },
+                { null, whiteRook, null, null, null, null, whiteBishop, null },
+                { null, null, null, null, null, whiteBishop, null, null },
+                { null, null, null, null, null, null, null, null },
+                { null, null, null, null, null, null, null, null },
+            };
             
             // TEST MAT EN DEUX COUPS
             // Pieces = new Piece[,]

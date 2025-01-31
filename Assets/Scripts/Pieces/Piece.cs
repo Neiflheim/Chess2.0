@@ -9,6 +9,6 @@ namespace Pieces
         public bool IsWhite;
         public int BaseValue;
 
-        public abstract List<Vector2Int> AvailableMovements(Vector2Int position);
+        public abstract List<Vector2Int> AvailableMovements(Piece[,] pieces, Vector2Int position);
     }
 }
