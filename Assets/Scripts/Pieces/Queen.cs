@@ -33,12 +33,12 @@ namespace Pieces
             
             for (i = position.x + 1; i <= 7; i++) 
             { 
-                if (BoardsHandler.Instance.Pieces[i, position.y] == null)
+                if (pieces[i, position.y] == null)
                 { 
                     movements.Add(new Vector2Int(i, position.y)); 
                     continue;
                 } 
-                if (BoardsHandler.Instance.Pieces[i, position.y].IsWhite != IsWhite)
+                if (pieces[i, position.y].IsWhite != IsWhite)
                 { 
                     movements.Add(new Vector2Int(i, position.y)); 
                     break;
@@ -50,12 +50,12 @@ namespace Pieces
             } 
             for (i = position.x - 1; i >= 0; i--) 
             { 
-                if (BoardsHandler.Instance.Pieces[i, position.y] == null) 
+                if (pieces[i, position.y] == null) 
                 { 
                     movements.Add(new Vector2Int(i, position.y)); 
                     continue;
                 } 
-                if (BoardsHandler.Instance.Pieces[i, position.y].IsWhite != IsWhite) 
+                if (pieces[i, position.y].IsWhite != IsWhite) 
                 { 
                     movements.Add(new Vector2Int(i, position.y)); 
                     break;
@@ -68,12 +68,12 @@ namespace Pieces
             
             for (j = position.y + 1; j <= 7; j++) 
             { 
-                if (BoardsHandler.Instance.Pieces[position.x, j] == null)
+                if (pieces[position.x, j] == null)
                 { 
                     movements.Add(new Vector2Int(position.x, j)); 
                     continue;
                 } 
-                if (BoardsHandler.Instance.Pieces[position.x, j].IsWhite != IsWhite) 
+                if (pieces[position.x, j].IsWhite != IsWhite) 
                 { 
                     movements.Add(new Vector2Int(position.x, j)); 
                     break;
@@ -85,12 +85,12 @@ namespace Pieces
             } 
             for (j = position.y - 1; j >= 0; j--) 
             { 
-                if (BoardsHandler.Instance.Pieces[position.x, j] == null) 
+                if (pieces[position.x, j] == null) 
                 { 
                     movements.Add(new Vector2Int(position.x, j)); 
                     continue;
                 } 
-                if (BoardsHandler.Instance.Pieces[position.x, j].IsWhite != IsWhite) 
+                if (pieces[position.x, j].IsWhite != IsWhite) 
                 { 
                     movements.Add(new Vector2Int(position.x, j)); 
                     break;
@@ -111,12 +111,12 @@ namespace Pieces
                     _movementBasDroite = false;
                     break;
                 }
-                if (BoardsHandler.Instance.Pieces[_testDirection.x, _testDirection.y] == null)
+                if (pieces[_testDirection.x, _testDirection.y] == null)
                 { 
                     movements.Add(new Vector2Int(_testDirection.x, _testDirection.y)); 
                     continue;
                 } 
-                if (BoardsHandler.Instance.Pieces[_testDirection.x, _testDirection.y].IsWhite != IsWhite)
+                if (pieces[_testDirection.x, _testDirection.y].IsWhite != IsWhite)
                 { 
                     movements.Add(new Vector2Int(_testDirection.x, _testDirection.y));
                     _movementBasDroite = false;
@@ -137,12 +137,12 @@ namespace Pieces
                     _movementBasGauche = false;
                     break;
                 }
-                if (BoardsHandler.Instance.Pieces[_testDirection.x, _testDirection.y] == null)
+                if (pieces[_testDirection.x, _testDirection.y] == null)
                 { 
                     movements.Add(new Vector2Int(_testDirection.x, _testDirection.y)); 
                     continue;
                 } 
-                if (BoardsHandler.Instance.Pieces[_testDirection.x, _testDirection.y].IsWhite != IsWhite)
+                if (pieces[_testDirection.x, _testDirection.y].IsWhite != IsWhite)
                 { 
                     movements.Add(new Vector2Int(_testDirection.x, _testDirection.y));
                     _movementBasGauche = false;
@@ -163,12 +163,12 @@ namespace Pieces
                     _movementHautDroite = false;
                     break;
                 }
-                if (BoardsHandler.Instance.Pieces[_testDirection.x, _testDirection.y] == null)
+                if (pieces[_testDirection.x, _testDirection.y] == null)
                 { 
                     movements.Add(new Vector2Int(_testDirection.x, _testDirection.y)); 
                     continue;
                 } 
-                if (BoardsHandler.Instance.Pieces[_testDirection.x, _testDirection.y].IsWhite != IsWhite)
+                if (pieces[_testDirection.x, _testDirection.y].IsWhite != IsWhite)
                 { 
                     movements.Add(new Vector2Int(_testDirection.x, _testDirection.y));
                     _movementHautDroite = false;
@@ -189,12 +189,12 @@ namespace Pieces
                     _movementHautGauche = false;
                     break;
                 }
-                if (BoardsHandler.Instance.Pieces[_testDirection.x, _testDirection.y] == null)
+                if (pieces[_testDirection.x, _testDirection.y] == null)
                 { 
                     movements.Add(new Vector2Int(_testDirection.x, _testDirection.y)); 
                     continue;
                 } 
-                if (BoardsHandler.Instance.Pieces[_testDirection.x, _testDirection.y].IsWhite != IsWhite)
+                if (pieces[_testDirection.x, _testDirection.y].IsWhite != IsWhite)
                 { 
                     movements.Add(new Vector2Int(_testDirection.x, _testDirection.y));
                     _movementHautGauche = false;

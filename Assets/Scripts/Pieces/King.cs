@@ -28,12 +28,12 @@ namespace Pieces
                 }
                 
                 // Ajoute les mouvements
-                if (BoardsHandler.Instance.Pieces[testDirection.x, testDirection.y] == null)
+                if (pieces[testDirection.x, testDirection.y] == null)
                 { 
                     movements.Add(new Vector2Int(testDirection.x, testDirection.y));
                     continue;
                 } 
-                if (BoardsHandler.Instance.Pieces[testDirection.x, testDirection.y].IsWhite != IsWhite)
+                if (pieces[testDirection.x, testDirection.y].IsWhite != IsWhite)
                 { 
                     movements.Add(new Vector2Int(testDirection.x, testDirection.y));
                 }
