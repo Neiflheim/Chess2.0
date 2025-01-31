@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using Handlers;
 using MinMax;
+using Pieces;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
@@ -62,8 +63,9 @@ namespace Game
                     Debug.Log("Actual heuristic value : " + _node.HeuristicValue());
                     Debug.Log("Child number : " + _node.Children().Count);
                 }
+                
                 _index += 1;
-                if (_index <= _node.Children().Count - 1)
+                if (_index <= _node.Children().Count)
                 {
                     ChangePieces(nodes[_index]);
                 }
@@ -83,11 +85,25 @@ namespace Game
                 // Pour tester le MinMax
                 _node = new Node(BoardsHandler.Instance.Pieces, IsWhiteTurn, IsWhiteTurn);
                 nodes = _node.Children();
+                int maxHeuristic = int.MinValue;
+                Node bestChildNode = null;
                 
-                int value = _aiHandler.MinMax(_node, _depth, true, true);
-                BoardsHandler.Instance.Pieces = _aiHandler.BestChild.Pieces;
-                Debug.Log("MinMax Value : " + value);
-                Debug.Log("BestChild Value : " + _aiHandler.BestChild.HeuristicValue());
+                foreach (Node child in nodes)
+                {
+                    BoardsHandler.Instance.Pieces = child.Pieces;
+                    int childheuristic = child.HeuristicValue();
+                    int currentHeuristic = _aiHandler.MinMax(child, _depth -1, false);
+                    if (currentHeuristic > maxHeuristic)
+                    {
+                        maxHeuristic = currentHeuristic;
+                        bestChildNode = child;
+                    }
+                }
+
+                if (bestChildNode != null)
+                {
+                    BoardsHandler.Instance.Pieces = bestChildNode.Pieces;
+                }
                 
                 BoardsHandler.Instance.ResetMatrix();
                 BoardsHandler.Instance.DisplayMatrix();
@@ -102,11 +118,27 @@ namespace Game
 
         private void Play()
         {
-            Debug.Log("Play");
             _node = new Node(BoardsHandler.Instance.Pieces, IsWhiteTurn, IsWhiteTurn);
+            nodes = _node.Children();
+            int maxHeuristic = int.MinValue;
+            Node bestChildNode = null;
                 
-            _aiHandler.MinMax(_node, _depth, true, true);
-            BoardsHandler.Instance.Pieces = _aiHandler.BestChild.Pieces;
+            foreach (Node child in nodes)
+            {
+                BoardsHandler.Instance.Pieces = child.Pieces;
+                int childheuristic = child.HeuristicValue();
+                int currentHeuristic = _aiHandler.MinMax(child, _depth -1, false);
+                if (currentHeuristic > maxHeuristic)
+                {
+                    maxHeuristic = currentHeuristic;
+                    bestChildNode = child;
+                }
+            }
+
+            if (bestChildNode != null)
+            {
+                BoardsHandler.Instance.Pieces = bestChildNode.Pieces;
+            }
                 
             BoardsHandler.Instance.ResetMatrix();
             BoardsHandler.Instance.DisplayMatrix();

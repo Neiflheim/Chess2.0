@@ -9,12 +9,13 @@ namespace MinMax
     {
         public Piece[,] Pieces;
         public bool IsWhiteTurn;
-        public bool IsWhitePlaying;
-        public Node(Piece[,] pieces, bool isWhiteTurn, bool isWhitePlaying)
+        public bool IsWhitePredictions;
+        
+        public Node(Piece[,] pieces, bool isWhiteTurn, bool isWhitePredictions)
         {
             Pieces = (Piece[,]) pieces.Clone();
             IsWhiteTurn = isWhiteTurn;
-            IsWhitePlaying = isWhitePlaying;
+            IsWhitePredictions = isWhitePredictions;
         }
         
         public bool IsTerminal()
@@ -60,7 +61,7 @@ namespace MinMax
                 }
             }
             
-            if (IsWhiteTurn)
+            if (IsWhitePredictions)
             {
                 boardHeuristicValue = whiteHeuristicValue - blackHeuristicValue;
             }
@@ -93,7 +94,7 @@ namespace MinMax
                         foreach (Vector2Int movement in availableMovements)
                         {
                             Piece[,] pieces = Pieces;
-                            Node node = new Node(pieces, !IsWhiteTurn, IsWhitePlaying);
+                            Node node = new Node(pieces, !IsWhiteTurn, IsWhitePredictions);
                             node.MovePiece(piece, position, movement);
                             children.Add(node);
                         }

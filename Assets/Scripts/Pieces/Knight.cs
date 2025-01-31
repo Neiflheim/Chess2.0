@@ -34,10 +34,8 @@ namespace Pieces
                 } 
                 if (BoardsHandler.Instance.Pieces[testDirection.x, testDirection.y].IsWhite != IsWhite)
                 { 
-                    movements.Add(new Vector2Int(testDirection.x, testDirection.y)); 
-                    continue;
+                    movements.Add(new Vector2Int(testDirection.x, testDirection.y));
                 }
-                continue;
             }
             
             return movements;

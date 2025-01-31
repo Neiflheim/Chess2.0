@@ -1,4 +1,5 @@
 using Game;
+using Helpers;
 using Pieces;
 using UnityEngine;
 using Utils;
@@ -33,7 +34,7 @@ namespace Handlers
         private void Start()
         {
             Time.timeScale = 1;
-            
+
             // BASEBOARD
             Pieces = new Piece[,]
             {
@@ -46,6 +47,19 @@ namespace Handlers
                 { whitePawn, whitePawn, whitePawn, whitePawn, whitePawn, whitePawn, whitePawn, whitePawn },
                 { whiteRook, whiteKnight, whiteBishop, whiteQueen, whiteKing, whiteBishop, whiteKnight, whiteRook },
             };
+            
+            // TEST BASIQUE CHOIX
+            // Pieces = new Piece[,]
+            // {
+            //     { null, null, whiteKing, null, null, null, null, null },
+            //     { null, null, null, null, null, null, null, null },
+            //     { null, null, null, whiteBishop, null, null, null, null },
+            //     { null, null, whiteRook, blackKing, null, null, null, null },
+            //     { null, null, null, null, null, null, null, null },
+            //     { null, null, null, null, null, null, null, null },
+            //     { null, null, null, null, null, null, null, null },
+            //     { null, null, null, null, null, null, null, null },
+            // };
             
             // TEST MAT EN DEUX COUPS
             // Pieces = new Piece[,]
