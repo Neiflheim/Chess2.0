@@ -4,6 +4,7 @@ using MinMax;
 using Pieces;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.Serialization;
 using UnityEngine.UI;
 using Utils;
 
@@ -23,8 +24,10 @@ namespace Game
         
         [Header("Data")]
         public bool IsWhiteTurn = true;
-        public bool IsBlackKing;
-        public bool IsWhiteKing;
+        public bool IsBlackKingCheckMate;
+        public bool IsBlackKingCheck;
+        public bool IsWhiteKingCheckMate;
+        public bool IsWhiteKingCheck;
         
         [Header("Selected Piece")]
         [SerializeField] private float _delayMinMax;

@@ -36,17 +36,17 @@ namespace Handlers
             Time.timeScale = 1;
 
             // BASEBOARD
-            Pieces = new Piece[,]
-            {
-                { blackRook, blackKnight, blackBishop, blackQueen, blackKing, blackBishop, blackKnight, blackRook },
-                { blackPawn, blackPawn, blackPawn, blackPawn, blackPawn, blackPawn, blackPawn, blackPawn },
-                { null, null, null, null, null, null, null, null },
-                { null, null, null, null, null, null, null, null },
-                { null, null, null, null, null, null, null, null },
-                { null, null, null, null, null, null, null, null },
-                { whitePawn, whitePawn, whitePawn, whitePawn, whitePawn, whitePawn, whitePawn, whitePawn },
-                { whiteRook, whiteKnight, whiteBishop, whiteQueen, whiteKing, whiteBishop, whiteKnight, whiteRook },
-            };
+            // Pieces = new Piece[,]
+            // {
+            //     { blackRook, blackKnight, blackBishop, blackQueen, blackKing, blackBishop, blackKnight, blackRook },
+            //     { blackPawn, blackPawn, blackPawn, blackPawn, blackPawn, blackPawn, blackPawn, blackPawn },
+            //     { null, null, null, null, null, null, null, null },
+            //     { null, null, null, null, null, null, null, null },
+            //     { null, null, null, null, null, null, null, null },
+            //     { null, null, null, null, null, null, null, null },
+            //     { whitePawn, whitePawn, whitePawn, whitePawn, whitePawn, whitePawn, whitePawn, whitePawn },
+            //     { whiteRook, whiteKnight, whiteBishop, whiteQueen, whiteKing, whiteBishop, whiteKnight, whiteRook },
+            // };
             
             // TEST BASIQUE CHOIX DEPTH 2
             // Pieces = new Piece[,]
@@ -61,18 +61,18 @@ namespace Handlers
             //     { null, null, null, null, null, null, null, null },
             // };
             
-            // TEST BASIQUE CHOIX DEPTH 4
-            // Pieces = new Piece[,]
-            // {
-            //     { null, null, whiteKing, null, null, null, null, null },
-            //     { null, null, null, null, null, null, null, null },
-            //     { null, whiteRook, null, whiteRook, null, null, null, null },
-            //     { null, whiteRook, null, blackKing, null, null, null, whiteRook },
-            //     { null, whiteRook, null, null, null, null, whiteBishop, null },
-            //     { null, null, null, null, null, whiteBishop, null, null },
-            //     { null, null, null, null, null, null, null, null },
-            //     { null, null, null, null, null, null, null, null },
-            // };
+            // TEST ISCHECK/ISCHECKMATE
+            Pieces = new Piece[,]
+            {
+                { null, null, whiteKing, null, null, null, null, null },
+                { null, null, null, null, null, null, null, null },
+                { null, null, null, null, null, null, null, null },
+                { null, whiteRook, null, blackKing, null, null, null, whiteRook },
+                { null, whiteRook, null, null, null, null, whiteBishop, null },
+                { null, null, null, null, null, whiteBishop, null, null },
+                { null, null, null, null, null, null, null, null },
+                { null, null, null, null, null, null, null, null },
+            };
             
             // TEST MAT EN DEUX COUPS
             // Pieces = new Piece[,]
@@ -119,6 +119,21 @@ namespace Handlers
                         // Instancier un prefab Image pour chaque élément
                         newPiece = Instantiate(piecePrefab, gridParent);
                         newPiece.GetComponent<PieceHandler>().Setup(Pieces[i, j], new Vector2Int(i, j));
+                        
+                        if (Pieces[i, j] == blackKing)
+                        {
+                            if (Rules.IsCheck(Pieces, Pieces[i, j], new Vector2Int(i, j)))
+                            {
+                                GameManager.Instance.IsBlackKingCheck = true;
+                            }
+                        }
+                        if (Pieces[i, j] == whiteKing)
+                        {
+                            if (Rules.IsCheck(Pieces, Pieces[i, j], new Vector2Int(i, j)))
+                            {
+                                GameManager.Instance.IsWhiteKingCheck = true;
+                            }
+                        }
                     }
                     else
                     {
@@ -161,8 +176,8 @@ namespace Handlers
 
         public void IsEndGame()
         {
-            GameManager.Instance.IsBlackKing = false;
-            GameManager.Instance.IsWhiteKing = false;
+            GameManager.Instance.IsBlackKingCheckMate = false;
+            GameManager.Instance.IsWhiteKingCheckMate = false;
             
             for (int i = 0; i < Pieces.GetLength(0); i++)
             {
@@ -170,22 +185,43 @@ namespace Handlers
                 {
                     if (Pieces[i, j] == blackKing)
                     {
-                        GameManager.Instance.IsBlackKing = true;
+                        if (Rules.IsCheckMate(Pieces, Pieces[i, j], new Vector2Int(i, j)))
+                        {
+                            GameManager.Instance.IsBlackKingCheckMate = true;
+                        }
                     }
                     if (Pieces[i, j] == whiteKing)
                     {
-                        GameManager.Instance.IsWhiteKing = true;
+                        if (Rules.IsCheckMate(Pieces, Pieces[i, j], new Vector2Int(i, j)))
+                        {
+                            GameManager.Instance.IsWhiteKingCheckMate = true;
+                        }
                     }
                 }
             }
+            
+            // for (int i = 0; i < Pieces.GetLength(0); i++)
+            // {
+            //     for (int j = 0; j < Pieces.GetLength(1); j++)
+            //     {
+            //         if (Pieces[i, j] == blackKing)
+            //         {
+            //             GameManager.Instance.IsBlackKing = true;
+            //         }
+            //         if (Pieces[i, j] == whiteKing)
+            //         {
+            //             GameManager.Instance.IsWhiteKing = true;
+            //         }
+            //     }
+            // }
 
-            if (GameManager.Instance.IsBlackKing == false)
+            if (GameManager.Instance.IsBlackKingCheckMate)
             {
                 Time.timeScale = 0;
                 GameManager.Instance.EndGamePanel.SetActive(true);
                 GameManager.Instance.EndGameText.text = " Victory White Player ! ";
             }
-            if (GameManager.Instance.IsWhiteKing == false)
+            if (GameManager.Instance.IsWhiteKingCheckMate)
             {
                 Time.timeScale = 0;
                 GameManager.Instance.EndGamePanel.SetActive(true);
