@@ -21,7 +21,7 @@ namespace MinMax
         public bool IsTerminal()
         {
             bool isTerminal = Children().Count == 0;
-            Debug.Log("Is Terminal : " + isTerminal);
+            // Debug.Log("Is Terminal : " + isTerminal);
             
             return isTerminal;
         }
