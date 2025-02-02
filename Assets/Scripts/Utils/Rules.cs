@@ -18,7 +18,7 @@ namespace Utils
                     {
                         Piece piece = pieces[i,j];
                         Vector2Int piecePosition = new Vector2Int(i, j);
-                        List<Vector2Int> availableMovements = piece.AvailableMovements(pieces, piecePosition);
+                        List<Vector2Int> availableMovements = piece.AvailableMovements(pieces, piecePosition, false);
                         
                         if (availableMovements.Count == 0) continue;
                     
@@ -43,7 +43,7 @@ namespace Utils
 
             if (IsCheck(pieces, currentPiece, position))
             {
-                List<Vector2Int> currentPieceAvailableMovements = currentPiece.AvailableMovements(pieces, position);
+                List<Vector2Int> currentPieceAvailableMovements = currentPiece.AvailableMovements(pieces, position, false);
                 foreach (Vector2Int currentPieceMovement in currentPieceAvailableMovements)
                 {
                     Piece[,] testPieces = (Piece[,]) pieces.Clone();
@@ -54,29 +54,6 @@ namespace Utils
                     {
                         movementsToRemove.Add(currentPieceMovement);
                     }
-                    
-                    // for (int i = 0; i < testPieces.GetLength(0); i++)
-                    // {
-                    //     for (int j = 0; j < testPieces.GetLength(1); j++)
-                    //     {
-                    //         if (testPieces[i,j] && testPieces[i,j].IsWhite != currentPiece.IsWhite)
-                    //         {
-                    //             Piece piece = testPieces[i,j];
-                    //             Vector2Int piecePosition = new Vector2Int(i, j);
-                    //             List<Vector2Int> pieceAvailableMovements = piece.AvailableMovements(testPieces, piecePosition);
-                    //     
-                    //             if (pieceAvailableMovements.Count == 0) continue;
-                    //
-                    //             foreach (Vector2Int pieceMovement in pieceAvailableMovements)
-                    //             {
-                    //                 if ()
-                    //                 {
-                    //                     movementsToRemove.Add(pieceMovement);
-                    //                 }
-                    //             }
-                    //         }
-                    //     }
-                    // }
                 }
 
                 foreach (Vector2Int movement in movementsToRemove)

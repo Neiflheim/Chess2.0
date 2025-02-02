@@ -14,9 +14,10 @@ namespace Pieces
         };
         
         
-        public override List<Vector2Int> AvailableMovements(Piece[,] pieces, Vector2Int position)
+        public override List<Vector2Int> AvailableMovements(Piece[,] pieces, Vector2Int position, bool firstCall)
         {
             List<Vector2Int> movements = new List<Vector2Int>();
+            List<Vector2Int> movementsToRemove = new List<Vector2Int>();
             
 
             foreach (Vector2Int direction in _directions)
@@ -35,6 +36,25 @@ namespace Pieces
                 if (pieces[testDirection.x, testDirection.y].IsWhite != IsWhite)
                 { 
                     movements.Add(new Vector2Int(testDirection.x, testDirection.y));
+                }
+            }
+            
+            if (firstCall)
+            {
+                foreach (Vector2Int movement in movements)
+                {
+                    if (!CanPlayThisMovement(pieces, this, position, movement))
+                    {
+                        movementsToRemove.Add(movement);
+                    }
+                }
+            
+                foreach (Vector2Int movement in movementsToRemove)
+                {
+                    if (movements.Contains(movement))
+                    {
+                        movements.Remove(movement);
+                    }
                 }
             }
             

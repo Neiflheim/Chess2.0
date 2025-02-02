@@ -88,7 +88,7 @@ namespace MinMax
                         Piece piece = Pieces[i,j];
                         Vector2Int position = new Vector2Int(i, j);
                         // Debug.Log(piece.name + " : " + piece.AvailableMovements(position).Count);
-                        List<Vector2Int> availableMovements = piece.AvailableMovements(Pieces, position);
+                        List<Vector2Int> availableMovements = piece.AvailableMovements(Pieces, position, true);
                         
                         if (availableMovements.Count == 0) continue;
                     

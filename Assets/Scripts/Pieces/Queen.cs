@@ -19,7 +19,7 @@ namespace Pieces
         private bool _movementHautDroite = true;
         private bool _movementHautGauche = true;
         
-        public override List<Vector2Int> AvailableMovements(Piece[,] pieces, Vector2Int position)
+        public override List<Vector2Int> AvailableMovements(Piece[,] pieces, Vector2Int position, bool firstCall)
         {
             _movementBasDroite = true;
             _movementBasGauche = true;
@@ -27,6 +27,7 @@ namespace Pieces
             _movementHautGauche = true;
             
             List<Vector2Int> movements = new List<Vector2Int>();
+            List<Vector2Int> movementsToRemove = new List<Vector2Int>();
 
             int i;
             int j;
@@ -202,6 +203,25 @@ namespace Pieces
                 else
                 {
                     _movementHautGauche = false;
+                }
+            }
+            
+            if (firstCall)
+            {
+                foreach (Vector2Int movement in movements)
+                {
+                    if (!CanPlayThisMovement(pieces, this, position, movement))
+                    {
+                        movementsToRemove.Add(movement);
+                    }
+                }
+            
+                foreach (Vector2Int movement in movementsToRemove)
+                {
+                    if (movements.Contains(movement))
+                    {
+                        movements.Remove(movement);
+                    }
                 }
             }
             
