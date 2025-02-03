@@ -144,7 +144,7 @@ namespace Handlers
                 }
             }
             
-            Rules.IsEndGameOver(Pieces, whiteKing, blackKing);
+            Rules.IsGameOver(Pieces, whiteKing, blackKing);
         }
 
         public void ResetMatrix()

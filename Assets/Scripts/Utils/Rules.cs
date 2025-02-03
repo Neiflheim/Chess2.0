@@ -97,7 +97,7 @@ namespace Utils
             return isCheckMate;
         }
 
-        public static void IsEndGameOver(Piece[,] pieces, Piece whiteKing, Piece blackKing)
+        public static void IsGameOver(Piece[,] pieces, Piece whiteKing, Piece blackKing)
         {
             GameManager.Instance.IsBlackKingCheckMate = false;
             GameManager.Instance.IsWhiteKingCheckMate = false;
@@ -130,13 +130,13 @@ namespace Utils
             {
                 Time.timeScale = 0;
                 GameManager.Instance.EndGamePanel.SetActive(true);
-                GameManager.Instance.EndGameText.text = " Victory White Player ! ";
+                GameManager.Instance.GameOverText.text = " CHECKMATE : Victory White Player ! ";
             }
             if (GameManager.Instance.IsWhiteKingCheckMate)
             {
                 Time.timeScale = 0;
                 GameManager.Instance.EndGamePanel.SetActive(true);
-                GameManager.Instance.EndGameText.text = " Victory Black Player ! ";
+                GameManager.Instance.GameOverText.text = " CHECKMATE : Victory Black Player ! ";
             }
         }
     }

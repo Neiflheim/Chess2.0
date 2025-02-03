@@ -2,9 +2,9 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using Handlers;
 using MinMax;
+using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
-using UnityEngine.UI;
 using Utils;
 using Debug = UnityEngine.Debug;
 
@@ -17,7 +17,7 @@ namespace Game
 
         [Header("End Game")]
         public GameObject EndGamePanel;
-        public Text EndGameText;
+        public TextMeshProUGUI GameOverText;
 
         [Header("Sound")]
         // public GameObject AudioManager;
