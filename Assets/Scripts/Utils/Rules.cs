@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using Game;
 using Pieces;
 using UnityEngine;
 
@@ -6,6 +7,29 @@ namespace Utils
 {
     public static class Rules
     {
+        public static void PawnPromotion(Piece[,] pieces, Piece whiteQueen, Piece blackQueen)
+        {
+            for (int i = 0; i < pieces.GetLength(0); i++)
+            {
+                if (pieces[0, i])
+                {
+                    if (pieces[0, i].name == "WhitePawn")
+                    {
+                        pieces[0, i] = whiteQueen;
+                    }
+                }
+
+                if (pieces[7, i])
+                {
+                    if (pieces[7, i].name == "BlackPawn")
+                    {
+                        pieces[7, i] = blackQueen;
+                    }
+                }
+                
+            }
+        }
+        
         public static bool IsCheck(Piece[,] pieces, Piece currentPiece, Vector2Int position)
         {
             bool isCheck = false;
@@ -71,6 +95,49 @@ namespace Utils
             }
             
             return isCheckMate;
+        }
+
+        public static void IsEndGameOver(Piece[,] pieces, Piece whiteKing, Piece blackKing)
+        {
+            GameManager.Instance.IsBlackKingCheckMate = false;
+            GameManager.Instance.IsWhiteKingCheckMate = false;
+            
+            for (int i = 0; i < pieces.GetLength(0); i++)
+            {
+                for (int j = 0; j < pieces.GetLength(1); j++)
+                {
+                    if (pieces[i, j])
+                    {
+                        if (pieces[i, j] == blackKing)
+                        {
+                            if (IsCheckMate(pieces, pieces[i, j], new Vector2Int(i, j)))
+                            {
+                                GameManager.Instance.IsBlackKingCheckMate = true;
+                            }
+                        }
+                        if (pieces[i, j] == whiteKing)
+                        {
+                            if (IsCheckMate(pieces, pieces[i, j], new Vector2Int(i, j)))
+                            {
+                                GameManager.Instance.IsWhiteKingCheckMate = true;
+                            }
+                        }
+                    }
+                }
+            }
+
+            if (GameManager.Instance.IsBlackKingCheckMate)
+            {
+                Time.timeScale = 0;
+                GameManager.Instance.EndGamePanel.SetActive(true);
+                GameManager.Instance.EndGameText.text = " Victory White Player ! ";
+            }
+            if (GameManager.Instance.IsWhiteKingCheckMate)
+            {
+                Time.timeScale = 0;
+                GameManager.Instance.EndGamePanel.SetActive(true);
+                GameManager.Instance.EndGameText.text = " Victory Black Player ! ";
+            }
         }
     }
 }

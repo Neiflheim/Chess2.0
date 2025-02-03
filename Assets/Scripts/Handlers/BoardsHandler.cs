@@ -1,5 +1,4 @@
 using Game;
-using Helpers;
 using Pieces;
 using UnityEngine;
 using Utils;
@@ -45,7 +44,7 @@ namespace Handlers
             //     { null, null, null, null, null, null, null, null },
             //     { null, null, null, null, null, null, null, null },
             //     { whitePawn, whitePawn, whitePawn, whitePawn, whitePawn, whitePawn, whitePawn, whitePawn },
-            //     { whiteRook, whiteKnight, whiteBishop, whiteQueen, whiteKing, whiteBishop, whiteKnight, whiteRook },
+            //     { whiteRook, whiteKnight, whiteBishop, whiteQueen, whiteKing, whiteBishop, whiteKnight, whiteRook }
             // };
             
             // TEST BASIQUE CHOIX DEPTH 2
@@ -58,7 +57,7 @@ namespace Handlers
             //     { null, null, null, null, null, null, null, null },
             //     { null, null, null, null, null, null, null, null },
             //     { null, null, null, null, null, null, null, null },
-            //     { null, null, null, null, null, null, null, null },
+            //     { null, null, null, null, null, null, null, null }
             // };
             
             // TEST ISCHECK/ISCHECKMATE
@@ -71,7 +70,7 @@ namespace Handlers
             //     { null, whiteRook, null, null, null, null, whiteBishop, null },
             //     { null, null, null, null, null, whiteBishop, null, null },
             //     { null, null, null, null, null, null, null, null },
-            //     { null, null, null, null, null, null, null, null },
+            //     { null, null, null, null, null, null, null, null }
             // };
             
             // TEST MAT EN DEUX COUPS
@@ -84,7 +83,7 @@ namespace Handlers
                 { null, whiteBishop, null, null, null, null, null, null },
                 { whiteKnight, whiteKnight, null, null, null, null, null, null },
                 { blackPawn, blackKing, null, whiteKing, null, null, null, null },
-                { null, null, null, null, null, null, null, null },
+                { null, null, null, null, null, null, null, null }
             };
             
             // Pieces = new Piece[,]
@@ -96,7 +95,7 @@ namespace Handlers
             //     { blackPawn, null, null, whitePawn, null, null, null, whiteBishop },
             //     { null, whitePawn, null, null, null, null, null, whiteKing },
             //     { whitePawn, null, null, null, null, null, null, whitePawn },
-            //     { null, null, null, null, null, null, null, null },
+            //     { null, null, null, null, null, null, null, null }
             // };
             
             DisplayMatrix();
@@ -106,7 +105,7 @@ namespace Handlers
         {
             PiecesDisplay = new GameObject[Pieces.GetLength(0), Pieces.GetLength(1)];
             
-            PawnToQueen();
+            Rules.PawnPromotion(Pieces, whiteQueen, blackQueen);
             
             for (int i = 0; i < Pieces.GetLength(0); i++)
             {
@@ -145,7 +144,7 @@ namespace Handlers
                 }
             }
             
-            IsEndGame();
+            Rules.IsEndGameOver(Pieces, whiteKing, blackKing);
         }
 
         public void ResetMatrix()
@@ -153,79 +152,6 @@ namespace Handlers
             foreach (Transform child in gridParent.transform)
             {
                 Destroy(child.gameObject);
-            }
-        }
-
-        private void PawnToQueen()
-        {
-            for (int i = 0; i < Pieces.GetLength(0); i++)
-            {
-                if (Pieces[0, i] == whitePawn)
-                {
-                    Pieces[0, i] = whiteQueen;
-                }
-            }
-            for (int i = 0; i < Pieces.GetLength(0); i++)
-            {
-                if (Pieces[7, i] == blackPawn)
-                {
-                    Pieces[7, i] = blackQueen;
-                }
-            }
-        }
-
-        public void IsEndGame()
-        {
-            GameManager.Instance.IsBlackKingCheckMate = false;
-            GameManager.Instance.IsWhiteKingCheckMate = false;
-            
-            for (int i = 0; i < Pieces.GetLength(0); i++)
-            {
-                for (int j = 0; j < Pieces.GetLength(1); j++)
-                {
-                    if (Pieces[i, j] == blackKing)
-                    {
-                        if (Rules.IsCheckMate(Pieces, Pieces[i, j], new Vector2Int(i, j)))
-                        {
-                            GameManager.Instance.IsBlackKingCheckMate = true;
-                        }
-                    }
-                    if (Pieces[i, j] == whiteKing)
-                    {
-                        if (Rules.IsCheckMate(Pieces, Pieces[i, j], new Vector2Int(i, j)))
-                        {
-                            GameManager.Instance.IsWhiteKingCheckMate = true;
-                        }
-                    }
-                }
-            }
-            
-            // for (int i = 0; i < Pieces.GetLength(0); i++)
-            // {
-            //     for (int j = 0; j < Pieces.GetLength(1); j++)
-            //     {
-            //         if (Pieces[i, j] == blackKing)
-            //         {
-            //             GameManager.Instance.IsBlackKing = true;
-            //         }
-            //         if (Pieces[i, j] == whiteKing)
-            //         {
-            //             GameManager.Instance.IsWhiteKing = true;
-            //         }
-            //     }
-            // }
-
-            if (GameManager.Instance.IsBlackKingCheckMate)
-            {
-                Time.timeScale = 0;
-                GameManager.Instance.EndGamePanel.SetActive(true);
-                GameManager.Instance.EndGameText.text = " Victory White Player ! ";
-            }
-            if (GameManager.Instance.IsWhiteKingCheckMate)
-            {
-                Time.timeScale = 0;
-                GameManager.Instance.EndGamePanel.SetActive(true);
-                GameManager.Instance.EndGameText.text = " Victory Black Player ! ";
             }
         }
     }

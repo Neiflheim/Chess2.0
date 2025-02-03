@@ -55,8 +55,6 @@ namespace MinMax
                             {
                                 isWhiteKingCheckMate = true;
                             }
-                            
-                            // whiteHeuristicValue += Pieces[i, j].BaseValue;
                         }
                         else
                         {
@@ -70,8 +68,6 @@ namespace MinMax
                             {
                                 isBlackKingCheckMate = true;
                             }
-                            
-                            // blackHeuristicValue += Pieces[i, j].BaseValue;
                         }
                     }
                 }
@@ -81,7 +77,7 @@ namespace MinMax
             {
                 if (isWhiteKingCheckMate)
                 {
-                    checkMateValue = 100000;
+                    checkMateValue = -100000;
                 }
 
                 if (isBlackKingCheckMate)
@@ -100,7 +96,7 @@ namespace MinMax
 
                 if (isBlackKingCheckMate)
                 {
-                    checkMateValue = 100000;
+                    checkMateValue = -100000;
                 }
                 
                 boardHeuristicValue = blackHeuristicValue + checkMateValue - whiteHeuristicValue;

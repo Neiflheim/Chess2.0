@@ -38,7 +38,7 @@ namespace MinMax
             }
         }
         
-        public int MinMaxAlphaBeta(Node node, int depth, bool maximizingPlayer)
+        public int MinMaxAlphaBeta(Node node, int depth, bool maximizingPlayer, int alpha, int beta)
         {
             if (depth == 0 || node.IsTerminal())
             {
@@ -52,7 +52,13 @@ namespace MinMax
                 List<Node> nodeChildren = node.Children();
                 foreach (Node child in nodeChildren)
                 {
-                    maxHeuristicValue = Mathf.Max(maxHeuristicValue, MinMax(child, depth - 1, false));
+                    maxHeuristicValue = Mathf.Max(maxHeuristicValue, MinMaxAlphaBeta(child, depth - 1, false, alpha, beta));
+
+                    if (maxHeuristicValue >= beta)
+                    {
+                        return maxHeuristicValue;
+                    }
+                    alpha = Mathf.Max(alpha, maxHeuristicValue);
                 }
                 
                 return maxHeuristicValue;
@@ -64,8 +70,14 @@ namespace MinMax
                 List<Node> nodeChildren = node.Children();
                 foreach (Node child in nodeChildren)
                 {
-                    minHeuristicValue = Mathf.Min(minHeuristicValue, MinMax(child, depth - 1, true));
+                    minHeuristicValue = Mathf.Min(minHeuristicValue, MinMaxAlphaBeta(child, depth - 1, true, alpha, beta));
                 }
+
+                if (alpha >= minHeuristicValue)
+                {
+                    return minHeuristicValue;
+                }
+                beta = Mathf.Min(beta, minHeuristicValue);
                 
                 return minHeuristicValue;
             }

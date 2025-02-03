@@ -1,12 +1,12 @@
 using System.Collections.Generic;
+using System.Diagnostics;
 using Handlers;
 using MinMax;
-using Pieces;
 using UnityEngine;
 using UnityEngine.SceneManagement;
-using UnityEngine.Serialization;
 using UnityEngine.UI;
 using Utils;
+using Debug = UnityEngine.Debug;
 
 namespace Game
 {
@@ -85,7 +85,11 @@ namespace Game
 
             if (Input.GetButtonDown("Fire2"))
             {
-                // Pour tester le MinMax
+                Stopwatch stopwatch = new Stopwatch();
+                stopwatch.Start();
+                
+                // TESTER MINMAX
+                
                 _node = new Node(BoardsHandler.Instance.Pieces, IsWhiteTurn, IsWhiteTurn);
                 nodes = _node.Children();
                 int maxHeuristic = int.MinValue;
@@ -101,7 +105,7 @@ namespace Game
                         bestChildNode = child;
                     }
                 }
-
+                
                 if (bestChildNode != null)
                 {
                     BoardsHandler.Instance.Pieces = bestChildNode.Pieces;
@@ -110,6 +114,37 @@ namespace Game
                 BoardsHandler.Instance.ResetMatrix();
                 BoardsHandler.Instance.DisplayMatrix();
                 IsWhiteTurn = !IsWhiteTurn;
+                
+                
+                // TESTER MINMAXALPHABETA
+                
+                // _node = new Node(BoardsHandler.Instance.Pieces, IsWhiteTurn, IsWhiteTurn);
+                // nodes = _node.Children();
+                // int maxHeuristic = int.MinValue;
+                // Node bestChildNode = null;
+                //
+                // foreach (Node child in nodes)
+                // {
+                //     BoardsHandler.Instance.Pieces = child.Pieces;
+                //     int currentHeuristic = _aiHandler.MinMaxAlphaBeta(child, _depth -1, false, int.MinValue, int.MaxValue);
+                //     if (currentHeuristic > maxHeuristic)
+                //     {
+                //         maxHeuristic = currentHeuristic;
+                //         bestChildNode = child;
+                //     }
+                // }
+                //
+                // if (bestChildNode != null)
+                // {
+                //     BoardsHandler.Instance.Pieces = bestChildNode.Pieces;
+                // }
+                //
+                // BoardsHandler.Instance.ResetMatrix();
+                // BoardsHandler.Instance.DisplayMatrix();
+                // IsWhiteTurn = !IsWhiteTurn;
+                
+                stopwatch.Stop();
+                Debug.Log("Execution Time : " + stopwatch.ElapsedMilliseconds);
             }
 
             if (Input.GetButtonDown("Jump"))
