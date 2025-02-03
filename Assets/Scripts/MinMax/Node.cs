@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using Game;
 using Pieces;
 using UnityEngine;
+using Utils;
 
 namespace MinMax
 {
@@ -28,9 +29,13 @@ namespace MinMax
         
         public int HeuristicValue()
         {
-            int boardHeuristicValue;
+            int boardHeuristicValue = 0;
             int whiteHeuristicValue = 0;
             int blackHeuristicValue = 0;
+            int checkMateValue = 0;
+
+            bool isWhiteKingCheckMate = false;
+            bool isBlackKingCheckMate = false;
             
             for (int i = 0; i < Pieces.GetLength(0); i++)
             {
@@ -45,6 +50,11 @@ namespace MinMax
                             valueDependingOnPosition = matrix[i,j];
                             
                             whiteHeuristicValue += Pieces[i, j].BaseValue + valueDependingOnPosition;
+
+                            if (Pieces[i,j].name == "WhiteKing" && Rules.IsCheckMate(Pieces, Pieces[i,j], new Vector2Int(i,j)))
+                            {
+                                isWhiteKingCheckMate = true;
+                            }
                             
                             // whiteHeuristicValue += Pieces[i, j].BaseValue;
                         }
@@ -56,6 +66,11 @@ namespace MinMax
                             
                             blackHeuristicValue += Pieces[i, j].BaseValue + valueDependingOnPosition;
                             
+                            if (Pieces[i,j].name == "BlackKing" && Rules.IsCheckMate(Pieces, Pieces[i,j], new Vector2Int(i,j)))
+                            {
+                                isBlackKingCheckMate = true;
+                            }
+                            
                             // blackHeuristicValue += Pieces[i, j].BaseValue;
                         }
                     }
@@ -64,11 +79,31 @@ namespace MinMax
             
             if (IsWhitePredictions)
             {
-                boardHeuristicValue = whiteHeuristicValue - blackHeuristicValue;
+                if (isWhiteKingCheckMate)
+                {
+                    checkMateValue = 100000;
+                }
+
+                if (isBlackKingCheckMate)
+                {
+                    checkMateValue = 100000;
+                }
+                
+                boardHeuristicValue = whiteHeuristicValue + checkMateValue - blackHeuristicValue;
             }
             else
             {
-                boardHeuristicValue = blackHeuristicValue - whiteHeuristicValue;
+                if (isWhiteKingCheckMate)
+                {
+                    checkMateValue = 100000;
+                }
+
+                if (isBlackKingCheckMate)
+                {
+                    checkMateValue = 100000;
+                }
+                
+                boardHeuristicValue = blackHeuristicValue + checkMateValue - whiteHeuristicValue;
             }
             
             return boardHeuristicValue;

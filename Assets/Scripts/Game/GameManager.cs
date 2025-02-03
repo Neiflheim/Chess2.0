@@ -94,7 +94,6 @@ namespace Game
                 foreach (Node child in nodes)
                 {
                     BoardsHandler.Instance.Pieces = child.Pieces;
-                    int childheuristic = child.HeuristicValue();
                     int currentHeuristic = _aiHandler.MinMax(child, _depth -1, false);
                     if (currentHeuristic > maxHeuristic)
                     {
@@ -110,7 +109,7 @@ namespace Game
                 
                 BoardsHandler.Instance.ResetMatrix();
                 BoardsHandler.Instance.DisplayMatrix();
-                Instance.IsWhiteTurn = !Instance.IsWhiteTurn;
+                IsWhiteTurn = !IsWhiteTurn;
             }
 
             if (Input.GetButtonDown("Jump"))
