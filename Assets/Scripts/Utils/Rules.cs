@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using Game;
 using Pieces;
@@ -7,6 +8,8 @@ namespace Utils
 {
     public static class Rules
     {
+        private static List<string> _oldPieces = new List<string>();
+        
         public static void PawnPromotion(Piece[,] pieces, Piece whiteQueen, Piece blackQueen)
         {
             for (int i = 0; i < pieces.GetLength(0); i++)
@@ -95,6 +98,35 @@ namespace Utils
             }
             
             return isCheckMate;
+        }
+
+        public static void ThreefoldRepetition(Piece[,] pieces)
+        {
+            int count = 0;
+
+            string piecesHasher = Helpers.PiecesComputeSHA256(pieces);
+            
+            foreach (string piece in _oldPieces)
+            {
+                if (piece == piecesHasher)
+                {
+                    count++;
+                }
+            }
+            
+            _oldPieces.Add(piecesHasher);
+
+            if (_oldPieces.Count >= 10)
+            {
+                _oldPieces.RemoveAt(0);
+            }
+
+            if (count >= 2)
+            {
+                Time.timeScale = 0;
+                GameManager.Instance.EndGamePanel.SetActive(true);
+                GameManager.Instance.GameOverText.text = " DRAW ";
+            }
         }
 
         public static void IsGameOver(Piece[,] pieces, Piece whiteKing, Piece blackKing)

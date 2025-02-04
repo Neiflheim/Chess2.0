@@ -87,38 +87,41 @@ namespace Handlers
             // };
             
             // TEST MAT EN DEUX COUPS
-            // Pieces = new Piece[,]
-            // {
-            //     { null, null, null, null, null, null, null, null },
-            //     { null, null, null, null, null, null, null, null },
-            //     { null, null, null, null, null, null, null, null },
-            //     { null, null, null, null, null, null, null, null },
-            //     { null, whiteBishop, null, null, null, null, null, null },
-            //     { whiteKnight, whiteKnight, null, null, null, null, null, null },
-            //     { blackPawn, blackKing, null, whiteKing, null, null, null, null },
-            //     { null, null, null, null, null, null, null, null }
-            // };
-            
             Pieces = new Piece[,]
             {
-                { null, null, null, null, null, null, null, blackRook },
-                { null, null, null, blackKing, blackBishop, blackPawn, null, blackPawn },
-                { null, whiteQueen, null, null, null, whiteRook, null, null },
-                { null, null, null, blackPawn, null, null, null, blackQueen },
-                { blackPawn, null, null, whitePawn, null, null, null, whiteBishop },
-                { null, whitePawn, null, null, null, null, null, whiteKing },
-                { whitePawn, null, null, null, null, null, null, whitePawn },
+                { null, null, null, null, null, null, null, null },
+                { null, null, null, null, null, null, null, null },
+                { null, null, null, null, null, null, null, null },
+                { null, null, null, null, null, null, null, null },
+                { null, whiteBishop, null, null, null, null, null, null },
+                { whiteKnight, whiteKnight, null, null, null, null, null, null },
+                { blackPawn, blackKing, null, whiteKing, null, null, null, null },
                 { null, null, null, null, null, null, null, null }
             };
             
-            DisplayMatrix();
+            // Pieces = new Piece[,]
+            // {
+            //     { null, null, null, null, null, null, null, blackRook },
+            //     { null, null, null, blackKing, blackBishop, blackPawn, null, blackPawn },
+            //     { null, whiteQueen, null, null, null, whiteRook, null, null },
+            //     { null, null, null, blackPawn, null, null, null, blackQueen },
+            //     { blackPawn, null, null, whitePawn, null, null, null, whiteBishop },
+            //     { null, whitePawn, null, null, null, null, null, whiteKing },
+            //     { whitePawn, null, null, null, null, null, null, whitePawn },
+            //     { null, null, null, null, null, null, null, null }
+            // };
+            
+            DisplayMatrix(true);
         }
 
-        public void DisplayMatrix()
+        public void DisplayMatrix(bool changeTurn)
         {
             PiecesDisplay = new GameObject[Pieces.GetLength(0), Pieces.GetLength(1)];
-            
-            Rules.PawnPromotion(Pieces, whiteQueen, blackQueen);
+
+            if (changeTurn)
+            {
+                Rules.PawnPromotion(Pieces, whiteQueen, blackQueen);
+            }
             
             for (int i = 0; i < Pieces.GetLength(0); i++)
             {
@@ -156,8 +159,12 @@ namespace Handlers
                     PiecesDisplay[i, j] = newPiece;
                 }
             }
-            
-            Rules.IsGameOver(Pieces, whiteKing, blackKing);
+
+            if (changeTurn)
+            {
+                Rules.IsGameOver(Pieces, whiteKing, blackKing);
+                Rules.ThreefoldRepetition(Pieces);
+            }
         }
 
         public void ResetMatrix()

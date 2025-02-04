@@ -18,9 +18,6 @@ namespace Game
         [Header("End Game")]
         public GameObject EndGamePanel;
         public TextMeshProUGUI GameOverText;
-
-        [Header("Sound")]
-        // public GameObject AudioManager;
         
         [Header("Data")]
         public bool IsWhiteTurn = true;
@@ -34,11 +31,16 @@ namespace Game
         [SerializeField] private int _depthMinMax;
         [SerializeField] private int _depthAlphaBeta;
         
+        // Internal Component
         private AIHandler _aiHandler;
         
+        // For MinMax
         private Node _node = null;
         private int _index = -1;
         private List<Node> nodes = new List<Node>();
+        
+        // Previous Play
+        
 
         private void Awake()
         {
@@ -78,7 +80,7 @@ namespace Game
                     BoardsHandler.Instance.Pieces = _node.Pieces;
                 
                     BoardsHandler.Instance.ResetMatrix();
-                    BoardsHandler.Instance.DisplayMatrix();
+                    BoardsHandler.Instance.DisplayMatrix(false);
                     _index = -1;
                 }
                 
@@ -113,7 +115,7 @@ namespace Game
                 // }
                 //
                 // BoardsHandler.Instance.ResetMatrix();
-                // BoardsHandler.Instance.DisplayMatrix();
+                // BoardsHandler.Instance.DisplayMatrix(true);
                 // IsWhiteTurn = !IsWhiteTurn;
                 
                 
@@ -150,7 +152,7 @@ namespace Game
                 }
                 
                 BoardsHandler.Instance.ResetMatrix();
-                BoardsHandler.Instance.DisplayMatrix();
+                BoardsHandler.Instance.DisplayMatrix(true);
                 IsWhiteTurn = !IsWhiteTurn;
                 
                 stopwatch.Stop();
@@ -188,7 +190,7 @@ namespace Game
             }
                 
             BoardsHandler.Instance.ResetMatrix();
-            BoardsHandler.Instance.DisplayMatrix();
+            BoardsHandler.Instance.DisplayMatrix(true);
             Instance.IsWhiteTurn = !Instance.IsWhiteTurn;
             
             Invoke(nameof(Play), _delayMinMax);
@@ -200,7 +202,7 @@ namespace Game
             Debug.Log("Child value : " + node.HeuristicValue());
                 
             BoardsHandler.Instance.ResetMatrix();
-            BoardsHandler.Instance.DisplayMatrix();
+            BoardsHandler.Instance.DisplayMatrix(false);
         }
     }
 }

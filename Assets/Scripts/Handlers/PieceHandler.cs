@@ -40,7 +40,7 @@ namespace Handlers
                     GameManager.Instance.LastClickGameObject = gameObject.GetComponent<PieceHandler>();
                 
                     BoardsHandler.Instance.ResetMatrix();
-                    BoardsHandler.Instance.DisplayMatrix();
+                    BoardsHandler.Instance.DisplayMatrix(false);
             
                     List<Vector2Int> availableMovements = Piece.AvailableMovements(BoardsHandler.Instance.Pieces, Position, true);
             
@@ -58,16 +58,13 @@ namespace Handlers
             
             if (_isMovement)
             {
-                // Audio
-                // GameManager.Instance.AudioManager.GetComponent<AudioSource>().Play();
-                
                 // Movement
                 Vector2Int lastPosition = GameManager.Instance.LastClickGameObject.Position;
                 BoardsHandler.Instance.Pieces[lastPosition.x, lastPosition.y] = null;
                 BoardsHandler.Instance.Pieces[Position.x, Position.y] = GameManager.Instance.LastClickGameObject.Piece;
                 
                 BoardsHandler.Instance.ResetMatrix();
-                BoardsHandler.Instance.DisplayMatrix();
+                BoardsHandler.Instance.DisplayMatrix(true);
 
                 GameManager.Instance.IsWhiteTurn = !GameManager.Instance.IsWhiteTurn;
             }
