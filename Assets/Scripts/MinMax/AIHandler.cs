@@ -5,6 +5,9 @@ namespace MinMax
 {
     public class AIHandler : MonoBehaviour
     {
+        // Transposition Table
+        // Dictionary<string, string>
+        
         public int MinMax(Node node, int depth, bool maximizingPlayer)
         {
             if (depth == 0 || node.IsTerminal())
