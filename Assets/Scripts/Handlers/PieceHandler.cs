@@ -52,8 +52,6 @@ namespace Handlers
                 
                     availableMovements.Clear();
                 }
-                // Debug.Log("Is Check : " + Rules.IsCheck(BoardsHandler.Instance.Pieces, Piece, Position));
-                // Debug.Log("Is CheckMate : " + Rules.IsCheckMate(BoardsHandler.Instance.Pieces, Piece, Position));
             }
             
             if (_isMovement)

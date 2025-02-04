@@ -38,9 +38,6 @@ namespace Game
         private Node _node = null;
         private int _index = -1;
         private List<Node> nodes = new List<Node>();
-        
-        // Previous Play
-        
 
         private void Awake()
         {
@@ -161,21 +158,20 @@ namespace Game
 
             if (Input.GetButtonDown("Jump"))
             {
-                Invoke(nameof(Play), _delayMinMax);
+                Invoke(nameof(MinMaxPlay), _delayMinMax);
             }
         }
 
-        private void Play()
+        private void MinMaxPlay()
         {
             _node = new Node(BoardsHandler.Instance.Pieces, IsWhiteTurn, IsWhiteTurn);
             nodes = _node.Children();
+            
             int maxHeuristic = int.MinValue;
             Node bestChildNode = null;
                 
             foreach (Node child in nodes)
             {
-                BoardsHandler.Instance.Pieces = child.Pieces;
-                int childheuristic = child.HeuristicValue();
                 int currentHeuristic = _aiHandler.MinMax(child, _depthMinMax -1, false);
                 if (currentHeuristic > maxHeuristic)
                 {
@@ -193,7 +189,7 @@ namespace Game
             BoardsHandler.Instance.DisplayMatrix(true);
             Instance.IsWhiteTurn = !Instance.IsWhiteTurn;
             
-            Invoke(nameof(Play), _delayMinMax);
+            // Invoke(nameof(MinMaxPlay), _delayMinMax);
         }
 
         private void ChangePieces(Node node)
