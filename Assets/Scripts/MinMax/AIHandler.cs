@@ -53,7 +53,7 @@ namespace MinMax
                 foreach (Node child in nodeChildren)
                 {
                     maxHeuristicValue = Mathf.Max(maxHeuristicValue, MinMaxAlphaBeta(child, depth - 1, false, alpha, beta));
-
+                    
                     if (maxHeuristicValue >= beta)
                     {
                         return maxHeuristicValue;
@@ -72,7 +72,7 @@ namespace MinMax
                 {
                     minHeuristicValue = Mathf.Min(minHeuristicValue, MinMaxAlphaBeta(child, depth - 1, true, alpha, beta));
                     
-                    if (alpha >= minHeuristicValue)
+                    if (minHeuristicValue <= alpha)
                     {
                         return minHeuristicValue;
                     }

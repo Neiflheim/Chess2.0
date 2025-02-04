@@ -31,7 +31,8 @@ namespace Game
         
         [Header("Selected Piece")]
         [SerializeField] private float _delayMinMax;
-        [SerializeField] private int _depth;
+        [SerializeField] private int _depthMinMax;
+        [SerializeField] private int _depthAlphaBeta;
         
         private AIHandler _aiHandler;
         
@@ -98,8 +99,7 @@ namespace Game
                 //
                 // foreach (Node child in nodes)
                 // {
-                //     BoardsHandler.Instance.Pieces = child.Pieces;
-                //     int currentHeuristic = _aiHandler.MinMax(child, _depth -1, false);
+                //     int currentHeuristic = _aiHandler.MinMax(child, _depthMinMax - 1, false);
                 //     if (currentHeuristic > maxHeuristic)
                 //     {
                 //         maxHeuristic = currentHeuristic;
@@ -123,17 +123,25 @@ namespace Game
                 nodes = _node.Children();
                 
                 int maxHeuristic = int.MinValue;
+                int alpha = int.MinValue;
+                int beta = int.MaxValue;
                 Node bestChildNode = null;
                 
                 foreach (Node child in nodes)
                 {
-                    BoardsHandler.Instance.Pieces = child.Pieces;
-                    int currentHeuristic = _aiHandler.MinMaxAlphaBeta(child, _depth -1, false, int.MinValue, int.MaxValue);
+                    int currentHeuristic = _aiHandler.MinMaxAlphaBeta(child, _depthAlphaBeta - 1, false, alpha, beta);
+                
                     if (currentHeuristic > maxHeuristic)
                     {
                         maxHeuristic = currentHeuristic;
                         bestChildNode = child;
                     }
+                    
+                    if (currentHeuristic >= beta)
+                    {
+                        break;
+                    }
+                    alpha = Mathf.Max(alpha, currentHeuristic);
                 }
                 
                 if (bestChildNode != null)
@@ -146,7 +154,7 @@ namespace Game
                 IsWhiteTurn = !IsWhiteTurn;
                 
                 stopwatch.Stop();
-                Debug.Log("Execution Time : " + stopwatch.ElapsedMilliseconds + " / For : " + _node.Children().Count +" children");
+                Debug.Log("Execution Time : " + stopwatch.ElapsedMilliseconds + " ms / For : " + _node.Children().Count +" children");
             }
 
             if (Input.GetButtonDown("Jump"))
@@ -166,7 +174,7 @@ namespace Game
             {
                 BoardsHandler.Instance.Pieces = child.Pieces;
                 int childheuristic = child.HeuristicValue();
-                int currentHeuristic = _aiHandler.MinMax(child, _depth -1, false);
+                int currentHeuristic = _aiHandler.MinMax(child, _depthMinMax -1, false);
                 if (currentHeuristic > maxHeuristic)
                 {
                     maxHeuristic = currentHeuristic;

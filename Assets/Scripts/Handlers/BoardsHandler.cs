@@ -48,17 +48,17 @@ namespace Handlers
             // };
             
             // TEST MINMAX/MINMAXALPHABETA
-            Pieces = new Piece[,]
-            {
-                { null, null, null, null, null, null, null, null },
-                { null, null, null, null, null, null, null, null },
-                { null, null, null, blackKing, null, null, null, null },
-                { null, null, whiteKnight, null, null, null, null, null },
-                { null, whiteBishop, null, null, null, null, null, null },
-                { whitePawn, whitePawn, null, null, null, null, null, null },
-                { null, null, null, whiteKing, null, null, null, null },
-                { null, null, null, null, null, null, null, null },
-            };
+            // Pieces = new Piece[,]
+            // {
+            //     { null, null, null, null, null, null, null, null },
+            //     { null, null, null, null, null, null, null, null },
+            //     { null, null, null, blackKing, null, null, null, null },
+            //     { null, null, whiteKnight, null, null, null, null, null },
+            //     { null, whiteBishop, null, null, null, null, null, null },
+            //     { whitePawn, whitePawn, null, null, null, null, null, null },
+            //     { null, null, null, whiteKing, null, null, null, null },
+            //     { null, null, null, null, null, null, null, null },
+            // };
             
             // TEST BASIQUE CHOIX DEPTH 2
             // Pieces = new Piece[,]
@@ -99,17 +99,17 @@ namespace Handlers
             //     { null, null, null, null, null, null, null, null }
             // };
             
-            // Pieces = new Piece[,]
-            // {
-            //     { null, null, null, null, null, null, null, blackRook },
-            //     { null, null, null, blackKing, blackBishop, blackPawn, null, blackPawn },
-            //     { null, whiteQueen, null, null, null, whiteRook, null, null },
-            //     { null, null, null, blackPawn, null, null, null, blackQueen },
-            //     { blackPawn, null, null, whitePawn, null, null, null, whiteBishop },
-            //     { null, whitePawn, null, null, null, null, null, whiteKing },
-            //     { whitePawn, null, null, null, null, null, null, whitePawn },
-            //     { null, null, null, null, null, null, null, null }
-            // };
+            Pieces = new Piece[,]
+            {
+                { null, null, null, null, null, null, null, blackRook },
+                { null, null, null, blackKing, blackBishop, blackPawn, null, blackPawn },
+                { null, whiteQueen, null, null, null, whiteRook, null, null },
+                { null, null, null, blackPawn, null, null, null, blackQueen },
+                { blackPawn, null, null, whitePawn, null, null, null, whiteBishop },
+                { null, whitePawn, null, null, null, null, null, whiteKing },
+                { whitePawn, null, null, null, null, null, null, whitePawn },
+                { null, null, null, null, null, null, null, null }
+            };
             
             DisplayMatrix();
         }
