@@ -98,6 +98,7 @@ namespace Game
                 //
                 // foreach (Node child in nodes)
                 // {
+                //     BoardsHandler.Instance.Pieces = child.Pieces;
                 //     int currentHeuristic = _aiHandler.MinMax(child, _depthMinMax - 1, false);
                 //     if (currentHeuristic > maxHeuristic)
                 //     {
@@ -128,6 +129,7 @@ namespace Game
                 
                 foreach (Node child in nodes)
                 {
+                    BoardsHandler.Instance.Pieces = child.Pieces;
                     int currentHeuristic = _aiHandler.MinMaxAlphaBeta(child, _depthAlphaBeta - 1, false, alpha, beta);
                 
                     if (currentHeuristic > maxHeuristic)

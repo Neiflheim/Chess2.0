@@ -1145,7 +1145,7 @@ MonoBehaviour:
   LastClickGameObject: {fileID: 0}
   EndGamePanel: {fileID: 831712229}
   GameOverText: {fileID: 1689405955}
-  IsWhiteTurn: 0
+  IsWhiteTurn: 1
   IsBlackKingCheckMate: 0
   IsBlackKingCheck: 0
   IsWhiteKingCheckMate: 0
