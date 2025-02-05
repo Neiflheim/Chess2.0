@@ -2,13 +2,14 @@ using System;
 using System.Collections.Generic;
 using System.Security.Cryptography;
 using System.Text;
+using MinMax;
 using Pieces;
 
 namespace Utils
 {
     public static class TranspositionTableHandler
     {
-        public static Dictionary<string, Piece [,]> TranspositionsTables = new Dictionary<string, Piece [,]>();
+        public static Dictionary<string, Node> TranspositionsTables = new Dictionary<string, Node>();
         
         public static string PiecesComputeSHA256(Piece[,] pieces)
         {

@@ -121,38 +121,46 @@ namespace Game
                 
                 _node = new Node(BoardsHandler.Instance.Pieces, IsWhiteTurn, IsWhiteTurn);
                 nodes = _node.Children();
-                
-                int maxHeuristic = int.MinValue;
-                int alpha = int.MinValue;
-                int beta = int.MaxValue;
                 Node bestChildNode = null;
-                
-                foreach (Node child in nodes)
+
+                string pieceHashing = TranspositionTableHandler.PiecesComputeSHA256(_node.Pieces);
+                if (TranspositionTableHandler.TranspositionsTables.ContainsKey(pieceHashing))
                 {
-                    BoardsHandler.Instance.Pieces = child.Pieces;
-                    int currentHeuristic = _aiHandler.MinMaxAlphaBeta(child, _depthAlphaBeta - 1, false, alpha, beta);
+                    Debug.Log("Use Transposition table.");
+                    bestChildNode = TranspositionTableHandler.TranspositionsTables[pieceHashing];
+                }
+                else
+                {
+                    Debug.Log("Use MinMaxAlphaBeta.");
+                    int maxHeuristic = int.MinValue;
+                    int alpha = int.MinValue;
+                    int beta = int.MaxValue;
                 
-                    if (currentHeuristic > maxHeuristic)
+                    foreach (Node child in nodes)
                     {
-                        maxHeuristic = currentHeuristic;
-                        bestChildNode = child;
+                        BoardsHandler.Instance.Pieces = child.Pieces;
+                        int currentHeuristic = _aiHandler.MinMaxAlphaBeta(child, _depthAlphaBeta - 1, false, alpha, beta);
+                
+                        if (currentHeuristic > maxHeuristic)
+                        {
+                            maxHeuristic = currentHeuristic;
+                            bestChildNode = child;
+                        }
+                    
+                        if (currentHeuristic >= beta)
+                        {
+                            break;
+                        }
+                        alpha = Mathf.Max(alpha, currentHeuristic);
                     }
                     
-                    if (currentHeuristic >= beta)
-                    {
-                        break;
-                    }
-                    alpha = Mathf.Max(alpha, currentHeuristic);
+                    // TT
+                    TranspositionTableHandler.TranspositionsTables.Add(pieceHashing, bestChildNode);
                 }
                 
                 if (bestChildNode != null)
                 {
                     BoardsHandler.Instance.Pieces = bestChildNode.Pieces;
-                    
-                    // TT
-                    string pieceHashing = TranspositionTableHandler.PiecesComputeSHA256(_node.Pieces);
-                    TranspositionTableHandler.TranspositionsTables.Add(pieceHashing, bestChildNode.Pieces);
-                    Debug.Log(TranspositionTableHandler.TranspositionsTables.Count);
                 }
                 
                 BoardsHandler.Instance.ResetMatrix();
