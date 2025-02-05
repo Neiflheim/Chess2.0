@@ -122,7 +122,7 @@ namespace Game
                 _node = new Node(BoardsHandler.Instance.Pieces, IsWhiteTurn, IsWhiteTurn);
                 nodes = _node.Children();
                 Node bestChildNode = null;
-
+                
                 string pieceHashing = TranspositionTableHandler.PiecesComputeSHA256(_node.Pieces);
                 if (TranspositionTableHandler.TranspositionsTables.ContainsKey(pieceHashing))
                 {
