@@ -148,6 +148,11 @@ namespace Game
                 if (bestChildNode != null)
                 {
                     BoardsHandler.Instance.Pieces = bestChildNode.Pieces;
+                    
+                    // TT
+                    string pieceHashing = TranspositionTableHandler.PiecesComputeSHA256(_node.Pieces);
+                    TranspositionTableHandler.TranspositionsTables.Add(pieceHashing, bestChildNode.Pieces);
+                    Debug.Log(TranspositionTableHandler.TranspositionsTables.Count);
                 }
                 
                 BoardsHandler.Instance.ResetMatrix();

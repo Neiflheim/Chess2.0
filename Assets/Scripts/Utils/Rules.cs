@@ -104,7 +104,7 @@ namespace Utils
         {
             int count = 0;
 
-            string piecesHasher = Functions.PiecesComputeSHA256(pieces);
+            string piecesHasher = TranspositionTableHandler.PiecesComputeSHA256(pieces);
             
             foreach (string piece in _oldPieces)
             {

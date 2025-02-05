@@ -1,12 +1,15 @@
 using System;
+using System.Collections.Generic;
 using System.Security.Cryptography;
 using System.Text;
 using Pieces;
 
 namespace Utils
 {
-    public static class Functions
+    public static class TranspositionTableHandler
     {
+        public static Dictionary<string, Piece [,]> TranspositionsTables = new Dictionary<string, Piece [,]>();
+        
         public static string PiecesComputeSHA256(Piece[,] pieces)
         {
             Piece[,] piecesCopy = (Piece[,]) pieces.Clone();
