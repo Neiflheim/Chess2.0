@@ -12,6 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c5a76de006d74a42b55ba22eff7ada56, type: 3}
   m_Name: BlackBishop
   m_EditorClassIdentifier: 
+  Id: 2
   Sprite: {fileID: 328647978, guid: 062360b186018484da07e2259b01c197, type: 3}
   IsWhite: 0
   BaseValue: 320

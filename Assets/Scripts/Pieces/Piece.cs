@@ -8,6 +8,7 @@ namespace Pieces
 {
     public abstract class Piece : ScriptableObject
     {
+        public int Id;
         public Sprite Sprite;
         public bool IsWhite;
         public int BaseValue;

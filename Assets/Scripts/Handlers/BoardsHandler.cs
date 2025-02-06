@@ -58,6 +58,7 @@ namespace Handlers
             //     { null, null, null, null, null, null, null, null }
             // };
             
+            ZobristHashing.InitializeZobristTable();
             DisplayMatrix(true);
         }
 

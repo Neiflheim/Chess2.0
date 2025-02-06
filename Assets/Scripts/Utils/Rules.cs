@@ -7,6 +7,9 @@ namespace Utils
 {
     public static class Rules
     {
+        // IsCheck
+        private static Dictionary<ulong, List<Vector2Int>> _cachedEnemyMovements = new Dictionary<ulong, List<Vector2Int>>();
+        
         // ThreefoldRepetition
         private static List<string> _oldPieces = new List<string>();
         
@@ -35,10 +38,8 @@ namespace Utils
         
         public static bool IsCheck(Piece[,] pieces, Piece currentPiece, Vector2Int position)
         {
-            bool isCheck = false;
-            
             List<Vector2Int> availableMovements = new List<Vector2Int>();
-                
+            
             for (int i = 0; i < pieces.GetLength(0); i++)
             {
                 for (int j = 0; j < pieces.GetLength(1); j++)
@@ -53,14 +54,52 @@ namespace Utils
                         {
                             if (movement == position)
                             {
-                                isCheck = true;
+                                return true;
                             }
                         }
                     }
                 }
             }
             
-            return isCheck;
+            return false;
+            
+            // USING ZOBRISTHASHING => FASTER BUT DON'T PLAY THE RIGHT MOV
+            
+            // List<Vector2Int> availableMovements;
+            //
+            // ulong zobristHash = ZobristHashing.ComputeBoardHash(pieces); // Remplace SHA-256
+            // if (_cachedEnemyMovements.TryGetValue(zobristHash, out availableMovements)) // Vérifie si l'état est en cache
+            // {
+            //     return availableMovements.Contains(position); // Vérifie directement
+            // }
+            //
+            // availableMovements = new List<Vector2Int>();
+            //
+            // for (int i = 0; i < pieces.GetLength(0); i++)
+            // {
+            //     for (int j = 0; j < pieces.GetLength(1); j++)
+            //     {
+            //         Piece piece = pieces[i, j];
+            //         if (piece != null && piece.IsWhite != currentPiece.IsWhite)
+            //         {
+            //             List<Vector2Int> moves = piece.AvailableMovements(pieces, new Vector2Int(i, j), false);
+            //     
+            //             foreach (Vector2Int move in moves)
+            //             {
+            //                 availableMovements.Add(move);
+            //         
+            //                 if (move == position)
+            //                 {
+            //                     _cachedEnemyMovements[zobristHash] = availableMovements; // Met à jour le cache
+            //                     return true; // Arrête immédiatement, pas besoin de continuer
+            //                 }
+            //             }
+            //         }
+            //     }
+            // }
+            //
+            // _cachedEnemyMovements[zobristHash] = availableMovements; // Stocke les mouvements si non trouvé
+            // return false;
         }
 
         public static bool IsCheckMate(Piece[,] pieces, Piece currentPiece, Vector2Int position)
