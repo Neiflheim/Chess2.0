@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using Handlers;
 using UnityEngine;
 
 namespace Pieces
@@ -10,98 +9,76 @@ namespace Pieces
         public override List<Vector2Int> AvailableMovements(Piece[,] pieces, Vector2Int position, bool firstCall)
         {
             List<Vector2Int> movements = new List<Vector2Int>();
-            List<Vector2Int> movementsToRemove = new List<Vector2Int>();
 
             int i;
-            int j;
             
             for (i = position.x + 1; i <= 7; i++) 
             { 
-                if (pieces[i, position.y] == null)
+                if (!pieces[i, position.y])
                 { 
-                    movements.Add(new Vector2Int(i, position.y)); 
-                    continue;
-                } 
-                if (pieces[i, position.y].IsWhite != IsWhite)
-                { 
-                    movements.Add(new Vector2Int(i, position.y)); 
-                    break;
+                    movements.Add(new Vector2Int(i, position.y));
                 }
-                else 
-                { 
+                else
+                {
+                    if (pieces[i, position.y].IsWhite != IsWhite)
+                    { 
+                        movements.Add(new Vector2Int(i, position.y)); 
+                    }
                     break;
                 }
             } 
+            
             for (i = position.x - 1; i >= 0; i--) 
             { 
-                if (pieces[i, position.y] == null) 
+                if (!pieces[i, position.y]) 
                 { 
-                    movements.Add(new Vector2Int(i, position.y)); 
-                    continue;
-                } 
-                if (pieces[i, position.y].IsWhite != IsWhite) 
-                { 
-                    movements.Add(new Vector2Int(i, position.y)); 
-                    break;
+                    movements.Add(new Vector2Int(i, position.y));
                 }
-                else 
-                { 
+                else
+                {
+                    if (pieces[i, position.y].IsWhite != IsWhite) 
+                    { 
+                        movements.Add(new Vector2Int(i, position.y)); 
+                    }
                     break;
                 }
             }
             
-            for (j = position.y + 1; j <= 7; j++) 
+            for (i = position.y + 1; i <= 7; i++) 
             { 
-                if (pieces[position.x, j] == null)
+                if (!pieces[position.x, i])
                 { 
-                    movements.Add(new Vector2Int(position.x, j)); 
-                    continue;
-                } 
-                if (pieces[position.x, j].IsWhite != IsWhite) 
-                { 
-                    movements.Add(new Vector2Int(position.x, j)); 
-                    break;
+                    movements.Add(new Vector2Int(position.x, i));
                 }
-                else 
-                { 
+                else
+                {
+                    if (pieces[position.x, i].IsWhite != IsWhite) 
+                    { 
+                        movements.Add(new Vector2Int(position.x, i));
+                    }
                     break;
                 }
             } 
-            for (j = position.y - 1; j >= 0; j--) 
+            
+            for (i = position.y - 1; i >= 0; i--) 
             { 
-                if (pieces[position.x, j] == null) 
+                if (!pieces[position.x, i]) 
                 { 
-                    movements.Add(new Vector2Int(position.x, j)); 
-                    continue;
-                } 
-                if (pieces[position.x, j].IsWhite != IsWhite) 
-                { 
-                    movements.Add(new Vector2Int(position.x, j)); 
-                    break;
+                    movements.Add(new Vector2Int(position.x, i));
                 }
-                else 
-                { 
+                else
+                {
+                    if (pieces[position.x, i].IsWhite != IsWhite) 
+                    { 
+                        movements.Add(new Vector2Int(position.x, i));
+                    }
                     break;
                 }
             }
             
             if (firstCall)
             {
-                foreach (Vector2Int movement in movements)
-                {
-                    if (!CanPlayThisMovement(pieces, this, position, movement))
-                    {
-                        movementsToRemove.Add(movement);
-                    }
-                }
-            
-                foreach (Vector2Int movement in movementsToRemove)
-                {
-                    if (movements.Contains(movement))
-                    {
-                        movements.Remove(movement);
-                    }
-                }
+                movements.RemoveAll(movement => !CanPlayThisMovement(pieces, this, position, movement));
             }
             
             return movements;

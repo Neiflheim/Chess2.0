@@ -12,6 +12,8 @@ namespace MinMax
         public bool IsWhiteTurn;
         public bool IsWhitePredictions;
         
+        public List<Node> NodeChildren = new List<Node>();
+        
         public Node(Piece[,] pieces, bool isWhiteTurn, bool isWhitePredictions)
         {
             Pieces = (Piece[,]) pieces.Clone();
@@ -21,7 +23,8 @@ namespace MinMax
         
         public bool IsTerminal()
         {
-            bool isTerminal = Children().Count == 0;
+            NodeChildren = Children();
+            bool isTerminal = NodeChildren.Count == 0;
             
             return isTerminal;
         }
@@ -42,9 +45,9 @@ namespace MinMax
                 {
                     if (Pieces[i,j])
                     {
+                        int valueDependingOnPosition;
                         if (Pieces[i,j].IsWhite)
                         {
-                            int valueDependingOnPosition = 0;
                             int [,] matrix = ValueDependOnPositionData.GetMatrix(Pieces[i, j].name);
                             valueDependingOnPosition = matrix[i,j];
                             
@@ -57,7 +60,6 @@ namespace MinMax
                         }
                         else
                         {
-                            int valueDependingOnPosition = 0;
                             int [,] matrix = ValueDependOnPositionData.GetMatrix(Pieces[i, j].name);
                             valueDependingOnPosition = matrix[i,j];
                             
@@ -115,17 +117,15 @@ namespace MinMax
                 {
                     if (Pieces[i,j] && Pieces[i,j].IsWhite == IsWhiteTurn)
                     {
-                        Piece piece = Pieces[i,j];
-                        Vector2Int position = new Vector2Int(i, j);
-                        List<Vector2Int> availableMovements = piece.AvailableMovements(Pieces, position, true);
+                        List<Vector2Int> availableMovements = Pieces[i,j].AvailableMovements(Pieces, new Vector2Int(i, j), true);
                         
                         if (availableMovements.Count == 0) continue;
                     
                         foreach (Vector2Int movement in availableMovements)
                         {
-                            Piece[,] pieces = Pieces;
-                            Node node = new Node(pieces, !IsWhiteTurn, IsWhitePredictions);
-                            node.MovePiece(piece, position, movement);
+                            Node node = new Node(Pieces, !IsWhiteTurn, IsWhitePredictions);
+                            node.MovePiece(Pieces[i,j], new Vector2Int(i, j), movement);
+                            // Rules.PawnPromotion(node.Pieces);
                             children.Add(node);
                         }
                     }

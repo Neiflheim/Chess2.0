@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using Game;
 using Pieces;
@@ -8,6 +7,7 @@ namespace Utils
 {
     public static class Rules
     {
+        // ThreefoldRepetition
         private static List<string> _oldPieces = new List<string>();
         
         public static void PawnPromotion(Piece[,] pieces, Piece whiteQueen, Piece blackQueen)
@@ -37,15 +37,15 @@ namespace Utils
         {
             bool isCheck = false;
             
+            List<Vector2Int> availableMovements = new List<Vector2Int>();
+                
             for (int i = 0; i < pieces.GetLength(0); i++)
             {
                 for (int j = 0; j < pieces.GetLength(1); j++)
                 {
                     if (pieces[i,j] && pieces[i,j].IsWhite != currentPiece.IsWhite)
                     {
-                        Piece piece = pieces[i,j];
-                        Vector2Int piecePosition = new Vector2Int(i, j);
-                        List<Vector2Int> availableMovements = piece.AvailableMovements(pieces, piecePosition, false);
+                        availableMovements = pieces[i,j].AvailableMovements(pieces, new Vector2Int(i, j), false);
                         
                         if (availableMovements.Count == 0) continue;
                     
@@ -114,18 +114,19 @@ namespace Utils
                 }
             }
             
-            _oldPieces.Add(piecesHasher);
-
-            if (_oldPieces.Count >= 10)
-            {
-                _oldPieces.RemoveAt(0);
-            }
-
             if (count >= 2)
             {
                 Time.timeScale = 0;
                 GameManager.Instance.EndGamePanel.SetActive(true);
                 GameManager.Instance.GameOverText.text = " DRAW ";
+                return;
+            }
+            
+            _oldPieces.Add(piecesHasher);
+
+            if (_oldPieces.Count >= 10)
+            {
+                _oldPieces.RemoveAt(0);
             }
         }
 

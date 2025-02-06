@@ -16,8 +16,7 @@ namespace MinMax
             {
                 int maxHeuristicValue = int.MinValue;
                 
-                List<Node> nodeChildren = node.Children();
-                foreach (Node child in nodeChildren)
+                foreach (Node child in node.NodeChildren)
                 {
                     maxHeuristicValue = Mathf.Max(maxHeuristicValue, MinMax(child, depth - 1, false));
                 }
@@ -28,8 +27,7 @@ namespace MinMax
             {
                 int minHeuristicValue = int.MaxValue;
                 
-                List<Node> nodeChildren = node.Children();
-                foreach (Node child in nodeChildren)
+                foreach (Node child in node.NodeChildren)
                 {
                     minHeuristicValue = Mathf.Min(minHeuristicValue, MinMax(child, depth - 1, true));
                 }
@@ -49,8 +47,7 @@ namespace MinMax
             {
                 int maxHeuristicValue = int.MinValue;
                 
-                List<Node> nodeChildren = node.Children();
-                foreach (Node child in nodeChildren)
+                foreach (Node child in node.NodeChildren)
                 {
                     maxHeuristicValue = Mathf.Max(maxHeuristicValue, MinMaxAlphaBeta(child, depth - 1, false, alpha, beta));
                     
@@ -67,8 +64,7 @@ namespace MinMax
             {
                 int minHeuristicValue = int.MaxValue;
                 
-                List<Node> nodeChildren = node.Children();
-                foreach (Node child in nodeChildren)
+                foreach (Node child in node.NodeChildren)
                 {
                     minHeuristicValue = Mathf.Min(minHeuristicValue, MinMaxAlphaBeta(child, depth - 1, true, alpha, beta));
                     
