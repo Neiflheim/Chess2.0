@@ -1152,7 +1152,7 @@ MonoBehaviour:
   IsWhiteKingCheck: 0
   _delayMinMax: 1
   _depthMinMax: 3
-  _depthAlphaBeta: 3
+  _depthAlphaBeta: 4
 --- !u!114 &324137484
 MonoBehaviour:
   m_ObjectHideFlags: 0
