@@ -107,30 +107,33 @@ namespace Utils
             bool isCheckMate = false;
             List<Vector2Int> movementsToRemove = new List<Vector2Int>();
 
-            List<Vector2Int> currentPieceAvailableMovements = currentPiece.AvailableMovements(pieces, position, false);
-            foreach (Vector2Int currentPieceMovement in currentPieceAvailableMovements)
+            if (IsCheck(pieces, currentPiece, position))
             {
-                Piece[,] testPieces = (Piece[,]) pieces.Clone();
-                testPieces[currentPieceMovement.x, currentPieceMovement.y] = currentPiece;
-                testPieces[position.x, position.y] = null;
-
-                if (IsCheck(testPieces, currentPiece, currentPieceMovement))
+                List<Vector2Int> currentPieceAvailableMovements = currentPiece.AvailableMovements(pieces, position, false);
+                foreach (Vector2Int currentPieceMovement in currentPieceAvailableMovements)
                 {
-                    movementsToRemove.Add(currentPieceMovement);
-                }
-            }
+                    Piece[,] testPieces = (Piece[,]) pieces.Clone();
+                    testPieces[currentPieceMovement.x, currentPieceMovement.y] = currentPiece;
+                    testPieces[position.x, position.y] = null;
 
-            foreach (Vector2Int movement in movementsToRemove)
-            {
-                if (currentPieceAvailableMovements.Contains(movement))
+                    if (IsCheck(testPieces, currentPiece, currentPieceMovement))
+                    {
+                        movementsToRemove.Add(currentPieceMovement);
+                    }
+                }
+
+                foreach (Vector2Int movement in movementsToRemove)
                 {
-                    currentPieceAvailableMovements.Remove(movement);
+                    if (currentPieceAvailableMovements.Contains(movement))
+                    {
+                        currentPieceAvailableMovements.Remove(movement);
+                    }
                 }
-            }
 
-            if (currentPieceAvailableMovements.Count == 0)
-            {
-                isCheckMate = true;
+                if (currentPieceAvailableMovements.Count == 0)
+                {
+                    isCheckMate = true;
+                }
             }
             
             return isCheckMate;
