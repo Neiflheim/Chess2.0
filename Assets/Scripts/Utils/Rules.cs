@@ -107,33 +107,30 @@ namespace Utils
             bool isCheckMate = false;
             List<Vector2Int> movementsToRemove = new List<Vector2Int>();
 
-            if (IsCheck(pieces, currentPiece, position))
+            List<Vector2Int> currentPieceAvailableMovements = currentPiece.AvailableMovements(pieces, position, false);
+            foreach (Vector2Int currentPieceMovement in currentPieceAvailableMovements)
             {
-                List<Vector2Int> currentPieceAvailableMovements = currentPiece.AvailableMovements(pieces, position, false);
-                foreach (Vector2Int currentPieceMovement in currentPieceAvailableMovements)
-                {
-                    Piece[,] testPieces = (Piece[,]) pieces.Clone();
-                    testPieces[currentPieceMovement.x, currentPieceMovement.y] = currentPiece;
-                    testPieces[position.x, position.y] = null;
+                Piece[,] testPieces = (Piece[,]) pieces.Clone();
+                testPieces[currentPieceMovement.x, currentPieceMovement.y] = currentPiece;
+                testPieces[position.x, position.y] = null;
 
-                    if (IsCheck(testPieces, currentPiece, currentPieceMovement))
-                    {
-                        movementsToRemove.Add(currentPieceMovement);
-                    }
-                }
-
-                foreach (Vector2Int movement in movementsToRemove)
+                if (IsCheck(testPieces, currentPiece, currentPieceMovement))
                 {
-                    if (currentPieceAvailableMovements.Contains(movement))
-                    {
-                        currentPieceAvailableMovements.Remove(movement);
-                    }
+                    movementsToRemove.Add(currentPieceMovement);
                 }
+            }
 
-                if (currentPieceAvailableMovements.Count == 0)
+            foreach (Vector2Int movement in movementsToRemove)
+            {
+                if (currentPieceAvailableMovements.Contains(movement))
                 {
-                    isCheckMate = true;
+                    currentPieceAvailableMovements.Remove(movement);
                 }
+            }
+
+            if (currentPieceAvailableMovements.Count == 0)
+            {
+                isCheckMate = true;
             }
             
             return isCheckMate;
@@ -169,42 +166,15 @@ namespace Utils
             }
         }
 
-        public static void IsGameOver(Piece[,] pieces, Piece whiteKing, Piece blackKing)
+        public static void IsGameOver(bool isWhitePlayer)
         {
-            GameManager.Instance.IsBlackKingCheckMate = false;
-            GameManager.Instance.IsWhiteKingCheckMate = false;
-            
-            for (int i = 0; i < pieces.GetLength(0); i++)
-            {
-                for (int j = 0; j < pieces.GetLength(1); j++)
-                {
-                    if (pieces[i, j])
-                    {
-                        if (pieces[i, j] == blackKing)
-                        {
-                            if (IsCheckMate(pieces, pieces[i, j], new Vector2Int(i, j)))
-                            {
-                                GameManager.Instance.IsBlackKingCheckMate = true;
-                            }
-                        }
-                        if (pieces[i, j] == whiteKing)
-                        {
-                            if (IsCheckMate(pieces, pieces[i, j], new Vector2Int(i, j)))
-                            {
-                                GameManager.Instance.IsWhiteKingCheckMate = true;
-                            }
-                        }
-                    }
-                }
-            }
-
-            if (GameManager.Instance.IsBlackKingCheckMate)
+            if (isWhitePlayer)
             {
                 Time.timeScale = 0;
                 GameManager.Instance.EndGamePanel.SetActive(true);
                 GameManager.Instance.GameOverText.text = " CHECKMATE : Victory White Player ! ";
             }
-            if (GameManager.Instance.IsWhiteKingCheckMate)
+            else
             {
                 Time.timeScale = 0;
                 GameManager.Instance.EndGamePanel.SetActive(true);

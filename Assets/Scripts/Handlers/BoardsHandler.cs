@@ -2,9 +2,7 @@ using System.Collections.Generic;
 using Game;
 using MinMax;
 using Pieces;
-using Unity.VisualScripting;
 using UnityEngine;
-using UnityEngine.Serialization;
 using Utils;
 
 namespace Handlers
@@ -69,11 +67,6 @@ namespace Handlers
         public void DisplayMatrix(bool changeTurn)
         {
             PiecesDisplay = new GameObject[Pieces.GetLength(0), Pieces.GetLength(1)];
-
-            if (changeTurn)
-            {
-                Rules.PawnPromotion(Pieces, WhiteQueen, BlackQueen);
-            }
             
             for (int i = 0; i < Pieces.GetLength(0); i++)
             {
@@ -114,42 +107,6 @@ namespace Handlers
 
             if (changeTurn)
             {
-                Node currentBoard = new Node(Pieces, GameManager.Instance.IsWhiteTurn,GameManager.Instance.IsWhiteTurn);
-                List<Node> children = currentBoard.Children();
-                int count = 0;
-                
-                foreach (Node child in children)
-                {
-                    for (int i = 0; i < child.Pieces.GetLength(0); i++)
-                    {
-                        for (int j = 0; j < child.Pieces.GetLength(1); j++)
-                        {
-                            if (child.Pieces[i,j])
-                            {
-                                if (child.Pieces[i,j].IsWhite)
-                                {
-                                    if (child.Pieces[i,j].name == "WhiteKing" && Rules.IsCheckMate(child.Pieces, child.Pieces[i,j], new Vector2Int(i,j)))
-                                    {
-                                        count++;
-                                    }
-                                }
-                                else
-                                {
-                                    if (child.Pieces[i,j].name == "BlackKing" && Rules.IsCheckMate(child.Pieces, child.Pieces[i,j], new Vector2Int(i,j)))
-                                    {
-                                        count++;
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-
-                if (count == children.Count)
-                {
-                    Rules.IsGameOver(Pieces, whiteKing, blackKing);
-                }
-                
                 Rules.ThreefoldRepetition(Pieces);
             }
         }
