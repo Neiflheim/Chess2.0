@@ -64,7 +64,7 @@ namespace Game
                     _node = new Node(BoardsHandler.Instance.Pieces, IsWhiteTurn, IsWhiteTurn);
                     nodes = _node.Children();
                     Debug.Log("Actual heuristic value : " + _node.HeuristicValue());
-                    Debug.Log("Child number : " + _node.Children().Count);
+                    Debug.Log("Child number : " + nodes.Count);
                 }
                 
                 _index += 1;
@@ -168,33 +168,59 @@ namespace Game
                 IsWhiteTurn = !IsWhiteTurn;
                 
                 stopwatch.Stop();
-                Debug.Log("Execution Time : " + stopwatch.ElapsedMilliseconds + " ms / For : " + _node.Children().Count +" children");
+                Debug.Log("Execution Time : " + stopwatch.ElapsedMilliseconds + " ms / For : " + nodes.Count +" children");
             }
 
             if (Input.GetButtonDown("Jump"))
             {
-                Invoke(nameof(MinMaxPlay), _delayMinMax);
+                Invoke(nameof(MinMaxAlphaBetaPlay), _delayMinMax);
             }
         }
 
-        private void MinMaxPlay()
+        private void MinMaxAlphaBetaPlay()
         {
+            Stopwatch stopwatch = new Stopwatch();
+            stopwatch.Start();
+            
             _node = new Node(BoardsHandler.Instance.Pieces, IsWhiteTurn, IsWhiteTurn);
             nodes = _node.Children();
-            
-            int maxHeuristic = int.MinValue;
             Node bestChildNode = null;
                 
-            foreach (Node child in nodes)
+            string pieceHashing = TranspositionTableHandler.PiecesComputeSHA256(_node.Pieces);
+            if (TranspositionTableHandler.TranspositionsTables.ContainsKey(pieceHashing))
             {
-                int currentHeuristic = _aiHandler.MinMax(child, _depthMinMax -1, false);
-                if (currentHeuristic > maxHeuristic)
-                {
-                    maxHeuristic = currentHeuristic;
-                    bestChildNode = child;
-                }
+                Debug.Log("Use Transposition table.");
+                bestChildNode = TranspositionTableHandler.TranspositionsTables[pieceHashing];
             }
-
+            else
+            {
+                Debug.Log("Use MinMaxAlphaBeta.");
+                int maxHeuristic = int.MinValue;
+                int alpha = int.MinValue;
+                int beta = int.MaxValue;
+                
+                foreach (Node child in nodes)
+                {
+                    BoardsHandler.Instance.Pieces = child.Pieces;
+                    int currentHeuristic = _aiHandler.MinMaxAlphaBeta(child, _depthAlphaBeta - 1, false, alpha, beta);
+                
+                    if (currentHeuristic > maxHeuristic)
+                    {
+                        maxHeuristic = currentHeuristic;
+                        bestChildNode = child;
+                    }
+                    
+                    if (currentHeuristic >= beta)
+                    {
+                        break;
+                    }
+                    alpha = Mathf.Max(alpha, currentHeuristic);
+                }
+                    
+                // TT
+                TranspositionTableHandler.TranspositionsTables.Add(pieceHashing, bestChildNode);
+            }
+                
             if (bestChildNode != null)
             {
                 BoardsHandler.Instance.Pieces = bestChildNode.Pieces;
@@ -202,9 +228,12 @@ namespace Game
                 
             BoardsHandler.Instance.ResetMatrix();
             BoardsHandler.Instance.DisplayMatrix(true);
-            Instance.IsWhiteTurn = !Instance.IsWhiteTurn;
+            IsWhiteTurn = !IsWhiteTurn;
+                
+            stopwatch.Stop();
+            Debug.Log("Execution Time : " + stopwatch.ElapsedMilliseconds + " ms / For : " + nodes.Count +" children");
             
-            // Invoke(nameof(MinMaxPlay), _delayMinMax);
+            Invoke(nameof(MinMaxAlphaBetaPlay), _delayMinMax);
         }
 
         private void ChangePieces(Node node)

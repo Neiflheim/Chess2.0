@@ -13,7 +13,7 @@ namespace MinMax
         public bool IsWhiteTurn;
         public bool IsWhitePredictions;
         
-        public List<Node> NodeChildren = new List<Node>();
+        public List<Node> NodeChildren;
         
         public Node(Piece[,] pieces, bool isWhiteTurn, bool isWhitePredictions)
         {
@@ -25,9 +25,7 @@ namespace MinMax
         public bool IsTerminal()
         {
             NodeChildren = Children();
-            bool isTerminal = NodeChildren.Count == 0;
-            
-            return isTerminal;
+            return NodeChildren.Count == 0;
         }
         
         public int HeuristicValue()
@@ -136,7 +134,7 @@ namespace MinMax
             return children;
         }
         
-        public void MovePiece(Piece piece, Vector2Int from, Vector2Int to)
+        private void MovePiece(Piece piece, Vector2Int from, Vector2Int to)
         {
             // Applique le déplacement de la piece sur Pieces
             Pieces[from.x, from.y] = null;
