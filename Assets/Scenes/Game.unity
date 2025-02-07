@@ -6257,8 +6257,8 @@ MonoBehaviour:
   whiteBishop: {fileID: 11400000, guid: 967015a200530ce409ac1e3125858e4f, type: 2}
   blackKing: {fileID: 11400000, guid: dc949bc0209e7cf4c94a2c534f096e66, type: 2}
   whiteKing: {fileID: 11400000, guid: 890ebcaa66da84247984c2d1474e1d21, type: 2}
-  blackQueen: {fileID: 11400000, guid: 7abebbc3dbf77864d9b47140bbf38207, type: 2}
-  whiteQueen: {fileID: 11400000, guid: f7d67fb5f2b932748974eb3c09d52646, type: 2}
+  BlackQueen: {fileID: 11400000, guid: 7abebbc3dbf77864d9b47140bbf38207, type: 2}
+  WhiteQueen: {fileID: 11400000, guid: f7d67fb5f2b932748974eb3c09d52646, type: 2}
   piecePrefab: {fileID: 2690092191498240832, guid: 875af057ef7811b478248121b8e5ba04, type: 3}
   transparentPrefab: {fileID: 2580139010474514594, guid: 4d15e502787270841aab043eeb57a99e, type: 3}
   gridParent: {fileID: 2013352920}

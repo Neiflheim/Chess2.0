@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using Game;
+using Handlers;
 using Pieces;
 using UnityEngine;
 using Utils;
@@ -125,7 +126,7 @@ namespace MinMax
                         {
                             Node node = new Node(Pieces, !IsWhiteTurn, IsWhitePredictions);
                             node.MovePiece(Pieces[i,j], new Vector2Int(i, j), movement);
-                            // Rules.PawnPromotion(node.Pieces);
+                            Rules.PawnPromotion(node.Pieces, BoardsHandler.Instance.WhiteQueen, BoardsHandler.Instance.BlackQueen);
                             children.Add(node);
                         }
                     }
