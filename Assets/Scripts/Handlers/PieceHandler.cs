@@ -67,53 +67,6 @@ namespace Handlers
                 BoardsHandler.Instance.ResetMatrix();
                 BoardsHandler.Instance.DisplayMatrix(true);
                 GameManager.Instance.IsWhiteTurn = !GameManager.Instance.IsWhiteTurn;
-                
-                // Rules verifications
-                // PawnPromotion
-                Rules.PawnPromotion(BoardsHandler.Instance.Pieces, BoardsHandler.Instance.WhiteQueen, BoardsHandler.Instance.BlackQueen);
-                
-                // IsEndGame
-                Node currentBoard = new Node(BoardsHandler.Instance.Pieces, GameManager.Instance.IsWhiteTurn, GameManager.Instance.IsWhiteTurn);
-                List<Node> children = currentBoard.Children();
-                int whiteCount = 0;
-                int blackCount = 0;
-                
-                foreach (Node child in children)
-                {
-                    for (int i = 0; i < child.Pieces.GetLength(0); i++)
-                    {
-                        for (int j = 0; j < child.Pieces.GetLength(1); j++)
-                        {
-                            if (child.Pieces[i,j])
-                            {
-                                if (child.Pieces[i,j].IsWhite)
-                                {
-                                    if (child.Pieces[i,j].name == "WhiteKing" && Rules.IsCheckMate(child.Pieces, child.Pieces[i,j], new Vector2Int(i,j)))
-                                    {
-                                        whiteCount++;
-                                    }
-                                }
-                                else
-                                {
-                                    if (child.Pieces[i,j].name == "BlackKing" && Rules.IsCheckMate(child.Pieces, child.Pieces[i,j], new Vector2Int(i,j)))
-                                    {
-                                        blackCount++;
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-                // Debug.Log("White count : " + whiteCount + " / Black count : " + blackCount + " / Chlidren count : " + children.Count);
-
-                if (whiteCount == children.Count)
-                {
-                    Rules.IsGameOver(true);
-                }
-                else if (blackCount == children.Count)
-                {
-                    Rules.IsGameOver(false);
-                }
             }
         }
     }

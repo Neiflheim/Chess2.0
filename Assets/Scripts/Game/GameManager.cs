@@ -118,15 +118,6 @@ namespace Game
                 BoardsHandler.Instance.DisplayMatrix(true);
                 IsWhiteTurn = !IsWhiteTurn;
                 
-                if (bestChildNode != null)
-                {
-                    BoardsHandler.Instance.Pieces = bestChildNode.Pieces;
-                }
-                
-                BoardsHandler.Instance.ResetMatrix();
-                BoardsHandler.Instance.DisplayMatrix(true);
-                IsWhiteTurn = !IsWhiteTurn;
-                
                 stopwatch.Stop();
                 Debug.Log("Execution Time : " + stopwatch.ElapsedMilliseconds + " ms / For : " + nodes.Count +" children");
             }

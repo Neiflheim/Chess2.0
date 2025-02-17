@@ -34,29 +34,29 @@ namespace Handlers
         {
             Time.timeScale = 1;
 
-            // Pieces = new Piece[,]
-            // {
-            //     { blackRook, blackKnight, blackBishop, BlackQueen, blackKing, blackBishop, blackKnight, blackRook },
-            //     { blackPawn, blackPawn, blackPawn, blackPawn, blackPawn, blackPawn, blackPawn, blackPawn },
-            //     { null, null, null, null, null, null, null, null },
-            //     { null, null, null, null, null, null, null, null },
-            //     { null, null, null, null, null, null, null, null },
-            //     { null, null, null, null, null, null, null, null },
-            //     { whitePawn, whitePawn, whitePawn, whitePawn, whitePawn, whitePawn, whitePawn, whitePawn },
-            //     { whiteRook, whiteKnight, whiteBishop, WhiteQueen, whiteKing, whiteBishop, whiteKnight, whiteRook }
-            // };
-            
             Pieces = new Piece[,]
             {
-                { null, null, null, null, null, null, null, blackRook },
-                { null, null, null, blackKing, blackBishop, blackPawn, null, blackPawn },
-                { null, WhiteQueen, null, null, null, whiteRook, null, null },
-                { null, null, null, blackPawn, null, null, null, BlackQueen },
-                { blackPawn, null, null, whitePawn, null, null, null, whiteBishop },
-                { null, whitePawn, null, null, null, null, null, whiteKing },
-                { whitePawn, null, null, null, null, null, null, whitePawn },
-                { null, null, null, null, null, null, null, null }
+                { blackRook, blackKnight, blackBishop, BlackQueen, blackKing, blackBishop, blackKnight, blackRook },
+                { blackPawn, blackPawn, blackPawn, blackPawn, blackPawn, blackPawn, blackPawn, blackPawn },
+                { null, null, null, null, null, null, null, null },
+                { null, null, null, null, null, null, null, null },
+                { null, null, null, null, null, null, null, null },
+                { null, null, null, null, null, null, null, null },
+                { whitePawn, whitePawn, whitePawn, whitePawn, whitePawn, whitePawn, whitePawn, whitePawn },
+                { whiteRook, whiteKnight, whiteBishop, WhiteQueen, whiteKing, whiteBishop, whiteKnight, whiteRook }
             };
+            
+            // Pieces = new Piece[,]
+            // {
+            //     { null, null, null, null, null, null, null, blackRook },
+            //     { null, null, null, blackKing, blackBishop, blackPawn, null, blackPawn },
+            //     { null, WhiteQueen, null, null, null, whiteRook, null, null },
+            //     { null, null, null, blackPawn, null, null, null, BlackQueen },
+            //     { blackPawn, null, null, whitePawn, null, null, null, whiteBishop },
+            //     { null, whitePawn, null, null, null, null, null, whiteKing },
+            //     { whitePawn, null, null, null, null, null, null, whitePawn },
+            //     { null, null, null, null, null, null, null, null }
+            // };
             
             ZobristHashing.InitializeZobristTable();
             DisplayMatrix(true);
@@ -65,6 +65,8 @@ namespace Handlers
         public void DisplayMatrix(bool changeTurn)
         {
             PiecesDisplay = new GameObject[Pieces.GetLength(0), Pieces.GetLength(1)];
+            
+            Rules.PawnPromotion(Pieces, WhiteQueen, BlackQueen);
             
             for (int i = 0; i < Pieces.GetLength(0); i++)
             {
@@ -78,19 +80,13 @@ namespace Handlers
                         newPiece = Instantiate(piecePrefab, gridParent);
                         newPiece.GetComponent<PieceHandler>().Setup(Pieces[i, j], new Vector2Int(i, j));
                         
-                        if (Pieces[i, j] == blackKing)
+                        if (Pieces[i, j] == blackKing && Rules.IsCheckMate(Pieces, Pieces[i, j], new Vector2Int(i, j)))
                         {
-                            if (Rules.IsCheck(Pieces, Pieces[i, j], new Vector2Int(i, j)))
-                            {
-                                GameManager.Instance.IsBlackKingCheck = true;
-                            }
+                            GameManager.Instance.IsBlackKingCheckMate = true;
                         }
-                        if (Pieces[i, j] == whiteKing)
+                        if (Pieces[i, j] == whiteKing && Rules.IsCheckMate(Pieces, Pieces[i, j], new Vector2Int(i, j)))
                         {
-                            if (Rules.IsCheck(Pieces, Pieces[i, j], new Vector2Int(i, j)))
-                            {
-                                GameManager.Instance.IsWhiteKingCheck = true;
-                            }
+                            GameManager.Instance.IsWhiteKingCheckMate = true;
                         }
                     }
                     else
@@ -106,6 +102,15 @@ namespace Handlers
             if (changeTurn)
             {
                 Rules.ThreefoldRepetition(Pieces);
+
+                if (GameManager.Instance.IsBlackKingCheckMate)
+                {
+                    Rules.IsGameOver(true);
+                }
+                else if (GameManager.Instance.IsWhiteKingCheckMate)
+                {
+                    Rules.IsGameOver(false);
+                }
             }
         }
 
