@@ -104,8 +104,7 @@ namespace Utils
 
         public static bool IsCheckMate(Piece[,] pieces, Piece currentPiece, Vector2Int position)
         {
-            bool isCheckMate = false;
-            List<Vector2Int> movementsToRemove = new List<Vector2Int>();
+            List<Vector2Int> movementsInCheck = new List<Vector2Int>();
 
             if (IsCheck(pieces, currentPiece, position))
             {
@@ -118,25 +117,17 @@ namespace Utils
 
                     if (IsCheck(testPieces, currentPiece, currentPieceMovement))
                     {
-                        movementsToRemove.Add(currentPieceMovement);
+                        movementsInCheck.Add(currentPieceMovement);
                     }
                 }
 
-                foreach (Vector2Int movement in movementsToRemove)
+                if (currentPieceAvailableMovements.Count == movementsInCheck.Count)
                 {
-                    if (currentPieceAvailableMovements.Contains(movement))
-                    {
-                        currentPieceAvailableMovements.Remove(movement);
-                    }
-                }
-
-                if (currentPieceAvailableMovements.Count == 0)
-                {
-                    isCheckMate = true;
+                    return true;
                 }
             }
             
-            return isCheckMate;
+            return false;
         }
 
         public static void ThreefoldRepetition(Piece[,] pieces)

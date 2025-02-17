@@ -34,29 +34,29 @@ namespace Handlers
         {
             Time.timeScale = 1;
 
-            Pieces = new Piece[,]
-            {
-                { blackRook, blackKnight, blackBishop, BlackQueen, blackKing, blackBishop, blackKnight, blackRook },
-                { blackPawn, blackPawn, blackPawn, blackPawn, blackPawn, blackPawn, blackPawn, blackPawn },
-                { null, null, null, null, null, null, null, null },
-                { null, null, null, null, null, null, null, null },
-                { null, null, null, null, null, null, null, null },
-                { null, null, null, null, null, null, null, null },
-                { whitePawn, whitePawn, whitePawn, whitePawn, whitePawn, whitePawn, whitePawn, whitePawn },
-                { whiteRook, whiteKnight, whiteBishop, WhiteQueen, whiteKing, whiteBishop, whiteKnight, whiteRook }
-            };
-            
             // Pieces = new Piece[,]
             // {
-            //     { null, null, null, null, null, null, null, blackRook },
-            //     { null, null, null, blackKing, blackBishop, blackPawn, null, blackPawn },
-            //     { null, WhiteQueen, null, null, null, whiteRook, null, null },
-            //     { null, null, null, blackPawn, null, null, null, BlackQueen },
-            //     { blackPawn, null, null, whitePawn, null, null, null, whiteBishop },
-            //     { null, whitePawn, null, null, null, null, null, whiteKing },
-            //     { whitePawn, null, null, null, null, null, null, whitePawn },
-            //     { null, null, null, null, null, null, null, null }
+            //     { blackRook, blackKnight, blackBishop, BlackQueen, blackKing, blackBishop, blackKnight, blackRook },
+            //     { blackPawn, blackPawn, blackPawn, blackPawn, blackPawn, blackPawn, blackPawn, blackPawn },
+            //     { null, null, null, null, null, null, null, null },
+            //     { null, null, null, null, null, null, null, null },
+            //     { null, null, null, null, null, null, null, null },
+            //     { null, null, null, null, null, null, null, null },
+            //     { whitePawn, whitePawn, whitePawn, whitePawn, whitePawn, whitePawn, whitePawn, whitePawn },
+            //     { whiteRook, whiteKnight, whiteBishop, WhiteQueen, whiteKing, whiteBishop, whiteKnight, whiteRook }
             // };
+            
+            Pieces = new Piece[,]
+            {
+                { null, null, null, null, null, null, null, blackRook },
+                { null, null, null, blackKing, blackBishop, blackPawn, null, blackPawn },
+                { null, WhiteQueen, null, null, null, whiteRook, null, null },
+                { null, null, null, blackPawn, null, null, null, BlackQueen },
+                { blackPawn, null, null, whitePawn, null, null, null, whiteBishop },
+                { null, whitePawn, null, null, null, null, null, whiteKing },
+                { whitePawn, null, null, null, null, null, null, whitePawn },
+                { null, null, null, null, null, null, null, null }
+            };
             
             ZobristHashing.InitializeZobristTable();
             DisplayMatrix(true);
