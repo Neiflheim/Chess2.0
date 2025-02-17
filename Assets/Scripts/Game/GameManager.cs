@@ -56,9 +56,10 @@ namespace Game
                 SceneManager.LoadScene(0);
             }
 
-            if (Input.GetButtonDown("Fire3"))
+            if (Input.GetKeyDown(KeyCode.C))
             {
                 // Pour tester et voir les enfants
+                Debug.Log("See every child.");
                 if (_node == null)
                 {
                     _node = new Node(BoardsHandler.Instance.Pieces, IsWhiteTurn, IsWhiteTurn);
@@ -83,39 +84,57 @@ namespace Game
                 
             }
 
-            if (Input.GetButtonDown("Fire2"))
+            if (Input.GetKeyDown(KeyCode.Q))
             {
                 Stopwatch stopwatch = new Stopwatch();
                 stopwatch.Start();
                 
                 // TESTER MINMAX
+                Debug.Log("Use Minmax.");
                 
-                // _node = new Node(BoardsHandler.Instance.Pieces, IsWhiteTurn, IsWhiteTurn);
-                // nodes = _node.Children();
-                //
-                // int maxHeuristic = int.MinValue;
-                // Node bestChildNode = null;
-                //
-                // foreach (Node child in nodes)
-                // {
-                //     BoardsHandler.Instance.Pieces = child.Pieces;
-                //     int currentHeuristic = _aiHandler.MinMax(child, _depthMinMax - 1, false);
-                //     if (currentHeuristic > maxHeuristic)
-                //     {
-                //         maxHeuristic = currentHeuristic;
-                //         bestChildNode = child;
-                //     }
-                // }
-                //
-                // if (bestChildNode != null)
-                // {
-                //     BoardsHandler.Instance.Pieces = bestChildNode.Pieces;
-                // }
-                //
-                // BoardsHandler.Instance.ResetMatrix();
-                // BoardsHandler.Instance.DisplayMatrix(true);
-                // IsWhiteTurn = !IsWhiteTurn;
+                _node = new Node(BoardsHandler.Instance.Pieces, IsWhiteTurn, IsWhiteTurn);
+                nodes = _node.Children();
                 
+                int maxHeuristic = int.MinValue;
+                Node bestChildNode = null;
+                
+                foreach (Node child in nodes)
+                {
+                    BoardsHandler.Instance.Pieces = child.Pieces;
+                    int currentHeuristic = _aiHandler.MinMax(child, _depthMinMax - 1, false);
+                    if (currentHeuristic > maxHeuristic)
+                    {
+                        maxHeuristic = currentHeuristic;
+                        bestChildNode = child;
+                    }
+                }
+                
+                if (bestChildNode != null)
+                {
+                    BoardsHandler.Instance.Pieces = bestChildNode.Pieces;
+                }
+                
+                BoardsHandler.Instance.ResetMatrix();
+                BoardsHandler.Instance.DisplayMatrix(true);
+                IsWhiteTurn = !IsWhiteTurn;
+                
+                if (bestChildNode != null)
+                {
+                    BoardsHandler.Instance.Pieces = bestChildNode.Pieces;
+                }
+                
+                BoardsHandler.Instance.ResetMatrix();
+                BoardsHandler.Instance.DisplayMatrix(true);
+                IsWhiteTurn = !IsWhiteTurn;
+                
+                stopwatch.Stop();
+                Debug.Log("Execution Time : " + stopwatch.ElapsedMilliseconds + " ms / For : " + nodes.Count +" children");
+            }
+
+            if (Input.GetKeyDown(KeyCode.W))
+            {
+                Stopwatch stopwatch = new Stopwatch();
+                stopwatch.Start();
                 
                 // TESTER MINMAXALPHABETA
                 
