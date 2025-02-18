@@ -8,7 +8,19 @@ namespace Utils
     public static class Rules
     {
         // IsCheck
-        private static Dictionary<ulong, List<Vector2Int>> _cachedEnemyMovements = new Dictionary<ulong, List<Vector2Int>>();
+        public struct MoveData
+        {
+            public List<Vector2Int> WhiteMoves;
+            public List<Vector2Int> BlackMoves;
+
+            public MoveData(List<Vector2Int> whiteMoves, List<Vector2Int> blackMoves)
+            {
+                WhiteMoves = whiteMoves;
+                BlackMoves = blackMoves;
+            }
+        }
+        private static Dictionary<ulong, MoveData> _moveCache = new Dictionary<ulong, MoveData>();
+        
         
         // ThreefoldRepetition
         private static List<string> _oldPieces = new List<string>();
@@ -63,43 +75,51 @@ namespace Utils
             
             return false;
             
-            // USING ZOBRISTHASHING => FASTER BUT DON'T PLAY THE RIGHT MOV
+            // USING ZOBRISTHASHING => SLOWER
             
-            // List<Vector2Int> availableMovements;
+            // bool isCheck = false;
+            // ulong zobristHash = ZobristHashing.ComputeBoardHash(pieces);
             //
-            // ulong zobristHash = ZobristHashing.ComputeBoardHash(pieces); // Remplace SHA-256
-            // if (_cachedEnemyMovements.TryGetValue(zobristHash, out availableMovements)) // Vérifie si l'état est en cache
+            // // Vérification du cache
+            // if (_moveCache.TryGetValue(zobristHash, out MoveData moveData))
             // {
-            //     return availableMovements.Contains(position); // Vérifie directement
+            //     Debug.Log("Use Zobrist Hash Cache");
+            //     return currentPiece.IsWhite ? moveData.BlackMoves.Contains(position) : moveData.WhiteMoves.Contains(position);
             // }
             //
-            // availableMovements = new List<Vector2Int>();
+            // List<Vector2Int> whiteMoves = new List<Vector2Int>();
+            // List<Vector2Int> blackMoves = new List<Vector2Int>();
             //
+            // // Collecte des mouvements des pièces
             // for (int i = 0; i < pieces.GetLength(0); i++)
             // {
             //     for (int j = 0; j < pieces.GetLength(1); j++)
             //     {
-            //         Piece piece = pieces[i, j];
-            //         if (piece != null && piece.IsWhite != currentPiece.IsWhite)
+            //         if (pieces[i, j] == null) continue;
+            //
+            //         List<Vector2Int> moves = pieces[i, j].AvailableMovements(pieces, new Vector2Int(i, j), false);
+            //
+            //         if (pieces[i, j].IsWhite)
             //         {
-            //             List<Vector2Int> moves = piece.AvailableMovements(pieces, new Vector2Int(i, j), false);
-            //     
-            //             foreach (Vector2Int move in moves)
-            //             {
-            //                 availableMovements.Add(move);
-            //         
-            //                 if (move == position)
-            //                 {
-            //                     _cachedEnemyMovements[zobristHash] = availableMovements; // Met à jour le cache
-            //                     return true; // Arrête immédiatement, pas besoin de continuer
-            //                 }
-            //             }
+            //             whiteMoves.AddRange(moves);
+            //         }
+            //         else
+            //         {
+            //             blackMoves.AddRange(moves);
+            //         }
+            //
+            //         // Vérification de la mise en échec sans interrompre l'accumulation des mouvements
+            //         if (pieces[i, j].IsWhite != currentPiece.IsWhite && moves.Contains(position))
+            //         {
+            //             isCheck = true;
             //         }
             //     }
             // }
             //
-            // _cachedEnemyMovements[zobristHash] = availableMovements; // Stocke les mouvements si non trouvé
-            // return false;
+            // // Stocker dans le cache pour accélérer les prochaines vérifications
+            // _moveCache[zobristHash] = new MoveData(whiteMoves, blackMoves);
+            //
+            // return isCheck;
         }
 
         public static bool IsCheckMate(Piece[,] pieces, Piece currentPiece, Vector2Int position)
