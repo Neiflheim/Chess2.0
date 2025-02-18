@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using Handlers;
 using UnityEngine;
 
 namespace Pieces
@@ -12,7 +13,7 @@ namespace Pieces
             new Vector2Int(1, 1), new Vector2Int(1, -1), new Vector2Int(-1, 1), new Vector2Int(-1, -1)
         };
         
-        public override List<Vector2Int> AvailableMovements(Piece[,] pieces, Vector2Int position, bool firstCall)
+        public override List<Vector2Int> AvailableMovements(int[,] board, Vector2Int position, bool firstCall)
         {
             List<Vector2Int> movements = new List<Vector2Int>();
 
@@ -22,8 +23,7 @@ namespace Pieces
 
                 if ((uint)testDirection.x > 7 || (uint)testDirection.y > 7) continue;
                 
-                Piece targetPiece = pieces[testDirection.x, testDirection.y];
-                if (!targetPiece || targetPiece.IsWhite != IsWhite)
+                if (BoardsHandler.Instance.AreDifferentColors(board[position.x, position.y], board[testDirection.x, testDirection.y], true))
                 {
                     movements.Add(testDirection);
                 }
@@ -31,7 +31,7 @@ namespace Pieces
             
             if (firstCall)
             {
-                movements.RemoveAll(movement => !CanPlayThisMovement(pieces, this, position, movement));
+                movements.RemoveAll(movement => !CanPlayThisMovement(board, this, position, movement));
             }
             
             return movements;

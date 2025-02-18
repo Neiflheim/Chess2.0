@@ -32,7 +32,7 @@ namespace Handlers
         public int[,] BoardData;
         public GameObject[,] PiecesDisplay;
         
-        public Piece[,] Pieces;
+        // public Piece[,] Pieces;
         
         private void Start()
         {
@@ -54,27 +54,15 @@ namespace Handlers
 
             BoardData = new int[,]
             {
-                { 0, 0, 0, 0, 0, 0, 0, 0 },
-                { 0, 0, 0, 0, 0, 0, 0, 0 },
-                { 0, 0, 0, 0, 0, 0, 0, 0 },
-                { 0, 0, 0, 0, 0, 0, 0, 0 },
-                { 0, 0, 0, 0, 0, 0, 0, 0 },
-                { 0, 0, 0, 0, 0, 0, 0, 0 },
-                { 0, 0, 0, 0, 0, 0, 0, 0 },
-                { 0, 0, 0, 0, 0, 0, 0, 0 }
+                { 10, 8, 9,11,12, 9, 8,10 },
+                {  7, 7, 7, 7, 7, 7, 7, 7 },
+                {  0, 0, 0, 0, 0, 0, 0, 0 },
+                {  0, 0, 0, 0, 0, 0, 0, 0 },
+                {  0, 0, 0, 0, 0, 0, 0, 0 },
+                {  0, 0, 0, 0, 0, 0, 0, 0 },
+                {  1, 1, 1, 1, 1, 1, 1, 1 },
+                {  4, 2, 3, 5, 6, 3, 2, 4 }
             };
-
-            // Pieces = new Piece[,]
-            // {
-            //     { _blackRook, _blackKnight, _blackBishop, _blackQueen, _blackKing, _blackBishop, _blackKnight, _blackRook },
-            //     { _blackPawn, _blackPawn, _blackPawn, _blackPawn, _blackPawn, _blackPawn, _blackPawn, _blackPawn },
-            //     { null, null, null, null, null, null, null, null },
-            //     { null, null, null, null, null, null, null, null },
-            //     { null, null, null, null, null, null, null, null },
-            //     { null, null, null, null, null, null, null, null },
-            //     { _whitePawn, _whitePawn, _whitePawn, _whitePawn, _whitePawn, _whitePawn, _whitePawn, _whitePawn },
-            //     { _whiteRook, _whiteKnight, _whiteBishop, _whiteQueen, _whiteKing, _whiteBishop, _whiteKnight, _whiteRook }
-            // };
             
             ZobristHashing.InitializeZobristTable();
             DisplayMatrix(true);
@@ -82,30 +70,30 @@ namespace Handlers
 
         public void DisplayMatrix(bool changeTurn)
         {
-            PiecesDisplay = new GameObject[Pieces.GetLength(0), Pieces.GetLength(1)];
+            PiecesDisplay = new GameObject[BoardData.GetLength(0), BoardData.GetLength(1)];
             
-            Rules.PawnPromotion(Pieces, _whiteQueen, _blackQueen);
+            Rules.PawnPromotion(BoardData);
             
-            for (int i = 0; i < Pieces.GetLength(0); i++)
+            for (int i = 0; i < BoardData.GetLength(0); i++)
             {
-                for (int j = 0; j < Pieces.GetLength(1); j++)
+                for (int j = 0; j < BoardData.GetLength(1); j++)
                 {
                     GameObject newPiece;
                     
-                    if (Pieces[i, j] != null)
+                    if (BoardData[i, j] != 0)
                     {
                         // Instancier un prefab Image pour chaque élément
                         newPiece = Instantiate(_piecePrefab, _gridParent);
-                        newPiece.GetComponent<PieceHandler>().Setup(Pieces[i, j], new Vector2Int(i, j));
+                        newPiece.GetComponent<PieceHandler>().Setup(PiecesDictionary[BoardData[i, j]], new Vector2Int(i, j));
                         
-                        if (Pieces[i, j] == _blackKing && Rules.IsCheckMate(Pieces, Pieces[i, j], new Vector2Int(i, j)))
-                        {
-                            GameManager.Instance.IsBlackKingCheckMate = true;
-                        }
-                        if (Pieces[i, j] == _whiteKing && Rules.IsCheckMate(Pieces, Pieces[i, j], new Vector2Int(i, j)))
-                        {
-                            GameManager.Instance.IsWhiteKingCheckMate = true;
-                        }
+                        // if (Pieces[i, j] == _blackKing && Rules.IsCheckMate(Pieces, Pieces[i, j], new Vector2Int(i, j)))
+                        // {
+                        //     GameManager.Instance.IsBlackKingCheckMate = true;
+                        // }
+                        // if (Pieces[i, j] == _whiteKing && Rules.IsCheckMate(Pieces, Pieces[i, j], new Vector2Int(i, j)))
+                        // {
+                        //     GameManager.Instance.IsWhiteKingCheckMate = true;
+                        // }
                     }
                     else
                     {
@@ -119,8 +107,8 @@ namespace Handlers
 
             if (changeTurn)
             {
-                Rules.ThreefoldRepetition(Pieces);
-
+                Rules.ThreefoldRepetition(BoardData);
+            
                 if (GameManager.Instance.IsBlackKingCheckMate)
                 {
                     Rules.IsGameOver(true);
@@ -138,6 +126,19 @@ namespace Handlers
             {
                 Destroy(child.gameObject);
             }
+        }
+        
+        public bool AreDifferentColors(int pieceOne, int pieceTwo, bool emptyVerification)
+        {
+            if (emptyVerification)
+            {
+                if (pieceTwo == 0)
+                {
+                    return true;
+                }
+            }
+            
+            return (pieceOne <= 6 && pieceTwo > 6) || (pieceOne > 6 && pieceTwo <= 6 && pieceTwo >= 1);
         }
     }
 }

@@ -52,7 +52,7 @@ namespace MinMax
                             
                             whiteHeuristicValue += Pieces[i, j].BaseValue + valueDependingOnPosition;
 
-                            if (Pieces[i,j].name == "WhiteKing" && Rules.IsCheckMate(Pieces, Pieces[i,j], new Vector2Int(i,j)))
+                            // if (Pieces[i,j].name == "WhiteKing" && Rules.IsCheckMate(Pieces, Pieces[i,j], new Vector2Int(i,j)))
                             {
                                 isWhiteKingCheckMate = true;
                             }
@@ -64,7 +64,7 @@ namespace MinMax
                             
                             blackHeuristicValue += Pieces[i, j].BaseValue + valueDependingOnPosition;
                             
-                            if (Pieces[i,j].name == "BlackKing" && Rules.IsCheckMate(Pieces, Pieces[i,j], new Vector2Int(i,j)))
+                            // if (Pieces[i,j].name == "BlackKing" && Rules.IsCheckMate(Pieces, Pieces[i,j], new Vector2Int(i,j)))
                             {
                                 isBlackKingCheckMate = true;
                             }
@@ -116,17 +116,17 @@ namespace MinMax
                 {
                     if (Pieces[i,j] && Pieces[i,j].IsWhite == IsWhiteTurn)
                     {
-                        List<Vector2Int> availableMovements = Pieces[i,j].AvailableMovements(Pieces, new Vector2Int(i, j), true);
-                        
-                        if (availableMovements.Count == 0) continue;
-                    
-                        foreach (Vector2Int movement in availableMovements)
-                        {
-                            Node node = new Node(Pieces, !IsWhiteTurn, IsWhitePredictions);
-                            node.MovePiece(Pieces[i,j], new Vector2Int(i, j), movement);
-                            // Rules.PawnPromotion(node.Pieces, BoardsHandler.Instance._whiteQueen, BoardsHandler.Instance._blackQueen);
-                            children.Add(node);
-                        }
+                        // List<Vector2Int> availableMovements = Pieces[i,j].AvailableMovements(Pieces, new Vector2Int(i, j), true);
+                        //
+                        // if (availableMovements.Count == 0) continue;
+                        //
+                        // foreach (Vector2Int movement in availableMovements)
+                        // {
+                        //     Node node = new Node(Pieces, !IsWhiteTurn, IsWhitePredictions);
+                        //     node.MovePiece(Pieces[i,j], new Vector2Int(i, j), movement);
+                        //     Rules.PawnPromotion(node.Pieces, BoardsHandler.Instance._whiteQueen, BoardsHandler.Instance._blackQueen);
+                        //     children.Add(node);
+                        // }
                     }
                 }
             }

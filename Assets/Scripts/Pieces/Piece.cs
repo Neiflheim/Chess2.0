@@ -12,55 +12,44 @@ namespace Pieces
         public bool IsWhite;
         public int BaseValue;
 
-        public abstract List<Vector2Int> AvailableMovements(Piece[,] pieces, Vector2Int position, bool firstCall);
+        public abstract List<Vector2Int> AvailableMovements(int[,] board, Vector2Int position, bool firstCall);
 
-        public bool CanPlayThisMovement(Piece[,] pieces, Piece piece, Vector2Int oldPosition, Vector2Int newPosition)
+        public bool CanPlayThisMovement(int[,] pieces, Piece piece, Vector2Int oldPosition, Vector2Int newPosition)
         {
             bool canPlayThisMovement = true;
+            
+            int[,] testBoard = (int[,]) pieces.Clone();
+            testBoard[newPosition.x, newPosition.y] = testBoard[oldPosition.x, oldPosition.y];
+            testBoard[oldPosition.x, oldPosition.y] = 0;
             
             // Vérifier si pour ce mouvement le roi est toujours en echec
             if (IsWhite)
             {
-                Piece[,] testPieces = (Piece[,]) BoardsHandler.Instance.Pieces.Clone();
-                testPieces[newPosition.x, newPosition.y] = piece;
-                testPieces[oldPosition.x, oldPosition.y] = null;
-
-                for (int i = 0; i < testPieces.GetLength(0); i++)
+                for (int i = 0; i < testBoard.GetLength(0); i++)
                 {
-                    for (int j = 0; j < testPieces.GetLength(1); j++)
+                    for (int j = 0; j < testBoard.GetLength(1); j++)
                     {
-                        if (testPieces[i,j])
+                        if (testBoard[i,j] == 6)
                         {
-                            if (testPieces[i,j].name == "WhiteKing")
-                            {
-                                if (Rules.IsCheck(testPieces, testPieces[i,j], new Vector2Int(i, j)))
-                                { 
-                                    canPlayThisMovement = false;
-                                }
+                            if (Rules.IsCheck(testBoard, new Vector2Int(i, j)))
+                            { 
+                                canPlayThisMovement = false;
                             }
                         }
                     }
                 }
             }
-
-            if (!IsWhite)
+            else
             {
-                Piece[,] testPieces = (Piece[,]) BoardsHandler.Instance.Pieces.Clone();
-                testPieces[newPosition.x, newPosition.y] = piece;
-                testPieces[oldPosition.x, oldPosition.y] = null;
-
-                for (int i = 0; i < testPieces.GetLength(0); i++)
+                for (int i = 0; i < testBoard.GetLength(0); i++)
                 {
-                    for (int j = 0; j < testPieces.GetLength(1); j++)
+                    for (int j = 0; j < testBoard.GetLength(1); j++)
                     {
-                        if (testPieces[i,j])
+                        if (testBoard[i,j] == 12)
                         { 
-                            if (testPieces[i,j].name == "BlackKing")
-                            { 
-                                if (Rules.IsCheck(testPieces, testPieces[i,j], new Vector2Int(i, j)))
-                                {
-                                    canPlayThisMovement = false;
-                                }
+                            if (Rules.IsCheck(testBoard, new Vector2Int(i, j)))
+                            {
+                                canPlayThisMovement = false;
                             }
                         }
                     }

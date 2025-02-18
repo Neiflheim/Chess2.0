@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using Game;
+using Handlers;
 using Pieces;
 using UnityEngine;
 
@@ -25,40 +26,35 @@ namespace Utils
         // ThreefoldRepetition
         private static List<string> _oldPieces = new List<string>();
         
-        public static void PawnPromotion(Piece[,] pieces, Piece whiteQueen, Piece blackQueen)
+        // Rules
+        public static void PawnPromotion(int[,] pieces)
         {
             for (int i = 0; i < pieces.GetLength(0); i++)
             {
-                if (pieces[0, i])
+                if (pieces[0, i] == 1)
                 {
-                    if (pieces[0, i].name == "WhitePawn")
-                    {
-                        pieces[0, i] = whiteQueen;
-                    }
+                    pieces[0, i] = 5;
                 }
 
-                if (pieces[7, i])
+                if (pieces[7, i] == 7)
                 {
-                    if (pieces[7, i].name == "BlackPawn")
-                    {
-                        pieces[7, i] = blackQueen;
-                    }
+                    pieces[7, i] = 11;
                 }
                 
             }
         }
         
-        public static bool IsCheck(Piece[,] pieces, Piece currentPiece, Vector2Int position)
+        public static bool IsCheck(int[,] board, Vector2Int position)
         {
             List<Vector2Int> availableMovements = new List<Vector2Int>();
             
-            for (int i = 0; i < pieces.GetLength(0); i++)
+            for (int i = 0; i < board.GetLength(0); i++)
             {
-                for (int j = 0; j < pieces.GetLength(1); j++)
+                for (int j = 0; j < board.GetLength(1); j++)
                 {
-                    if (pieces[i,j] && pieces[i,j].IsWhite != currentPiece.IsWhite)
+                    if (BoardsHandler.Instance.AreDifferentColors(board[position.x, position.y], board[i, j], false))
                     {
-                        availableMovements = pieces[i,j].AvailableMovements(pieces, new Vector2Int(i, j), false);
+                        availableMovements = BoardsHandler.Instance.PiecesDictionary[board[i,j]].AvailableMovements(board, new Vector2Int(i, j), false);
                         
                         if (availableMovements.Count == 0) continue;
                     
@@ -122,25 +118,25 @@ namespace Utils
             // return isCheck;
         }
 
-        public static bool IsCheckMate(Piece[,] pieces, Piece currentPiece, Vector2Int position)
+        public static bool IsCheckMate(int[,] board, int currentPiece, Vector2Int position)
         {
             List<Vector2Int> movementsInCheck = new List<Vector2Int>();
 
-            if (IsCheck(pieces, currentPiece, position))
+            if (IsCheck(board, position))
             {
-                List<Vector2Int> currentPieceAvailableMovements = currentPiece.AvailableMovements(pieces, position, false);
+                List<Vector2Int> currentPieceAvailableMovements = BoardsHandler.Instance.PiecesDictionary[currentPiece].AvailableMovements(board, position, false);
                 foreach (Vector2Int currentPieceMovement in currentPieceAvailableMovements)
                 {
-                    Piece[,] testPieces = (Piece[,]) pieces.Clone();
-                    testPieces[currentPieceMovement.x, currentPieceMovement.y] = currentPiece;
-                    testPieces[position.x, position.y] = null;
-
-                    if (IsCheck(testPieces, currentPiece, currentPieceMovement))
+                    int[,] testBoard = (int[,]) board.Clone();
+                    testBoard[currentPieceMovement.x, currentPieceMovement.y] = currentPiece;
+                    testBoard[position.x, position.y] = 0;
+            
+                    if (IsCheck(testBoard, currentPieceMovement))
                     {
                         movementsInCheck.Add(currentPieceMovement);
                     }
                 }
-
+            
                 if (currentPieceAvailableMovements.Count == movementsInCheck.Count)
                 {
                     return true;
@@ -150,17 +146,18 @@ namespace Utils
             return false;
         }
 
-        public static void ThreefoldRepetition(Piece[,] pieces)
+        public static void ThreefoldRepetition(int[,] board)
         {
             int count = 0;
 
-            string piecesHasher = TranspositionTableHandler.PiecesComputeSHA256(pieces);
+            string piecesHasher = TranspositionTableHandler.PiecesComputeSHA256(board);
             
             foreach (string piece in _oldPieces)
             {
                 if (piece == piecesHasher)
                 {
                     count++;
+                    Debug.Log(count);
                 }
             }
             

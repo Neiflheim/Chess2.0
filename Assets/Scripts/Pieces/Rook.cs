@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using Handlers;
 using UnityEngine;
 
 namespace Pieces
@@ -6,7 +7,7 @@ namespace Pieces
     [CreateAssetMenu(fileName = "Rook", menuName = "Piece/Rook")]
     public class Rook : Piece
     {
-        public override List<Vector2Int> AvailableMovements(Piece[,] pieces, Vector2Int position, bool firstCall)
+        public override List<Vector2Int> AvailableMovements(int[,] board, Vector2Int position, bool firstCall)
         {
             List<Vector2Int> movements = new List<Vector2Int>();
 
@@ -14,13 +15,13 @@ namespace Pieces
             
             for (i = position.x + 1; i <= 7; i++) 
             { 
-                if (!pieces[i, position.y])
+                if (board[i, position.y] == 0)
                 { 
                     movements.Add(new Vector2Int(i, position.y));
                 }
                 else
                 {
-                    if (pieces[i, position.y].IsWhite != IsWhite)
+                    if (BoardsHandler.Instance.AreDifferentColors(board[position.x, position.y], board[i, position.y], false))
                     { 
                         movements.Add(new Vector2Int(i, position.y)); 
                     }
@@ -30,13 +31,13 @@ namespace Pieces
             
             for (i = position.x - 1; i >= 0; i--) 
             { 
-                if (!pieces[i, position.y]) 
+                if (board[i, position.y] == 0) 
                 { 
                     movements.Add(new Vector2Int(i, position.y));
                 }
                 else
                 {
-                    if (pieces[i, position.y].IsWhite != IsWhite) 
+                    if (BoardsHandler.Instance.AreDifferentColors(board[position.x, position.y], board[i, position.y], false)) 
                     { 
                         movements.Add(new Vector2Int(i, position.y)); 
                     }
@@ -46,13 +47,13 @@ namespace Pieces
             
             for (i = position.y + 1; i <= 7; i++) 
             { 
-                if (!pieces[position.x, i])
+                if (board[position.x, i] == 0)
                 { 
                     movements.Add(new Vector2Int(position.x, i));
                 }
                 else
                 {
-                    if (pieces[position.x, i].IsWhite != IsWhite) 
+                    if (BoardsHandler.Instance.AreDifferentColors(board[position.x, position.y], board[position.x, i], false)) 
                     { 
                         movements.Add(new Vector2Int(position.x, i));
                     }
@@ -62,13 +63,13 @@ namespace Pieces
             
             for (i = position.y - 1; i >= 0; i--) 
             { 
-                if (!pieces[position.x, i]) 
+                if (board[position.x, i] == 0) 
                 { 
                     movements.Add(new Vector2Int(position.x, i));
                 }
                 else
                 {
-                    if (pieces[position.x, i].IsWhite != IsWhite) 
+                    if (BoardsHandler.Instance.AreDifferentColors(board[position.x, position.y], board[position.x, i], false)) 
                     { 
                         movements.Add(new Vector2Int(position.x, i));
                     }
@@ -78,7 +79,7 @@ namespace Pieces
             
             if (firstCall)
             {
-                movements.RemoveAll(movement => !CanPlayThisMovement(pieces, this, position, movement));
+                movements.RemoveAll(movement => !CanPlayThisMovement(board, this, position, movement));
             }
             
             return movements;

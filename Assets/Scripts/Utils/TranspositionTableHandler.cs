@@ -1,9 +1,9 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
 using MinMax;
-using Pieces;
 
 namespace Utils
 {
@@ -11,25 +11,12 @@ namespace Utils
     {
         public static Dictionary<string, Node> TranspositionsTables = new Dictionary<string, Node>();
         
-        public static string PiecesComputeSHA256(Piece[,] pieces)
+        public static string PiecesComputeSHA256(int[,] board)
         {
-            Piece[,] piecesCopy = (Piece[,]) pieces.Clone();
-            
-            StringBuilder piecesString = new StringBuilder();
-
-            for (int i = 0; i < piecesCopy.GetLength(0); i++)
-            {
-                for (int j = 0; j < piecesCopy.GetLength(1); j++)
-                {
-                    Piece piece = piecesCopy[i, j];
-                    piecesString.Append(piece == null ? "0" : piece.GetHashCode().ToString());
-                    piecesString.Append(",");
-                }
-            }
-
+            string boardString = string.Join(",", board.Cast<int>());
             using (SHA256 sha256 = SHA256.Create())
             {
-                byte[] hashBytes = sha256.ComputeHash(Encoding.UTF8.GetBytes(piecesString.ToString()));
+                byte[] hashBytes = sha256.ComputeHash(Encoding.UTF8.GetBytes(boardString));
                 return BitConverter.ToString(hashBytes).Replace("-", "").ToLower();
             }
         }
