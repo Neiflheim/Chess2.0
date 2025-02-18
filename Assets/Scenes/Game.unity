@@ -5321,37 +5321,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1734107843}
   m_CullTransparentMesh: 1
---- !u!1 &1737481640
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1737481641}
-  m_Layer: 0
-  m_Name: GameObject
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &1737481641
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1737481640}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 958.67865, y: 534.40814, z: -6.0269985}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1742222228
 GameObject:
   m_ObjectHideFlags: 0
@@ -6278,21 +6247,21 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a0fceb0b25c7f664296fca3b0391c847, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  blackPawn: {fileID: 11400000, guid: 252b1514c937bcf47a3ffb712925ec71, type: 2}
-  whitePawn: {fileID: 11400000, guid: f17bf6bc8e89acd44934b7186bef610a, type: 2}
-  blackRook: {fileID: 11400000, guid: d193dd5cadc055f4a8d102c3f3821345, type: 2}
-  whiteRook: {fileID: 11400000, guid: cae29d2068b0a0b48bf9361fcde4423e, type: 2}
-  blackKnight: {fileID: 11400000, guid: 04cd784137a3c2846ab7af82c8438c54, type: 2}
-  whiteKnight: {fileID: 11400000, guid: 0f004f7e3f1f3554fa3fa36c02d7e9df, type: 2}
-  blackBishop: {fileID: 11400000, guid: 6ad3d596201a2df4c834ba0f5b94c218, type: 2}
-  whiteBishop: {fileID: 11400000, guid: 967015a200530ce409ac1e3125858e4f, type: 2}
-  blackKing: {fileID: 11400000, guid: dc949bc0209e7cf4c94a2c534f096e66, type: 2}
-  whiteKing: {fileID: 11400000, guid: 890ebcaa66da84247984c2d1474e1d21, type: 2}
-  BlackQueen: {fileID: 11400000, guid: 7abebbc3dbf77864d9b47140bbf38207, type: 2}
-  WhiteQueen: {fileID: 11400000, guid: f7d67fb5f2b932748974eb3c09d52646, type: 2}
-  piecePrefab: {fileID: 2690092191498240832, guid: 875af057ef7811b478248121b8e5ba04, type: 3}
-  transparentPrefab: {fileID: 2580139010474514594, guid: 4d15e502787270841aab043eeb57a99e, type: 3}
-  gridParent: {fileID: 2013352920}
+  _blackPawn: {fileID: 11400000, guid: 252b1514c937bcf47a3ffb712925ec71, type: 2}
+  _whitePawn: {fileID: 11400000, guid: f17bf6bc8e89acd44934b7186bef610a, type: 2}
+  _blackRook: {fileID: 11400000, guid: d193dd5cadc055f4a8d102c3f3821345, type: 2}
+  _whiteRook: {fileID: 11400000, guid: cae29d2068b0a0b48bf9361fcde4423e, type: 2}
+  _blackKnight: {fileID: 11400000, guid: 04cd784137a3c2846ab7af82c8438c54, type: 2}
+  _whiteKnight: {fileID: 11400000, guid: 0f004f7e3f1f3554fa3fa36c02d7e9df, type: 2}
+  _blackBishop: {fileID: 11400000, guid: 6ad3d596201a2df4c834ba0f5b94c218, type: 2}
+  _whiteBishop: {fileID: 11400000, guid: 967015a200530ce409ac1e3125858e4f, type: 2}
+  _blackQueen: {fileID: 11400000, guid: 7abebbc3dbf77864d9b47140bbf38207, type: 2}
+  _whiteQueen: {fileID: 11400000, guid: f7d67fb5f2b932748974eb3c09d52646, type: 2}
+  _blackKing: {fileID: 11400000, guid: dc949bc0209e7cf4c94a2c534f096e66, type: 2}
+  _whiteKing: {fileID: 11400000, guid: 890ebcaa66da84247984c2d1474e1d21, type: 2}
+  _piecePrefab: {fileID: 2690092191498240832, guid: 875af057ef7811b478248121b8e5ba04, type: 3}
+  _transparentPrefab: {fileID: 2580139010474514594, guid: 4d15e502787270841aab043eeb57a99e, type: 3}
+  _gridParent: {fileID: 2013352920}
 --- !u!1 &2036374905
 GameObject:
   m_ObjectHideFlags: 0
@@ -6606,4 +6575,3 @@ SceneRoots:
   - {fileID: 941541265}
   - {fileID: 881802715}
   - {fileID: 590350196}
-  - {fileID: 1737481641}

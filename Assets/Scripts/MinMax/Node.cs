@@ -124,7 +124,7 @@ namespace MinMax
                         {
                             Node node = new Node(Pieces, !IsWhiteTurn, IsWhitePredictions);
                             node.MovePiece(Pieces[i,j], new Vector2Int(i, j), movement);
-                            Rules.PawnPromotion(node.Pieces, BoardsHandler.Instance.WhiteQueen, BoardsHandler.Instance.BlackQueen);
+                            // Rules.PawnPromotion(node.Pieces, BoardsHandler.Instance._whiteQueen, BoardsHandler.Instance._blackQueen);
                             children.Add(node);
                         }
                     }
