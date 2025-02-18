@@ -20,5 +20,20 @@ namespace Utils
                 return BitConverter.ToString(hashBytes).Replace("-", "").ToLower();
             }
         }
+
+        public static string BoardsHasher(int[,] board)
+        {
+            StringBuilder boardString = new StringBuilder(64);
+
+            for (int i = 0; i < board.GetLength(0); i++)
+            {
+                for (int j = 0; j < board.GetLength(1); j++)
+                {
+                    boardString.Append((char)('a' + board[i, j])); // Convertit directement en char
+                }
+            }
+
+            return boardString.ToString();
+        }
     }
 }

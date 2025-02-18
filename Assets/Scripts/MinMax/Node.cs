@@ -113,7 +113,7 @@ namespace MinMax
             {
                 for (int j = 0; j < Board.GetLength(1); j++)
                 {
-                    if (Board[i,j] != 0 && PieceIsWhite(Board[i,j]) == IsWhiteTurn)
+                    if (Board[i,j] != 0 && BoardsHandler.Instance.PieceIsWhite(Board[i,j]) == IsWhiteTurn)
                     {
                         List<Vector2Int> availableMovements = BoardsHandler.Instance.PiecesDictionary[Board[i,j]].AvailableMovements(Board, new Vector2Int(i, j), true);
                         
@@ -138,11 +138,6 @@ namespace MinMax
             // Applique le déplacement de la piece sur pieceIndex
             Board[from.x, from.y] = 0;
             Board[to.x, to.y] = pieceIndex;
-        }
-
-        private bool PieceIsWhite(int pieceIndex)
-        {
-            return pieceIndex <= 6 && pieceIndex != 0;
         }
     }
 }

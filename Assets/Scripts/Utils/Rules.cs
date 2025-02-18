@@ -19,7 +19,7 @@ namespace Utils
                 BlackMoves = blackMoves;
             }
         }
-        private static Dictionary<ulong, MoveData> _moveCache = new Dictionary<ulong, MoveData>();
+        private static Dictionary<string, MoveData> _moveCache = new Dictionary<string, MoveData>();
         
         
         // ThreefoldRepetition
@@ -45,6 +45,7 @@ namespace Utils
         
         public static bool IsCheck(int[,] board, Vector2Int piecePosition)
         {
+            // DON'T USE CACHE : depth : 4 => 400ms
             List<Vector2Int> availableMovements = new List<Vector2Int>();
             
             for (int i = 0; i < board.GetLength(0); i++)
@@ -70,31 +71,29 @@ namespace Utils
             
             return false;
             
-            // USING ZOBRISTHASHING => SLOWER
             
+            // USE CACHE WITHOUT HASHER : depth : 4 => 1300ms
             // bool isCheck = false;
-            // ulong zobristHash = ZobristHashing.ComputeBoardHash(pieces);
             //
-            // // Vérification du cache
-            // if (_moveCache.TryGetValue(zobristHash, out MoveData moveData))
+            // if (_moveCache.TryGetValue(board, out MoveData moveData))
             // {
-            //     Debug.Log("Use Zobrist Hash Cache");
-            //     return currentPiece.IsWhite ? moveData.BlackMoves.Contains(position) : moveData.WhiteMoves.Contains(position);
+            //     Debug.Log("Use Hash Cache");
+            //     return BoardsHandler.Instance.PieceIsWhite(board[piecePosition.x, piecePosition.y]) ? moveData.BlackMoves.Contains(piecePosition) : moveData.WhiteMoves.Contains(piecePosition);
             // }
             //
             // List<Vector2Int> whiteMoves = new List<Vector2Int>();
             // List<Vector2Int> blackMoves = new List<Vector2Int>();
             //
             // // Collecte des mouvements des pièces
-            // for (int i = 0; i < pieces.GetLength(0); i++)
+            // for (int i = 0; i < board.GetLength(0); i++)
             // {
-            //     for (int j = 0; j < pieces.GetLength(1); j++)
+            //     for (int j = 0; j < board.GetLength(1); j++)
             //     {
-            //         if (pieces[i, j] == null) continue;
+            //         if (board[i, j] == 0) continue;
             //
-            //         List<Vector2Int> moves = pieces[i, j].AvailableMovements(pieces, new Vector2Int(i, j), false);
+            //         List<Vector2Int> moves = BoardsHandler.Instance.PiecesDictionary[board[i, j]].AvailableMovements(board, new Vector2Int(i, j), false);
             //
-            //         if (pieces[i, j].IsWhite)
+            //         if (BoardsHandler.Instance.PieceIsWhite(board[i, j]))
             //         {
             //             whiteMoves.AddRange(moves);
             //         }
@@ -104,7 +103,7 @@ namespace Utils
             //         }
             //
             //         // Vérification de la mise en échec sans interrompre l'accumulation des mouvements
-            //         if (pieces[i, j].IsWhite != currentPiece.IsWhite && moves.Contains(position))
+            //         if (BoardsHandler.Instance.PieceIsWhite(board[i, j]) != BoardsHandler.Instance.PieceIsWhite(board[piecePosition.x, piecePosition.y]) && moves.Contains(piecePosition))
             //         {
             //             isCheck = true;
             //         }
@@ -112,7 +111,52 @@ namespace Utils
             // }
             //
             // // Stocker dans le cache pour accélérer les prochaines vérifications
-            // _moveCache[zobristHash] = new MoveData(whiteMoves, blackMoves);
+            // _moveCache[board] = new MoveData(whiteMoves, blackMoves);
+            //
+            // return isCheck;
+            
+            
+            // USE CACHE WITH HASHER : depth : 4 => 2700ms
+            // bool isCheck = false;
+            // string boardHasherVersion = TranspositionTableHandler.BoardsHasher(board);
+            //
+            // if (_moveCache.TryGetValue(boardHasherVersion, out MoveData moveData))
+            // {
+            //     Debug.Log("Use Hash Cache");
+            //     return BoardsHandler.Instance.PieceIsWhite(board[piecePosition.x, piecePosition.y]) ? moveData.BlackMoves.Contains(piecePosition) : moveData.WhiteMoves.Contains(piecePosition);
+            // }
+            //
+            // List<Vector2Int> whiteMoves = new List<Vector2Int>();
+            // List<Vector2Int> blackMoves = new List<Vector2Int>();
+            //
+            // // Collecte des mouvements des pièces
+            // for (int i = 0; i < board.GetLength(0); i++)
+            // {
+            //     for (int j = 0; j < board.GetLength(1); j++)
+            //     {
+            //         if (board[i, j] == 0) continue;
+            //
+            //         List<Vector2Int> moves = BoardsHandler.Instance.PiecesDictionary[board[i, j]].AvailableMovements(board, new Vector2Int(i, j), false);
+            //
+            //         if (BoardsHandler.Instance.PieceIsWhite(board[i, j]))
+            //         {
+            //             whiteMoves.AddRange(moves);
+            //         }
+            //         else
+            //         {
+            //             blackMoves.AddRange(moves);
+            //         }
+            //
+            //         // Vérification de la mise en échec sans interrompre l'accumulation des mouvements
+            //         if (BoardsHandler.Instance.PieceIsWhite(board[i, j]) != BoardsHandler.Instance.PieceIsWhite(board[piecePosition.x, piecePosition.y]) && moves.Contains(piecePosition))
+            //         {
+            //             isCheck = true;
+            //         }
+            //     }
+            // }
+            //
+            // // Stocker dans le cache pour accélérer les prochaines vérifications
+            // _moveCache[boardHasherVersion] = new MoveData(whiteMoves, blackMoves);
             //
             // return isCheck;
         }
