@@ -129,7 +129,7 @@ namespace Game
                 
                 // TESTER MINMAXALPHABETA
                 
-                // _node = new Node(BoardsHandler.Instance.Pieces, IsWhiteTurn, IsWhiteTurn);
+                _node = new Node(BoardsHandler.Instance.BoardData, IsWhiteTurn, IsWhiteTurn);
                 nodes = _node.Children();
                 Node bestChildNode = null;
                 
@@ -148,7 +148,7 @@ namespace Game
                 
                     foreach (Node child in nodes)
                     {
-                        // BoardsHandler.Instance.Pieces = child.Pieces;
+                        BoardsHandler.Instance.BoardData = child.Board;
                         int currentHeuristic = _aiHandler.MinMaxAlphaBeta(child, _depthAlphaBeta - 1, false, alpha, beta);
                 
                         if (currentHeuristic > maxHeuristic)
@@ -170,7 +170,7 @@ namespace Game
                 
                 if (bestChildNode != null)
                 {
-                    // BoardsHandler.Instance.Pieces = bestChildNode.Pieces;
+                    BoardsHandler.Instance.BoardData = bestChildNode.Board;
                 }
                 
                 BoardsHandler.Instance.ResetMatrix();

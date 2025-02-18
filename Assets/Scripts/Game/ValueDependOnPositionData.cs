@@ -4,27 +4,27 @@ namespace Game
 {
     public static class ValueDependOnPositionData
     {
-        static Dictionary<string, int[,]> valuesDepandOnPosition = new Dictionary<string, int[,]>();
+        static Dictionary<int, int[,]> valuesDepandOnPosition = new Dictionary<int, int[,]>();
 
         public static void InitializeDictionary()
         {
-            valuesDepandOnPosition.Add("WhitePawn", WhitePawnMatrix);
-            valuesDepandOnPosition.Add("BlackPawn", BlackPawnMatrix);
-            valuesDepandOnPosition.Add("WhiteKnight", WhiteKnightMatrix);
-            valuesDepandOnPosition.Add("BlackKnight", BlackKnightMatrix);
-            valuesDepandOnPosition.Add("WhiteBishop", WhiteBishopMatrix);
-            valuesDepandOnPosition.Add("BlackBishop", BlackBishopMatrix);
-            valuesDepandOnPosition.Add("WhiteRook", WhiteRookMatrix);
-            valuesDepandOnPosition.Add("BlackRook", BlackRookMatrix);
-            valuesDepandOnPosition.Add("WhiteQueen", WhiteQueenMatrix);
-            valuesDepandOnPosition.Add("BlackQueen", BlackQueenMatrix);
-            valuesDepandOnPosition.Add("WhiteKing", WhiteKingMatrix);
-            valuesDepandOnPosition.Add("BlackKing", BlackKingMatrix);
+            valuesDepandOnPosition.Add(1, WhitePawnMatrix);
+            valuesDepandOnPosition.Add(7, BlackPawnMatrix);
+            valuesDepandOnPosition.Add(2, WhiteKnightMatrix);
+            valuesDepandOnPosition.Add(8, BlackKnightMatrix);
+            valuesDepandOnPosition.Add(3, WhiteBishopMatrix);
+            valuesDepandOnPosition.Add(9, BlackBishopMatrix);
+            valuesDepandOnPosition.Add(4, WhiteRookMatrix);
+            valuesDepandOnPosition.Add(10, BlackRookMatrix);
+            valuesDepandOnPosition.Add(5, WhiteQueenMatrix);
+            valuesDepandOnPosition.Add(11, BlackQueenMatrix);
+            valuesDepandOnPosition.Add(6, WhiteKingMatrix);
+            valuesDepandOnPosition.Add(12, BlackKingMatrix);
         }
 
-        public static int[,] GetMatrix(string name)
+        public static int[,] GetMatrix(int index)
         {
-            return valuesDepandOnPosition.ContainsKey(name) ? valuesDepandOnPosition[name] : null;
+            return valuesDepandOnPosition.ContainsKey(index) ? valuesDepandOnPosition[index] : null;
         }
         
         public static int[,] WhitePawnMatrix = new int[,]

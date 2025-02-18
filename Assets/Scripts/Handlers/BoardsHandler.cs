@@ -32,8 +32,6 @@ namespace Handlers
         public int[,] BoardData;
         public GameObject[,] PiecesDisplay;
         
-        // public Piece[,] Pieces;
-        
         private void Start()
         {
             Time.timeScale = 1;
@@ -86,14 +84,14 @@ namespace Handlers
                         newPiece = Instantiate(_piecePrefab, _gridParent);
                         newPiece.GetComponent<PieceHandler>().Setup(PiecesDictionary[BoardData[i, j]], new Vector2Int(i, j));
                         
-                        // if (Pieces[i, j] == _blackKing && Rules.IsCheckMate(Pieces, Pieces[i, j], new Vector2Int(i, j)))
-                        // {
-                        //     GameManager.Instance.IsBlackKingCheckMate = true;
-                        // }
-                        // if (Pieces[i, j] == _whiteKing && Rules.IsCheckMate(Pieces, Pieces[i, j], new Vector2Int(i, j)))
-                        // {
-                        //     GameManager.Instance.IsWhiteKingCheckMate = true;
-                        // }
+                        if (BoardData[i, j] == 12 && Rules.IsCheckMate(BoardData, BoardData[i, j], new Vector2Int(i, j)))
+                        {
+                            GameManager.Instance.IsBlackKingCheckMate = true;
+                        }
+                        if (BoardData[i, j] == 6 && Rules.IsCheckMate(BoardData, BoardData[i, j], new Vector2Int(i, j)))
+                        {
+                            GameManager.Instance.IsWhiteKingCheckMate = true;
+                        }
                     }
                     else
                     {

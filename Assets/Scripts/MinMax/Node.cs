@@ -1,7 +1,6 @@
 using System.Collections.Generic;
 using Game;
 using Handlers;
-using Pieces;
 using UnityEngine;
 using Utils;
 
@@ -9,15 +8,15 @@ namespace MinMax
 {
     public class Node
     {
-        public Piece[,] Pieces;
+        public int[,] Board;
         public bool IsWhiteTurn;
         public bool IsWhitePredictions;
         
         public List<Node> NodeChildren;
         
-        public Node(Piece[,] pieces, bool isWhiteTurn, bool isWhitePredictions)
+        public Node(int[,] board, bool isWhiteTurn, bool isWhitePredictions)
         {
-            Pieces = (Piece[,]) pieces.Clone();
+            Board = (int[,]) board.Clone();
             IsWhiteTurn = isWhiteTurn;
             IsWhitePredictions = isWhitePredictions;
         }
@@ -38,33 +37,33 @@ namespace MinMax
             bool isWhiteKingCheckMate = false;
             bool isBlackKingCheckMate = false;
             
-            for (int i = 0; i < Pieces.GetLength(0); i++)
+            for (int i = 0; i < Board.GetLength(0); i++)
             {
-                for (int j = 0; j < Pieces.GetLength(1); j++)
+                for (int j = 0; j < Board.GetLength(1); j++)
                 {
-                    if (Pieces[i,j])
+                    if (Board[i,j] != 0)
                     {
                         int valueDependingOnPosition;
-                        if (Pieces[i,j].IsWhite)
+                        if (Board[i,j] <= 6)
                         {
-                            int [,] matrix = ValueDependOnPositionData.GetMatrix(Pieces[i, j].name);
+                            int [,] matrix = ValueDependOnPositionData.GetMatrix(Board[i, j]);
                             valueDependingOnPosition = matrix[i,j];
                             
-                            whiteHeuristicValue += Pieces[i, j].BaseValue + valueDependingOnPosition;
+                            whiteHeuristicValue += BoardsHandler.Instance.PiecesDictionary[Board[i, j]].BaseValue + valueDependingOnPosition;
 
-                            // if (Pieces[i,j].name == "WhiteKing" && Rules.IsCheckMate(Pieces, Pieces[i,j], new Vector2Int(i,j)))
+                            if (Board[i,j] == 6 && Rules.IsCheckMate(Board, Board[i,j], new Vector2Int(i,j)))
                             {
                                 isWhiteKingCheckMate = true;
                             }
                         }
                         else
                         {
-                            int [,] matrix = ValueDependOnPositionData.GetMatrix(Pieces[i, j].name);
+                            int [,] matrix = ValueDependOnPositionData.GetMatrix(Board[i, j]);
                             valueDependingOnPosition = matrix[i,j];
                             
-                            blackHeuristicValue += Pieces[i, j].BaseValue + valueDependingOnPosition;
+                            blackHeuristicValue += BoardsHandler.Instance.PiecesDictionary[Board[i, j]].BaseValue + valueDependingOnPosition;
                             
-                            // if (Pieces[i,j].name == "BlackKing" && Rules.IsCheckMate(Pieces, Pieces[i,j], new Vector2Int(i,j)))
+                            if (Board[i,j] == 12 && Rules.IsCheckMate(Board, Board[i,j], new Vector2Int(i,j)))
                             {
                                 isBlackKingCheckMate = true;
                             }
@@ -110,23 +109,23 @@ namespace MinMax
             List<Node> children = new List<Node>();
             
             // Crée une Node pour chaque mouvements disponibles de chaque piece de la couleur dont c'est le tour
-            for (int i = 0; i < Pieces.GetLength(0); i++)
+            for (int i = 0; i < Board.GetLength(0); i++)
             {
-                for (int j = 0; j < Pieces.GetLength(1); j++)
+                for (int j = 0; j < Board.GetLength(1); j++)
                 {
-                    if (Pieces[i,j] && Pieces[i,j].IsWhite == IsWhiteTurn)
+                    if (Board[i,j] != 0 && PieceIsWhite(Board[i,j]) == IsWhiteTurn)
                     {
-                        // List<Vector2Int> availableMovements = Pieces[i,j].AvailableMovements(Pieces, new Vector2Int(i, j), true);
-                        //
-                        // if (availableMovements.Count == 0) continue;
-                        //
-                        // foreach (Vector2Int movement in availableMovements)
-                        // {
-                        //     Node node = new Node(Pieces, !IsWhiteTurn, IsWhitePredictions);
-                        //     node.MovePiece(Pieces[i,j], new Vector2Int(i, j), movement);
-                        //     Rules.PawnPromotion(node.Pieces, BoardsHandler.Instance._whiteQueen, BoardsHandler.Instance._blackQueen);
-                        //     children.Add(node);
-                        // }
+                        List<Vector2Int> availableMovements = BoardsHandler.Instance.PiecesDictionary[Board[i,j]].AvailableMovements(Board, new Vector2Int(i, j), true);
+                        
+                        if (availableMovements.Count == 0) continue;
+                        
+                        foreach (Vector2Int movement in availableMovements)
+                        {
+                            Node node = new Node(Board, !IsWhiteTurn, IsWhitePredictions);
+                            node.MovePiece(Board[i,j], new Vector2Int(i, j), movement);
+                            Rules.PawnPromotion(node.Board);
+                            children.Add(node);
+                        }
                     }
                 }
             }
@@ -134,11 +133,16 @@ namespace MinMax
             return children;
         }
         
-        private void MovePiece(Piece piece, Vector2Int from, Vector2Int to)
+        private void MovePiece(int pieceIndex, Vector2Int from, Vector2Int to)
         {
-            // Applique le déplacement de la piece sur Pieces
-            Pieces[from.x, from.y] = null;
-            Pieces[to.x, to.y] = piece;
+            // Applique le déplacement de la piece sur pieceIndex
+            Board[from.x, from.y] = 0;
+            Board[to.x, to.y] = pieceIndex;
+        }
+
+        private bool PieceIsWhite(int pieceIndex)
+        {
+            return pieceIndex <= 6 && pieceIndex != 0;
         }
     }
 }

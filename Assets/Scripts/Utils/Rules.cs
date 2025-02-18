@@ -1,7 +1,6 @@
 using System.Collections.Generic;
 using Game;
 using Handlers;
-using Pieces;
 using UnityEngine;
 
 namespace Utils
@@ -27,24 +26,24 @@ namespace Utils
         private static List<string> _oldPieces = new List<string>();
         
         // Rules
-        public static void PawnPromotion(int[,] pieces)
+        public static void PawnPromotion(int[,] board)
         {
-            for (int i = 0; i < pieces.GetLength(0); i++)
+            for (int i = 0; i < board.GetLength(0); i++)
             {
-                if (pieces[0, i] == 1)
+                if (board[0, i] == 1)
                 {
-                    pieces[0, i] = 5;
+                    board[0, i] = 5;
                 }
 
-                if (pieces[7, i] == 7)
+                if (board[7, i] == 7)
                 {
-                    pieces[7, i] = 11;
+                    board[7, i] = 11;
                 }
                 
             }
         }
         
-        public static bool IsCheck(int[,] board, Vector2Int position)
+        public static bool IsCheck(int[,] board, Vector2Int piecePosition)
         {
             List<Vector2Int> availableMovements = new List<Vector2Int>();
             
@@ -52,7 +51,7 @@ namespace Utils
             {
                 for (int j = 0; j < board.GetLength(1); j++)
                 {
-                    if (BoardsHandler.Instance.AreDifferentColors(board[position.x, position.y], board[i, j], false))
+                    if (BoardsHandler.Instance.AreDifferentColors(board[piecePosition.x, piecePosition.y], board[i, j], false))
                     {
                         availableMovements = BoardsHandler.Instance.PiecesDictionary[board[i,j]].AvailableMovements(board, new Vector2Int(i, j), false);
                         
@@ -60,7 +59,7 @@ namespace Utils
                     
                         foreach (Vector2Int movement in availableMovements)
                         {
-                            if (movement == position)
+                            if (movement == piecePosition)
                             {
                                 return true;
                             }
@@ -118,17 +117,17 @@ namespace Utils
             // return isCheck;
         }
 
-        public static bool IsCheckMate(int[,] board, int currentPiece, Vector2Int position)
+        public static bool IsCheckMate(int[,] board, int pieceIndex, Vector2Int position)
         {
             List<Vector2Int> movementsInCheck = new List<Vector2Int>();
 
             if (IsCheck(board, position))
             {
-                List<Vector2Int> currentPieceAvailableMovements = BoardsHandler.Instance.PiecesDictionary[currentPiece].AvailableMovements(board, position, false);
+                List<Vector2Int> currentPieceAvailableMovements = BoardsHandler.Instance.PiecesDictionary[pieceIndex].AvailableMovements(board, position, false);
                 foreach (Vector2Int currentPieceMovement in currentPieceAvailableMovements)
                 {
                     int[,] testBoard = (int[,]) board.Clone();
-                    testBoard[currentPieceMovement.x, currentPieceMovement.y] = currentPiece;
+                    testBoard[currentPieceMovement.x, currentPieceMovement.y] = pieceIndex;
                     testBoard[position.x, position.y] = 0;
             
                     if (IsCheck(testBoard, currentPieceMovement))
