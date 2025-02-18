@@ -62,7 +62,7 @@ namespace Game
                 Debug.Log("See every child.");
                 if (_node == null)
                 {
-                    // _node = new Node(BoardsHandler.Instance.Pieces, IsWhiteTurn, IsWhiteTurn);
+                    _node = new Node(BoardsHandler.Instance.BoardData, IsWhiteTurn, IsWhiteTurn);
                     nodes = _node.Children();
                     Debug.Log("Actual heuristic value : " + _node.HeuristicValue());
                     Debug.Log("Child number : " + nodes.Count);
@@ -75,7 +75,7 @@ namespace Game
                 }
                 else
                 {
-                    // BoardsHandler.Instance.Pieces = _node.Pieces;
+                    BoardsHandler.Instance.BoardData = _node.Board;
                 
                     BoardsHandler.Instance.ResetMatrix();
                     BoardsHandler.Instance.DisplayMatrix(false);
@@ -92,7 +92,7 @@ namespace Game
                 // TESTER MINMAX
                 Debug.Log("Use Minmax.");
                 
-                // _node = new Node(BoardsHandler.Instance.Pieces, IsWhiteTurn, IsWhiteTurn);
+                _node = new Node(BoardsHandler.Instance.BoardData, IsWhiteTurn, IsWhiteTurn);
                 nodes = _node.Children();
                 
                 int maxHeuristic = int.MinValue;
@@ -111,7 +111,7 @@ namespace Game
                 
                 if (bestChildNode != null)
                 {
-                    // BoardsHandler.Instance.Pieces = bestChildNode.Pieces;
+                    BoardsHandler.Instance.BoardData = bestChildNode.Board;
                 }
                 
                 BoardsHandler.Instance.ResetMatrix();
@@ -190,65 +190,67 @@ namespace Game
         private void MinMaxAlphaBetaPlay()
         {
             Stopwatch stopwatch = new Stopwatch();
-            stopwatch.Start();
-            
-            // _node = new Node(BoardsHandler.Instance.Pieces, IsWhiteTurn, IsWhiteTurn);
-            nodes = _node.Children();
-            Node bestChildNode = null;
+                stopwatch.Start();
                 
-            // string pieceHashing = TranspositionTableHandler.PiecesComputeSHA256(_node.Pieces);
-            // if (TranspositionTableHandler.TranspositionsTables.ContainsKey(pieceHashing))
-            // {
-            //     Debug.Log("Use Transposition table.");
-            //     bestChildNode = TranspositionTableHandler.TranspositionsTables[pieceHashing];
-            // }
-            // else
-            // {
-                Debug.Log("Use MinMaxAlphaBeta.");
-                int maxHeuristic = int.MinValue;
-                int alpha = int.MinValue;
-                int beta = int.MaxValue;
+                // TESTER MINMAXALPHABETA
                 
-                foreach (Node child in nodes)
+                _node = new Node(BoardsHandler.Instance.BoardData, IsWhiteTurn, IsWhiteTurn);
+                nodes = _node.Children();
+                Node bestChildNode = null;
+                
+                string pieceHashing = TranspositionTableHandler.PiecesComputeSHA256(_node.Board);
+                if (TranspositionTableHandler.TranspositionsTables.ContainsKey(pieceHashing))
                 {
-                    // BoardsHandler.Instance.Pieces = child.Pieces;
-                    int currentHeuristic = _aiHandler.MinMaxAlphaBeta(child, _depthAlphaBeta - 1, false, alpha, beta);
-                
-                    if (currentHeuristic > maxHeuristic)
-                    {
-                        maxHeuristic = currentHeuristic;
-                        bestChildNode = child;
-                    }
-                    
-                    if (currentHeuristic >= beta)
-                    {
-                        break;
-                    }
-                    alpha = Mathf.Max(alpha, currentHeuristic);
+                    Debug.Log("Use Transposition table.");
+                    bestChildNode = TranspositionTableHandler.TranspositionsTables[pieceHashing];
                 }
+                else
+                {
+                    Debug.Log("Use MinMaxAlphaBeta.");
+                    int maxHeuristic = int.MinValue;
+                    int alpha = int.MinValue;
+                    int beta = int.MaxValue;
+                
+                    foreach (Node child in nodes)
+                    {
+                        BoardsHandler.Instance.BoardData = child.Board;
+                        int currentHeuristic = _aiHandler.MinMaxAlphaBeta(child, _depthAlphaBeta - 1, false, alpha, beta);
+                
+                        if (currentHeuristic > maxHeuristic)
+                        {
+                            maxHeuristic = currentHeuristic;
+                            bestChildNode = child;
+                        }
                     
-                // TT
-                // TranspositionTableHandler.TranspositionsTables.Add(pieceHashing, bestChildNode);
-            // }
+                        if (currentHeuristic >= beta)
+                        {
+                            break;
+                        }
+                        alpha = Mathf.Max(alpha, currentHeuristic);
+                    }
+                    
+                    // TT
+                    TranspositionTableHandler.TranspositionsTables.Add(pieceHashing, bestChildNode);
+                }
                 
-            if (bestChildNode != null)
-            {
-                // BoardsHandler.Instance.Pieces = bestChildNode.Pieces;
-            }
+                if (bestChildNode != null)
+                {
+                    BoardsHandler.Instance.BoardData = bestChildNode.Board;
+                }
                 
-            BoardsHandler.Instance.ResetMatrix();
-            BoardsHandler.Instance.DisplayMatrix(true);
-            IsWhiteTurn = !IsWhiteTurn;
+                BoardsHandler.Instance.ResetMatrix();
+                BoardsHandler.Instance.DisplayMatrix(true);
+                IsWhiteTurn = !IsWhiteTurn;
                 
-            stopwatch.Stop();
-            Debug.Log("Execution Time : " + stopwatch.ElapsedMilliseconds + " ms / For : " + nodes.Count +" children");
+                stopwatch.Stop();
+                Debug.Log("Execution Time : " + stopwatch.ElapsedMilliseconds + " ms / For : " + nodes.Count +" children");
             
             Invoke(nameof(MinMaxAlphaBetaPlay), _delayMinMax);
         }
 
         private void ChangePieces(Node node)
         {
-            // BoardsHandler.Instance.Pieces = node.Pieces;
+            BoardsHandler.Instance.BoardData = node.Board;
             Debug.Log("Child value : " + node.HeuristicValue());
                 
             BoardsHandler.Instance.ResetMatrix();
