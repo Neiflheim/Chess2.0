@@ -3,7 +3,7 @@ using UnityEngine.UI;
 
 namespace Game
 {
-    public class CanvasManagerScene1 : MonoBehaviour
+    public class CanvasInGameManager : MonoBehaviour
     {
         // Timer
         private bool _startTimers;
