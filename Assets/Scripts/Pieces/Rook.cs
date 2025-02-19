@@ -7,7 +7,7 @@ namespace Pieces
     [CreateAssetMenu(fileName = "Rook", menuName = "Piece/Rook")]
     public class Rook : Piece
     {
-        public override List<Vector2Int> AvailableMovements(int[,] board, Vector2Int position, bool firstCall)
+        public override List<Vector2Int> AvailableMovements(int[,] board, Vector2Int position, bool verifyKingIsCheck)
         {
             List<Vector2Int> movements = new List<Vector2Int>();
 
@@ -77,7 +77,7 @@ namespace Pieces
                 }
             }
             
-            if (firstCall)
+            if (verifyKingIsCheck)
             {
                 movements.RemoveAll(movement => !CanPlayThisMovement(board, this, position, movement));
             }

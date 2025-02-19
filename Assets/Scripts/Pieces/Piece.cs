@@ -12,7 +12,7 @@ namespace Pieces
         public bool IsWhite;
         public int BaseValue;
 
-        public abstract List<Vector2Int> AvailableMovements(int[,] board, Vector2Int position, bool firstCall);
+        public abstract List<Vector2Int> AvailableMovements(int[,] board, Vector2Int position, bool verifyKingIsCheck);
 
         public bool CanPlayThisMovement(int[,] pieces, Piece piece, Vector2Int oldPosition, Vector2Int newPosition)
         {

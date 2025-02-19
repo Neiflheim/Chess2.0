@@ -12,7 +12,7 @@ namespace Pieces
             new Vector2Int(1, 1), new Vector2Int(1, -1), new Vector2Int(-1, 1), new Vector2Int(-1, -1)
         };
         
-        public override List<Vector2Int> AvailableMovements(int[,] board, Vector2Int position, bool firstCall)
+        public override List<Vector2Int> AvailableMovements(int[,] board, Vector2Int position, bool verifyKingIsCheck)
         {
             List<Vector2Int> movements = new List<Vector2Int>();
 
@@ -41,7 +41,7 @@ namespace Pieces
                 }
             }
             
-            if (firstCall)
+            if (verifyKingIsCheck)
             {
                 movements.RemoveAll(movement => !CanPlayThisMovement(board, this, position, movement));
             }
