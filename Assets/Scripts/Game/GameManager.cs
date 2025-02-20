@@ -1,10 +1,10 @@
+using System;
+using System.Collections;
 using System.Collections.Generic;
-using System.Diagnostics;
 using Handlers;
 using MinMax;
 using TMPro;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 using Utils;
 using Debug = UnityEngine.Debug;
 
@@ -12,24 +12,14 @@ namespace Game
 {
     public class GameManager : MonoBehaviourSingleton<GameManager>
     {
-        [Header("Selected Piece")]
-        public PieceHandler LastClickGameObject;
-
         [Header("End Game")]
         public GameObject EndGamePanel;
         public TextMeshProUGUI GameOverText;
         
-        [Header("Data")]
-        public bool IsWhiteTurn = true;
-        public bool IsBlackKingCheckMate;
-        public bool IsBlackKingCheck;
-        public bool IsWhiteKingCheckMate;
-        public bool IsWhiteKingCheck;
-        
         [Header("Selected Piece")]
         [SerializeField] private float _delayMinMax;
-        [SerializeField] private int _depthMinMax;
-        [SerializeField] private int _depthAlphaBeta;
+        [SerializeField] private int _depthFirstAi;
+        [SerializeField] private int _depthSecondAi;
         
         // Internal Component
         private AIHandler _aiHandler;
@@ -38,223 +28,115 @@ namespace Game
         private Node _node = null;
         private int _index = -1;
         private List<Node> nodes = new List<Node>();
-
+        
         private void Awake()
         {
             _aiHandler = GetComponent<AIHandler>();
-        }
 
+            _depthFirstAi = GameSettings.FirstAIDifficulty;
+            _depthSecondAi = GameSettings.SecondAIDifficulty;
+        }
+        
         private void Start()
         {
             ValueDependOnPositionData.InitializeDictionary();
+            
+            if (GameSettings.GameMode == 3)
+            {
+                Debug.Log("Play in Game Mode 3");
+                StartCoroutine(MinMaxAlphaBetaPlay(_depthFirstAi));
+            }
         }
 
         private void Update()
         {
             if (Input.GetButtonDown("Cancel"))
             {
-                SceneManager.LoadScene(0);
+                throw new NotImplementedException();
             }
+        }
 
-            if (Input.GetKeyDown(KeyCode.C))
+        // Methode premier appel
+        public void MinMaxAlphaBeta(int depth)
+        {
+            Debug.Log("MinMaxAlphaBeta : " + depth);
+            
+            _node = new Node(BoardsHandler.Instance.BoardData, BoardsHandler.Instance.IsWhiteTurn, BoardsHandler.Instance.IsWhiteTurn);
+            nodes = _node.Children();
+            Node bestChildNode = null;
+                
+            string pieceHashing = TranspositionTableHandler.PiecesComputeSHA256(_node.Board);
+            if (TranspositionTableHandler.TranspositionsTables.ContainsKey(pieceHashing))
             {
-                // Pour tester et voir les enfants
-                Debug.Log("See every child.");
-                if (_node == null)
-                {
-                    _node = new Node(BoardsHandler.Instance.BoardData, IsWhiteTurn, IsWhiteTurn);
-                    nodes = _node.Children();
-                    Debug.Log("Actual heuristic value : " + _node.HeuristicValue());
-                    Debug.Log("Child number : " + nodes.Count);
-                }
-                
-                _index += 1;
-                if (_index <= _node.Children().Count)
-                {
-                    ChangePieces(nodes[_index]);
-                }
-                else
-                {
-                    BoardsHandler.Instance.BoardData = _node.Board;
-                
-                    BoardsHandler.Instance.ResetMatrix();
-                    BoardsHandler.Instance.DisplayMatrix(false);
-                    _index = -1;
-                }
-                
+                bestChildNode = TranspositionTableHandler.TranspositionsTables[pieceHashing];
             }
-
-            if (Input.GetKeyDown(KeyCode.Q))
+            else
             {
-                Stopwatch stopwatch = new Stopwatch();
-                stopwatch.Start();
-                
-                // TESTER MINMAX
-                Debug.Log("Use Minmax.");
-                
-                _node = new Node(BoardsHandler.Instance.BoardData, IsWhiteTurn, IsWhiteTurn);
-                nodes = _node.Children();
-                
                 int maxHeuristic = int.MinValue;
-                Node bestChildNode = null;
+                int alpha = int.MinValue;
+                int beta = int.MaxValue;
                 
                 foreach (Node child in nodes)
                 {
-                    // BoardsHandler.Instance.Pieces = child.Pieces;
-                    int currentHeuristic = _aiHandler.MinMax(child, _depthMinMax - 1, false);
+                    BoardsHandler.Instance.BoardData = child.Board;
+                    int currentHeuristic = _aiHandler.MinMaxAlphaBeta(child, depth - 1, false, alpha, beta);
+                
                     if (currentHeuristic > maxHeuristic)
                     {
                         maxHeuristic = currentHeuristic;
                         bestChildNode = child;
                     }
-                }
-                
-                if (bestChildNode != null)
-                {
-                    BoardsHandler.Instance.BoardData = bestChildNode.Board;
-                }
-                
-                BoardsHandler.Instance.ResetMatrix();
-                BoardsHandler.Instance.DisplayMatrix(true);
-                IsWhiteTurn = !IsWhiteTurn;
-                
-                stopwatch.Stop();
-                Debug.Log("Execution Time : " + stopwatch.ElapsedMilliseconds + " ms / For : " + nodes.Count +" children");
-            }
-
-            if (Input.GetKeyDown(KeyCode.W))
-            {
-                Stopwatch stopwatch = new Stopwatch();
-                stopwatch.Start();
-                
-                // TESTER MINMAXALPHABETA
-                
-                _node = new Node(BoardsHandler.Instance.BoardData, IsWhiteTurn, IsWhiteTurn);
-                nodes = _node.Children();
-                Node bestChildNode = null;
-                
-                string pieceHashing = TranspositionTableHandler.PiecesComputeSHA256(_node.Board);
-                if (TranspositionTableHandler.TranspositionsTables.ContainsKey(pieceHashing))
-                {
-                    Debug.Log("Use Transposition table.");
-                    bestChildNode = TranspositionTableHandler.TranspositionsTables[pieceHashing];
-                }
-                else
-                {
-                    Debug.Log("Use MinMaxAlphaBeta.");
-                    int maxHeuristic = int.MinValue;
-                    int alpha = int.MinValue;
-                    int beta = int.MaxValue;
-                
-                    foreach (Node child in nodes)
+                    
+                    if (currentHeuristic >= beta)
                     {
-                        BoardsHandler.Instance.BoardData = child.Board;
-                        int currentHeuristic = _aiHandler.MinMaxAlphaBeta(child, _depthAlphaBeta - 1, false, alpha, beta);
-                
-                        if (currentHeuristic > maxHeuristic)
-                        {
-                            maxHeuristic = currentHeuristic;
-                            bestChildNode = child;
-                        }
-                    
-                        if (currentHeuristic >= beta)
-                        {
-                            break;
-                        }
-                        alpha = Mathf.Max(alpha, currentHeuristic);
+                        break;
                     }
+                    alpha = Mathf.Max(alpha, currentHeuristic);
+                }
                     
-                    // TT
-                    TranspositionTableHandler.TranspositionsTables.Add(pieceHashing, bestChildNode);
-                }
-                
-                if (bestChildNode != null)
-                {
-                    BoardsHandler.Instance.BoardData = bestChildNode.Board;
-                }
-                
-                BoardsHandler.Instance.ResetMatrix();
-                BoardsHandler.Instance.DisplayMatrix(true);
-                IsWhiteTurn = !IsWhiteTurn;
-                
-                stopwatch.Stop();
-                Debug.Log("Execution Time : " + stopwatch.ElapsedMilliseconds + " ms / For : " + nodes.Count +" children");
+                // TT
+                TranspositionTableHandler.TranspositionsTables.Add(pieceHashing, bestChildNode);
             }
-
-            if (Input.GetButtonDown("Jump"))
+                
+            if (bestChildNode != null)
             {
-                Invoke(nameof(MinMaxAlphaBetaPlay), _delayMinMax);
+                BoardsHandler.Instance.BoardData = bestChildNode.Board;
             }
-        }
-
-        private void MinMaxAlphaBetaPlay()
-        {
-            Stopwatch stopwatch = new Stopwatch();
-                stopwatch.Start();
-                
-                // TESTER MINMAXALPHABETA
-                
-                _node = new Node(BoardsHandler.Instance.BoardData, IsWhiteTurn, IsWhiteTurn);
-                nodes = _node.Children();
-                Node bestChildNode = null;
-                
-                string pieceHashing = TranspositionTableHandler.PiecesComputeSHA256(_node.Board);
-                if (TranspositionTableHandler.TranspositionsTables.ContainsKey(pieceHashing))
-                {
-                    Debug.Log("Use Transposition table.");
-                    bestChildNode = TranspositionTableHandler.TranspositionsTables[pieceHashing];
-                }
-                else
-                {
-                    Debug.Log("Use MinMaxAlphaBeta.");
-                    int maxHeuristic = int.MinValue;
-                    int alpha = int.MinValue;
-                    int beta = int.MaxValue;
-                
-                    foreach (Node child in nodes)
-                    {
-                        BoardsHandler.Instance.BoardData = child.Board;
-                        int currentHeuristic = _aiHandler.MinMaxAlphaBeta(child, _depthAlphaBeta - 1, false, alpha, beta);
-                
-                        if (currentHeuristic > maxHeuristic)
-                        {
-                            maxHeuristic = currentHeuristic;
-                            bestChildNode = child;
-                        }
-                    
-                        if (currentHeuristic >= beta)
-                        {
-                            break;
-                        }
-                        alpha = Mathf.Max(alpha, currentHeuristic);
-                    }
-                    
-                    // TT
-                    TranspositionTableHandler.TranspositionsTables.Add(pieceHashing, bestChildNode);
-                }
-                
-                if (bestChildNode != null)
-                {
-                    BoardsHandler.Instance.BoardData = bestChildNode.Board;
-                }
-                
-                BoardsHandler.Instance.ResetMatrix();
-                BoardsHandler.Instance.DisplayMatrix(true);
-                IsWhiteTurn = !IsWhiteTurn;
-                
-                stopwatch.Stop();
-                Debug.Log("Execution Time : " + stopwatch.ElapsedMilliseconds + " ms / For : " + nodes.Count +" children");
-            
-            Invoke(nameof(MinMaxAlphaBetaPlay), _delayMinMax);
-        }
-
-        private void ChangePieces(Node node)
-        {
-            BoardsHandler.Instance.BoardData = node.Board;
-            Debug.Log("Child value : " + node.HeuristicValue());
                 
             BoardsHandler.Instance.ResetMatrix();
-            BoardsHandler.Instance.DisplayMatrix(false);
+            BoardsHandler.Instance.DisplayMatrix(true);
+            BoardsHandler.Instance.IsWhiteTurn = !BoardsHandler.Instance.IsWhiteTurn;
+        }
+        
+        // GameMode 2
+        public void StartCoroutineAiTurn()
+        {
+            StartCoroutine(AiTurn());
+        }
+        
+        public IEnumerator AiTurn()
+        {
+            Debug.Log("coucou");
+            yield return new WaitForSeconds(_delayMinMax);
+            Debug.Log("recoucou");
+            MinMaxAlphaBeta(_depthFirstAi);
+        }
+        
+        // GameMode 3
+        private IEnumerator MinMaxAlphaBetaPlay(int depth)
+        {
+            MinMaxAlphaBeta(depth);
+            
+            yield return new WaitForSeconds(_delayMinMax);
+
+            if (BoardsHandler.Instance.IsWhiteTurn)
+            {
+                StartCoroutine(MinMaxAlphaBetaPlay(_depthFirstAi));
+            }
+            else
+            {
+                StartCoroutine(MinMaxAlphaBetaPlay(_depthSecondAi));
+            }
         }
     }
 }

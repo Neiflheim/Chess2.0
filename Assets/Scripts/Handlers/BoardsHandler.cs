@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using Game;
 using Pieces;
 using UnityEngine;
 using Utils;
@@ -32,7 +31,15 @@ namespace Handlers
         public int[,] BoardData;
         public GameObject[,] PiecesDisplay;
         
-        private void Start()
+        [Header("Selected Piece")]
+        public PieceHandler LastClickGameObject;
+        
+        [Header("Data")]
+        public bool IsWhiteTurn = true;
+        public bool IsBlackKingCheckMate;
+        public bool IsWhiteKingCheckMate;
+        
+        private void Awake()
         {
             Time.timeScale = 1;
             
@@ -74,7 +81,6 @@ namespace Handlers
             //     {  0, 0, 0, 0, 0, 0, 0, 0 }
             // };
             
-            // ZobristHashing.InitializeZobristTable();
             DisplayMatrix(true);
         }
 
@@ -98,11 +104,11 @@ namespace Handlers
                         
                         if (BoardData[i, j] == 12 && Rules.IsCheckMate(BoardData, BoardData[i, j], new Vector2Int(i, j)))
                         {
-                            GameManager.Instance.IsBlackKingCheckMate = true;
+                            IsBlackKingCheckMate = true;
                         }
                         if (BoardData[i, j] == 6 && Rules.IsCheckMate(BoardData, BoardData[i, j], new Vector2Int(i, j)))
                         {
-                            GameManager.Instance.IsWhiteKingCheckMate = true;
+                            IsWhiteKingCheckMate = true;
                         }
                     }
                     else
@@ -119,11 +125,11 @@ namespace Handlers
             {
                 Rules.ThreefoldRepetition(BoardData);
             
-                if (GameManager.Instance.IsBlackKingCheckMate)
+                if (IsBlackKingCheckMate)
                 {
                     Rules.IsGameOver(true);
                 }
-                else if (GameManager.Instance.IsWhiteKingCheckMate)
+                else if (IsWhiteKingCheckMate)
                 {
                     Rules.IsGameOver(false);
                 }

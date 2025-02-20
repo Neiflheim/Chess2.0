@@ -1,5 +1,7 @@
+using Handlers;
 using UnityEngine;
 using UnityEngine.UI;
+using Utils;
 
 namespace Game
 {
@@ -11,13 +13,21 @@ namespace Game
         private float _whiteElapsedTime;
         
         [Header("Timer")]
-        public Text blackTimerText;
-        public Text whiteTimerText;
+        [SerializeField] private Text _blackTimerText;
+        [SerializeField] private Text _whiteTimerText;
         
         // Turn
         [Header("Turn Text")]
-        [SerializeField] private Text playerTurnText;
-        
+        [SerializeField] private Text _playerTurnText;
+
+        private void Awake()
+        {
+            _blackTimerText.text = GameSettings.GameTimer + ":00:00";
+            _whiteTimerText.text = GameSettings.GameTimer + ":00:00";
+            _blackElapsedTime = GameSettings.GameTimer * 60;
+            _whiteElapsedTime = GameSettings.GameTimer * 60;
+        }
+
         private void Update()
         {
             // Timer
@@ -28,14 +38,14 @@ namespace Game
             
             if (_startTimers)
             {
-                if (GameManager.Instance.IsWhiteTurn)
+                if (BoardsHandler.Instance.IsWhiteTurn)
                 {
-                    _whiteElapsedTime += Time.deltaTime;
+                    _whiteElapsedTime -= Time.deltaTime;
                     UpdateWhiteTimerText(_whiteElapsedTime);
                 }
                 else
                 {
-                    _blackElapsedTime += Time.deltaTime;
+                    _blackElapsedTime -= Time.deltaTime;
                     UpdateBlackTimerText(_blackElapsedTime);
                 }
             }
@@ -50,7 +60,12 @@ namespace Game
             int seconds = Mathf.FloorToInt(time % 60F);
             int milliseconds = Mathf.FloorToInt((time * 100F) % 100F);
 
-            blackTimerText.text = string.Format("{0:00}:{1:00}:{2:00}", minutes, seconds, milliseconds);
+            _blackTimerText.text = string.Format("{0:00}:{1:00}:{2:00}", minutes, seconds, milliseconds);
+
+            if (time <= 0f)
+            {
+                Rules.IsGameOver(true);
+            }
         }
         
         void UpdateWhiteTimerText(float time)
@@ -59,19 +74,24 @@ namespace Game
             int seconds = Mathf.FloorToInt(time % 60F);
             int milliseconds = Mathf.FloorToInt((time * 100F) % 100F);
 
-            whiteTimerText.text = string.Format("{0:00}:{1:00}:{2:00}", minutes, seconds, milliseconds);
+            _whiteTimerText.text = string.Format("{0:00}:{1:00}:{2:00}", minutes, seconds, milliseconds);
+            
+            if (time <= 0f)
+            {
+                Rules.IsGameOver(false);
+            }
         }
         
         // Turn
         public void PlayerTurnText()
         {
-            if (GameManager.Instance.IsWhiteTurn)
+            if (BoardsHandler.Instance.IsWhiteTurn)
             {
-                playerTurnText.text = " White Player Turn ";
+                _playerTurnText.text = " White Player Turn ";
             }
             else
             {
-                playerTurnText.text = " Black Player Turn ";
+                _playerTurnText.text = " Black Player Turn ";
             }
         }
     }

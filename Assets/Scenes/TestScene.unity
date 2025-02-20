@@ -1106,7 +1106,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 324137482}
-  - component: {fileID: 324137485}
+  - component: {fileID: 324137483}
   - component: {fileID: 324137484}
   m_Layer: 0
   m_Name: GameManager
@@ -1130,6 +1130,29 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &324137483
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 324137481}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8ea058a4e9f71ea43b7b8217bc5651be, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  LastClickGameObject: {fileID: 0}
+  EndGamePanel: {fileID: 831712229}
+  GameOverText: {fileID: 1689405955}
+  IsWhiteTurn: 1
+  IsBlackKingCheckMate: 0
+  IsBlackKingCheck: 0
+  IsWhiteKingCheckMate: 0
+  IsWhiteKingCheck: 0
+  _delayMinMax: 1
+  _depthMinMax: 3
+  _depthAlphaBeta: 4
 --- !u!114 &324137484
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1142,23 +1165,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2757942dbe6a1e844aa90d3b27eeba35, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &324137485
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 324137481}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a81343c16cf643c45ba3f948f266d1c6, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  EndGamePanel: {fileID: 831712229}
-  GameOverText: {fileID: 1689405955}
-  _delayMinMax: 1
-  _depthFirstAi: 0
-  _depthSecondAi: 0
 --- !u!1 &375304730
 GameObject:
   m_ObjectHideFlags: 0
@@ -2792,9 +2798,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d75448d8e87e8044e88213196d324d65, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _blackTimerText: {fileID: 1252591515}
-  _whiteTimerText: {fileID: 1771483911}
-  _playerTurnText: {fileID: 2079659537}
+  blackTimerText: {fileID: 1252591515}
+  whiteTimerText: {fileID: 1771483911}
+  playerTurnText: {fileID: 2079659537}
 --- !u!1 &941541264
 GameObject:
   m_ObjectHideFlags: 0
@@ -6256,10 +6262,6 @@ MonoBehaviour:
   _piecePrefab: {fileID: 2690092191498240832, guid: 875af057ef7811b478248121b8e5ba04, type: 3}
   _transparentPrefab: {fileID: 2580139010474514594, guid: 4d15e502787270841aab043eeb57a99e, type: 3}
   _gridParent: {fileID: 2013352920}
-  LastClickGameObject: {fileID: 0}
-  IsWhiteTurn: 1
-  IsBlackKingCheckMate: 0
-  IsWhiteKingCheckMate: 0
 --- !u!1 &2036374905
 GameObject:
   m_ObjectHideFlags: 0
