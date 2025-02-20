@@ -16,16 +16,16 @@ namespace Utils
             // };
             
             // TEST BASIQUE CHOIX DEPTH 2
-            // Pieces = new Piece[,]
+            // BoardData = new int[,]
             // {
-            //     { null, null, whiteKing, null, null, null, null, null },
-            //     { null, null, null, null, null, null, null, null },
-            //     { null, null, null, whiteBishop, null, null, null, null },
-            //     { null, null, whiteRook, blackKing, null, null, null, null },
-            //     { null, null, null, null, null, null, null, null },
-            //     { null, null, null, null, null, null, null, null },
-            //     { null, null, null, null, null, null, null, null },
-            //     { null, null, null, null, null, null, null, null }
+            //     {  0, 0, 6, 0, 0, 0, 0, 0 },
+            //     {  0, 0, 0, 0, 0, 0, 0, 0 },
+            //     {  0, 0, 0, 3, 0, 0, 0, 0 },
+            //     {  0, 0, 4,12, 0, 0, 0, 0 },
+            //     {  0, 0, 0, 0, 0, 0, 0, 0 },
+            //     {  0, 0, 0, 0, 0, 0, 0, 0 },
+            //     {  0, 0, 0, 0, 0, 0, 0, 0 },
+            //     {  0, 0, 0, 0, 0, 0, 0, 0 }
             // };
             
             // TEST ISCHECK/ISCHECKMATE
@@ -42,16 +42,16 @@ namespace Utils
             // };
             
             // TEST MAT EN DEUX COUPS
-            // Pieces = new Piece[,]
+            // BoardData = new int[,]
             // {
-            //     { null, null, null, null, null, null, null, null },
-            //     { null, null, null, null, null, null, null, null },
-            //     { null, null, null, null, null, null, null, null },
-            //     { null, null, null, null, null, null, null, null },
-            //     { null, whiteBishop, null, null, null, null, null, null },
-            //     { whiteKnight, whiteKnight, null, null, null, null, null, null },
-            //     { blackPawn, blackKing, null, whiteKing, null, null, null, null },
-            //     { null, null, null, null, null, null, null, null }
+            //     {  0, 0, 0, 0, 0, 0, 0, 0 },
+            //     {  0, 0, 0, 0, 0, 0, 0, 0 },
+            //     {  0, 0, 0, 0, 0, 0, 0, 0 },
+            //     {  0, 0, 0, 0, 0, 0, 0, 0 },
+            //     {  0, 3, 0, 0, 0, 0, 0, 0 },
+            //     {  2, 2, 0, 0, 0, 0, 0, 0 },
+            //     {  7, 12, 0, 6, 0, 0, 0, 0 },
+            //     {  0, 0, 0, 0, 0, 0, 0, 0 }
             // };
             
             // Pieces = new Piece[,]

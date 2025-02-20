@@ -1142,17 +1142,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8ea058a4e9f71ea43b7b8217bc5651be, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  LastClickGameObject: {fileID: 0}
   EndGamePanel: {fileID: 831712229}
   GameOverText: {fileID: 1689405955}
-  IsWhiteTurn: 1
-  IsBlackKingCheckMate: 0
-  IsBlackKingCheck: 0
-  IsWhiteKingCheckMate: 0
-  IsWhiteKingCheck: 0
   _delayMinMax: 1
   _depthMinMax: 3
-  _depthAlphaBeta: 4
+  _depthAlphaBeta: 3
 --- !u!114 &324137484
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2262,7 +2256,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &831712230
 RectTransform:
   m_ObjectHideFlags: 0
@@ -2798,9 +2792,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d75448d8e87e8044e88213196d324d65, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  blackTimerText: {fileID: 1252591515}
-  whiteTimerText: {fileID: 1771483911}
-  playerTurnText: {fileID: 2079659537}
+  _blackTimerText: {fileID: 0}
+  _whiteTimerText: {fileID: 0}
+  _playerTurnText: {fileID: 0}
 --- !u!1 &941541264
 GameObject:
   m_ObjectHideFlags: 0
@@ -5069,7 +5063,7 @@ RectTransform:
   m_Children: []
   m_Father: {fileID: 831712230}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMin: {x: 0.7, y: 0}
   m_AnchorMax: {x: 1, y: 1}
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
@@ -5116,7 +5110,7 @@ MonoBehaviour:
   m_spriteAsset: {fileID: 0}
   m_tintAllSprites: 0
   m_StyleSheet: {fileID: 0}
-  m_TextStyleHashCode: 0
+  m_TextStyleHashCode: -1183493901
   m_overrideHtmlColors: 0
   m_faceColor:
     serializedVersion: 2
@@ -6262,6 +6256,10 @@ MonoBehaviour:
   _piecePrefab: {fileID: 2690092191498240832, guid: 875af057ef7811b478248121b8e5ba04, type: 3}
   _transparentPrefab: {fileID: 2580139010474514594, guid: 4d15e502787270841aab043eeb57a99e, type: 3}
   _gridParent: {fileID: 2013352920}
+  LastClickGameObject: {fileID: 0}
+  IsWhiteTurn: 1
+  IsBlackKingCheckMate: 0
+  IsWhiteKingCheckMate: 0
 --- !u!1 &2036374905
 GameObject:
   m_ObjectHideFlags: 0
