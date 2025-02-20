@@ -13,8 +13,10 @@ namespace Game
     public class GameManager : MonoBehaviourSingleton<GameManager>
     {
         [Header("End Game")]
+        [SerializeField] private GameObject _pausePanel;
         public GameObject EndGamePanel;
         public TextMeshProUGUI GameOverText;
+        
         
         [Header("Selected Piece")]
         [SerializeField] private float _delayMinMax;
@@ -52,7 +54,8 @@ namespace Game
         {
             if (Input.GetButtonDown("Cancel"))
             {
-                throw new NotImplementedException();
+                Time.timeScale = 0;
+                _pausePanel.SetActive(true);
             }
         }
 
