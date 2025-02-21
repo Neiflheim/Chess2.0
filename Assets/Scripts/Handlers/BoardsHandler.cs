@@ -38,6 +38,8 @@ namespace Handlers
         public bool IsWhiteTurn = true;
         public bool IsBlackKingCheckMate;
         public bool IsWhiteKingCheckMate;
+
+        public int BoardLength;
         
         private void Awake()
         {
@@ -69,18 +71,20 @@ namespace Handlers
                 {  4, 2, 3, 5, 6, 3, 2, 4 }
             };
             
+            BoardLength = BoardData.GetLength(0);
+            
             DisplayMatrix(true);
         }
 
         public void DisplayMatrix(bool changeTurn)
         {
-            PiecesDisplay = new GameObject[BoardData.GetLength(0), BoardData.GetLength(1)];
+            PiecesDisplay = new GameObject[BoardLength, BoardLength];
             
             Rules.PawnPromotion(BoardData);
             
-            for (int i = 0; i < BoardData.GetLength(0); i++)
+            for (int i = 0; i < BoardLength; i++)
             {
-                for (int j = 0; j < BoardData.GetLength(1); j++)
+                for (int j = 0; j < BoardLength; j++)
                 {
                     GameObject newPiece;
                     

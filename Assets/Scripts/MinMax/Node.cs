@@ -13,12 +13,16 @@ namespace MinMax
         public bool IsWhitePredictions;
         
         public List<Node> NodeChildren;
+
+        private int _boardLenght;
         
         public Node(int[,] board, bool isWhiteTurn, bool isWhitePredictions)
         {
             Board = (int[,]) board.Clone();
             IsWhiteTurn = isWhiteTurn;
             IsWhitePredictions = isWhitePredictions;
+            
+            _boardLenght = board.GetLength(0);
         }
         
         public bool IsTerminal()
@@ -37,9 +41,9 @@ namespace MinMax
             bool isWhiteKingCheckMate = false;
             bool isBlackKingCheckMate = false;
             
-            for (int i = 0; i < Board.GetLength(0); i++)
+            for (int i = 0; i < _boardLenght; i++)
             {
-                for (int j = 0; j < Board.GetLength(1); j++)
+                for (int j = 0; j < _boardLenght; j++)
                 {
                     if (Board[i,j] != 0)
                     {
@@ -109,9 +113,9 @@ namespace MinMax
             List<Node> children = new List<Node>();
             
             // Crée une Node pour chaque mouvements disponibles de chaque piece de la couleur dont c'est le tour
-            for (int i = 0; i < Board.GetLength(0); i++)
+            for (int i = 0; i < _boardLenght; i++)
             {
-                for (int j = 0; j < Board.GetLength(1); j++)
+                for (int j = 0; j < _boardLenght; j++)
                 {
                     if (Board[i,j] != 0 && BoardsHandler.Instance.PieceIsWhite(Board[i,j]) == IsWhiteTurn)
                     {

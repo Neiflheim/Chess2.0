@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using Handlers;
 using UnityEngine;
 using Utils;
 
@@ -18,6 +17,8 @@ namespace Pieces
         {
             bool canPlayThisMovement = true;
             
+            int boardlength = pieces.GetLength(0);
+            
             int[,] testBoard = (int[,]) pieces.Clone();
             testBoard[newPosition.x, newPosition.y] = testBoard[oldPosition.x, oldPosition.y];
             testBoard[oldPosition.x, oldPosition.y] = 0;
@@ -25,9 +26,9 @@ namespace Pieces
             // Vérifier si pour ce mouvement le roi est toujours en echec
             if (IsWhite)
             {
-                for (int i = 0; i < testBoard.GetLength(0); i++)
+                for (int i = 0; i < boardlength; i++)
                 {
-                    for (int j = 0; j < testBoard.GetLength(1); j++)
+                    for (int j = 0; j < boardlength; j++)
                     {
                         if (testBoard[i,j] == 6)
                         {
@@ -41,9 +42,9 @@ namespace Pieces
             }
             else
             {
-                for (int i = 0; i < testBoard.GetLength(0); i++)
+                for (int i = 0; i < boardlength; i++)
                 {
-                    for (int j = 0; j < testBoard.GetLength(1); j++)
+                    for (int j = 0; j < boardlength; j++)
                     {
                         if (testBoard[i,j] == 12)
                         { 
