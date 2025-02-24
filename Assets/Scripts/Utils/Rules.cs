@@ -28,7 +28,8 @@ namespace Utils
         // Rules
         public static void PawnPromotion(int[,] board)
         {
-            for (int i = 0; i < board.GetLength(0); i++)
+            int boardLength = board.GetLength(0);
+            for (int i = 0; i < boardLength; i++)
             {
                 if (board[0, i] == 1)
                 {
@@ -45,12 +46,13 @@ namespace Utils
         
         public static bool IsCheck(int[,] board, Vector2Int piecePosition)
         {
+            int boardLength = board.GetLength(0);
             // DON'T USE CACHE : depth : 4 => 400ms
             List<Vector2Int> availableMovements = new List<Vector2Int>();
             
-            for (int i = 0; i < board.GetLength(0); i++)
+            for (int i = 0; i < boardLength; i++)
             {
-                for (int j = 0; j < board.GetLength(1); j++)
+                for (int j = 0; j < boardLength; j++)
                 {
                     if (BoardsHandler.Instance.AreDifferentColors(board[piecePosition.x, piecePosition.y], board[i, j], false))
                     {

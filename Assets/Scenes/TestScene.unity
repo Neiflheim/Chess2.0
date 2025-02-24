@@ -1146,7 +1146,7 @@ MonoBehaviour:
   GameOverText: {fileID: 1689405955}
   _delayMinMax: 1
   _depthMinMax: 3
-  _depthAlphaBeta: 5
+  _depthAlphaBeta: 4
 --- !u!114 &324137484
 MonoBehaviour:
   m_ObjectHideFlags: 0
