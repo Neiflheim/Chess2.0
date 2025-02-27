@@ -49,7 +49,6 @@ namespace Game
             if (Input.GetKeyDown(KeyCode.C))
             {
                 // Pour tester et voir les enfants
-                Debug.Log("See every child.");
                 if (_node == null)
                 {
                     _node = new Node(BoardsHandler.Instance.BoardData, BoardsHandler.Instance.IsWhiteTurn, BoardsHandler.Instance.IsWhiteTurn);

@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using Handlers;
 using UnityEngine;
+using Utils;
 
 namespace Pieces
 {
@@ -21,7 +22,7 @@ namespace Pieces
                 }
                 else
                 {
-                    if (BoardsHandler.Instance.AreDifferentColors(board[position.x, position.y], board[i, position.y], false))
+                    if (Rules.AreDifferentColors(board[position.x, position.y], board[i, position.y], false))
                     { 
                         movements.Add(new Vector2Int(i, position.y)); 
                     }
@@ -37,7 +38,7 @@ namespace Pieces
                 }
                 else
                 {
-                    if (BoardsHandler.Instance.AreDifferentColors(board[position.x, position.y], board[i, position.y], false)) 
+                    if (Rules.AreDifferentColors(board[position.x, position.y], board[i, position.y], false)) 
                     { 
                         movements.Add(new Vector2Int(i, position.y)); 
                     }
@@ -53,7 +54,7 @@ namespace Pieces
                 }
                 else
                 {
-                    if (BoardsHandler.Instance.AreDifferentColors(board[position.x, position.y], board[position.x, i], false)) 
+                    if (Rules.AreDifferentColors(board[position.x, position.y], board[position.x, i], false)) 
                     { 
                         movements.Add(new Vector2Int(position.x, i));
                     }
@@ -69,7 +70,7 @@ namespace Pieces
                 }
                 else
                 {
-                    if (BoardsHandler.Instance.AreDifferentColors(board[position.x, position.y], board[position.x, i], false)) 
+                    if (Rules.AreDifferentColors(board[position.x, position.y], board[position.x, i], false)) 
                     { 
                         movements.Add(new Vector2Int(position.x, i));
                     }

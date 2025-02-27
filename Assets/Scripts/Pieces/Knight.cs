@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using Handlers;
 using UnityEngine;
+using Utils;
 
 namespace Pieces
 {
@@ -23,7 +24,7 @@ namespace Pieces
 
                 if ((uint)testDirection.x > 7 || (uint)testDirection.y > 7) continue;
                 
-                if (BoardsHandler.Instance.AreDifferentColors(board[position.x, position.y], board[testDirection.x, testDirection.y], true))
+                if (Rules.AreDifferentColors(board[position.x, position.y], board[testDirection.x, testDirection.y], true))
                 {
                     movements.Add(testDirection);
                 }

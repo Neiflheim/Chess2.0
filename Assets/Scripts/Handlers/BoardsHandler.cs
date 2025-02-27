@@ -7,8 +7,10 @@ namespace Handlers
 {
     public class BoardsHandler : MonoBehaviourSingleton<BoardsHandler>
     {
+        [Header("Board")]
+        [SerializeField] private Boards _board;
+        
         [Header("Pieces Data")]
-        public Dictionary< int, Piece> PiecesDictionary = new Dictionary< int, Piece>();
         [SerializeField] private Piece _blackPawn;
         [SerializeField] private Piece _whitePawn;
         [SerializeField] private Piece _blackRook;
@@ -40,6 +42,7 @@ namespace Handlers
         public bool IsWhiteKingCheckMate;
 
         public int BoardLength;
+        public Dictionary< int, Piece> PiecesDictionary = new Dictionary< int, Piece>();
         
         private void Awake()
         {
@@ -57,31 +60,8 @@ namespace Handlers
             PiecesDictionary.Add(10, _blackRook);
             PiecesDictionary.Add(11, _blackQueen);
             PiecesDictionary.Add(12, _blackKing);
-            
 
-            // BoardData = new int[,]
-            // {
-            //     { 10, 8, 9,11,12, 9, 8,10 },
-            //     {  7, 7, 7, 7, 7, 7, 7, 7 },
-            //     {  0, 0, 0, 0, 0, 0, 0, 0 },
-            //     {  0, 0, 0, 0, 0, 0, 0, 0 },
-            //     {  0, 0, 0, 0, 0, 0, 0, 0 },
-            //     {  0, 0, 0, 0, 0, 0, 0, 0 },
-            //     {  1, 1, 1, 1, 1, 1, 1, 1 },
-            //     {  4, 2, 3, 5, 6, 3, 2, 4 }
-            // };
-            
-            BoardData = new int[,]
-            {
-                {  0, 0, 0, 0, 0, 0, 0, 0 },
-                {  0, 0, 0, 0, 0, 0, 0, 0 },
-                {  0, 0, 0, 0, 0, 0, 0, 0 },
-                {  0, 0, 0, 0, 0, 0, 0, 0 },
-                {  0, 3, 0, 0, 0, 0, 0, 0 },
-                {  2, 2, 0, 0, 0, 0, 0, 0 },
-                {  7,12, 0, 6, 0, 0, 0, 0 },
-                {  0, 0, 0, 0, 0, 0, 0, 0 }
-            };
+            BoardData = BoardTemplates.GetBoard(_board);
             
             BoardLength = BoardData.GetLength(0);
             
@@ -148,18 +128,14 @@ namespace Handlers
                 Destroy(child.gameObject);
             }
         }
-        
-        public bool AreDifferentColors(int pieceOne, int pieceTwo, bool emptyVerification)
-        {
-            if (emptyVerification)
-            {
-                if (pieceTwo == 0)
-                {
-                    return true;
-                }
-            }
-            
-            return (pieceOne <= 6 && pieceTwo > 6) || (pieceOne > 6 && pieceTwo <= 6 && pieceTwo >= 1);
-        }
+    }
+    
+    public enum Boards
+    {
+        BaseBoard,
+        BasicChoice,
+        CheckMateInTwoMoves1,
+        CheckMateInTwoMoves2,
+        WeirdChoice
     }
 }

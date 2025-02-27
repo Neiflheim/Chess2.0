@@ -1146,7 +1146,7 @@ MonoBehaviour:
   GameOverText: {fileID: 1689405955}
   _delayMinMax: 1
   _depthMinMax: 3
-  _depthAlphaBeta: 5
+  _depthAlphaBeta: 4
 --- !u!114 &324137484
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6137,10 +6137,10 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2013352920}
+  - component: {fileID: 2013352924}
   - component: {fileID: 2013352923}
   - component: {fileID: 2013352922}
   - component: {fileID: 2013352921}
-  - component: {fileID: 2013352924}
   m_Layer: 5
   m_Name: Board
   m_TagString: Untagged
@@ -6241,6 +6241,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a0fceb0b25c7f664296fca3b0391c847, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _board: 0
   _blackPawn: {fileID: 11400000, guid: 252b1514c937bcf47a3ffb712925ec71, type: 2}
   _whitePawn: {fileID: 11400000, guid: f17bf6bc8e89acd44934b7186bef610a, type: 2}
   _blackRook: {fileID: 11400000, guid: d193dd5cadc055f4a8d102c3f3821345, type: 2}

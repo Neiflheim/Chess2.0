@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using Handlers;
 using Unity.VisualScripting;
 using UnityEngine;
+using Utils;
 
 namespace Pieces
 {
@@ -59,7 +60,7 @@ namespace Pieces
 
                     if ((uint)testDirection.x > 7 || (uint)testDirection.y > 7) continue;
 
-                    if (BoardsHandler.Instance.AreDifferentColors(board[position.x, position.y], board[testDirection.x, testDirection.y], false))
+                    if (Rules.AreDifferentColors(board[position.x, position.y], board[testDirection.x, testDirection.y], false))
                     {
                         movements.Add(new Vector2Int(testDirection.x, testDirection.y));
                     }
@@ -100,7 +101,7 @@ namespace Pieces
 
                     if ((uint)testDirection.x > 7 || (uint)testDirection.y > 7) continue;
 
-                    if (BoardsHandler.Instance.AreDifferentColors(board[position.x, position.y], board[testDirection.x, testDirection.y], false))
+                    if (Rules.AreDifferentColors(board[position.x, position.y], board[testDirection.x, testDirection.y], false))
                     {
                         movements.Add(new Vector2Int(testDirection.x, testDirection.y));
                     }
