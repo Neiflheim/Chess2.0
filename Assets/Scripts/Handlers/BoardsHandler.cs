@@ -59,21 +59,34 @@ namespace Handlers
             PiecesDictionary.Add(12, _blackKing);
             
 
+            // BoardData = new int[,]
+            // {
+            //     { 10, 8, 9,11,12, 9, 8,10 },
+            //     {  7, 7, 7, 7, 7, 7, 7, 7 },
+            //     {  0, 0, 0, 0, 0, 0, 0, 0 },
+            //     {  0, 0, 0, 0, 0, 0, 0, 0 },
+            //     {  0, 0, 0, 0, 0, 0, 0, 0 },
+            //     {  0, 0, 0, 0, 0, 0, 0, 0 },
+            //     {  1, 1, 1, 1, 1, 1, 1, 1 },
+            //     {  4, 2, 3, 5, 6, 3, 2, 4 }
+            // };
+            
             BoardData = new int[,]
             {
-                { 10, 8, 9,11,12, 9, 8,10 },
-                {  7, 7, 7, 7, 7, 7, 7, 7 },
                 {  0, 0, 0, 0, 0, 0, 0, 0 },
                 {  0, 0, 0, 0, 0, 0, 0, 0 },
                 {  0, 0, 0, 0, 0, 0, 0, 0 },
                 {  0, 0, 0, 0, 0, 0, 0, 0 },
-                {  1, 1, 1, 1, 1, 1, 1, 1 },
-                {  4, 2, 3, 5, 6, 3, 2, 4 }
+                {  0, 3, 0, 0, 0, 0, 0, 0 },
+                {  2, 2, 0, 0, 0, 0, 0, 0 },
+                {  7,12, 0, 6, 0, 0, 0, 0 },
+                {  0, 0, 0, 0, 0, 0, 0, 0 }
             };
             
             BoardLength = BoardData.GetLength(0);
             
             DisplayMatrix(true);
+            ZobristHashing.InitializeZobristTable();
         }
 
         public void DisplayMatrix(bool changeTurn)
@@ -147,11 +160,6 @@ namespace Handlers
             }
             
             return (pieceOne <= 6 && pieceTwo > 6) || (pieceOne > 6 && pieceTwo <= 6 && pieceTwo >= 1);
-        }
-        
-        public bool PieceIsWhite(int pieceIndex)
-        {
-            return pieceIndex <= 6 && pieceIndex != 0;
         }
     }
 }

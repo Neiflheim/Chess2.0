@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using Handlers;
+using Unity.VisualScripting;
 using UnityEngine;
 
 namespace Pieces
@@ -45,7 +46,10 @@ namespace Pieces
                 {
                     if (board[position.x + 1, position.y] == 0)
                     {
-                        movements.Add(new Vector2Int(position.x + 1, position.y));
+                        if (position.x + 1 >= 0 && position.x + 1 <= 7)
+                        {
+                            movements.Add(new Vector2Int(position.x + 1, position.y));
+                        }
                     }
                 }
 
@@ -83,7 +87,10 @@ namespace Pieces
                 {
                     if (board[position.x - 1, position.y] == 0)
                     {
-                        movements.Add(new Vector2Int(position.x - 1, position.y));
+                        if (position.x - 1 >= 0 && position.x - 1 <= 7)
+                        {
+                            movements.Add(new Vector2Int(position.x - 1, position.y));
+                        }
                     }
                 }
 
@@ -102,7 +109,7 @@ namespace Pieces
             
             if (verifyKingIsCheck)
             {
-                movements.RemoveAll(movement => !CanPlayThisMovement(board, this, position, movement));
+                movements.RemoveAll(movement => !CanPlayThisMovement(board, position, movement));
             }
 
             return movements;

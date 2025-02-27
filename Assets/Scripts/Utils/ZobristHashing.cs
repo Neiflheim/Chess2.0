@@ -37,7 +37,7 @@ namespace Utils
             return BitConverter.ToUInt64(buffer, 0);
         }
 
-        public static ulong ComputeBoardHash(Piece[,] pieces)
+        public static ulong ComputeBoardHash(int[,] pieces)
         {
             ulong hash = 0;
 
@@ -45,10 +45,10 @@ namespace Utils
             {
                 for (int y = 0; y < 8; y++)
                 {
-                    Piece piece = pieces[x, y];
-                    if (piece == null) continue;
+                    int pieceIndex = pieces[x, y];
+                    if (pieceIndex == 0) continue;
 
-                    int pieceIndex = GetPieceIndex(piece); // Doit être entre 0 et 11
+                    // int pieceIndex = GetPieceIndex(piece); // Doit être entre 0 et 11
                     int positionIndex = x * 8 + y; // Doit être entre 0 et 63
 
                     // Vérification des indices

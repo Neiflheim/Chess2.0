@@ -43,7 +43,7 @@ namespace Pieces
             
             if (verifyKingIsCheck)
             {
-                movements.RemoveAll(movement => !CanPlayThisMovement(board, this, position, movement));
+                movements.RemoveAll(movement => !CanPlayThisMovement(board, position, movement));
             }
             
             return movements;

@@ -19,7 +19,7 @@ namespace Utils
                 BlackMoves = blackMoves;
             }
         }
-        private static Dictionary<string, MoveData> _moveCache = new Dictionary<string, MoveData>();
+        private static Dictionary<ulong, MoveData> _moveCache = new Dictionary<ulong, MoveData>();
         
         
         // ThreefoldRepetition
@@ -47,129 +47,92 @@ namespace Utils
         public static bool IsCheck(int[,] board, Vector2Int piecePosition)
         {
             int boardLength = board.GetLength(0);
-            // DON'T USE CACHE : depth : 4 => 400ms
-            List<Vector2Int> availableMovements = new List<Vector2Int>();
+            var boardHandler = BoardsHandler.Instance;
             
+            // DON'T USE CACHE : depth : 4 => 400ms
+            // List<Vector2Int> availableMovements;
+            //
+            // for (int i = 0; i < boardLength; i++)
+            // {
+            //     for (int j = 0; j < boardLength; j++)
+            //     {
+            //         if (BoardsHandler.Instance.AreDifferentColors(board[piecePosition.x, piecePosition.y], board[i, j], false))
+            //         {
+            //             availableMovements = boardHandler.PiecesDictionary[board[i,j]].AvailableMovements(board, new Vector2Int(i, j), false);
+            //             
+            //             if (availableMovements.Count == 0) continue;
+            //         
+            //             foreach (Vector2Int movement in availableMovements)
+            //             {
+            //                 if (movement == piecePosition)
+            //                 {
+            //                     return true;
+            //                 }
+            //             }
+            //         }
+            //     }
+            // }
+            //
+            // return false;
+            
+            
+            // USE CACHE WITHOUT HASHER : depth : 4 => 1300ms
+            ulong hashingBoard = ZobristHashing.ComputeBoardHash(board);
+            
+            if (_moveCache.TryGetValue(hashingBoard, out MoveData moveData))
+            {
+                return PieceIsWhite(board[piecePosition.x, piecePosition.y]) ? moveData.BlackMoves.Contains(piecePosition) : moveData.WhiteMoves.Contains(piecePosition);
+            }
+            
+            bool isCheck = false;
+            
+            var whiteMoves = new List<Vector2Int>();
+            var blackMoves = new List<Vector2Int>();
+            
+            bool pieceIsWhite = PieceIsWhite(board[piecePosition.x, piecePosition.y]);
+            
+            // Collecte des mouvements des pièces
             for (int i = 0; i < boardLength; i++)
             {
                 for (int j = 0; j < boardLength; j++)
                 {
-                    if (BoardsHandler.Instance.AreDifferentColors(board[piecePosition.x, piecePosition.y], board[i, j], false))
+                    int pieceIndex = board[i, j];
+                    if (pieceIndex == 0) continue;
+            
+                    bool isWhite = PieceIsWhite(pieceIndex);
+                    List<Vector2Int> moves = boardHandler.PiecesDictionary[pieceIndex].AvailableMovements(board, new Vector2Int(i, j), false);
+            
+                    if (isWhite)
                     {
-                        availableMovements = BoardsHandler.Instance.PiecesDictionary[board[i,j]].AvailableMovements(board, new Vector2Int(i, j), false);
-                        
-                        if (availableMovements.Count == 0) continue;
-                    
-                        foreach (Vector2Int movement in availableMovements)
-                        {
-                            if (movement == piecePosition)
-                            {
-                                return true;
-                            }
-                        }
+                        whiteMoves.AddRange(moves);
+                    }
+                    else
+                    {
+                        blackMoves.AddRange(moves);
+                    }
+            
+                    // Vérification de la mise en échec sans interrompre l'accumulation des mouvements
+                    if (isWhite != pieceIsWhite && moves.Contains(piecePosition))
+                    {
+                        isCheck = true;
                     }
                 }
             }
             
-            return false;
+            // Stocker dans le cache pour accélérer les prochaines vérifications
+            _moveCache[hashingBoard] = new MoveData(whiteMoves, blackMoves);
             
-            
-            // USE CACHE WITHOUT HASHER : depth : 4 => 1300ms
-            // bool isCheck = false;
-            //
-            // if (_moveCache.TryGetValue(board, out MoveData moveData))
-            // {
-            //     Debug.Log("Use Hash Cache");
-            //     return BoardsHandler.Instance.PieceIsWhite(board[piecePosition.x, piecePosition.y]) ? moveData.BlackMoves.Contains(piecePosition) : moveData.WhiteMoves.Contains(piecePosition);
-            // }
-            //
-            // List<Vector2Int> whiteMoves = new List<Vector2Int>();
-            // List<Vector2Int> blackMoves = new List<Vector2Int>();
-            //
-            // // Collecte des mouvements des pièces
-            // for (int i = 0; i < board.GetLength(0); i++)
-            // {
-            //     for (int j = 0; j < board.GetLength(1); j++)
-            //     {
-            //         if (board[i, j] == 0) continue;
-            //
-            //         List<Vector2Int> moves = BoardsHandler.Instance.PiecesDictionary[board[i, j]].AvailableMovements(board, new Vector2Int(i, j), false);
-            //
-            //         if (BoardsHandler.Instance.PieceIsWhite(board[i, j]))
-            //         {
-            //             whiteMoves.AddRange(moves);
-            //         }
-            //         else
-            //         {
-            //             blackMoves.AddRange(moves);
-            //         }
-            //
-            //         // Vérification de la mise en échec sans interrompre l'accumulation des mouvements
-            //         if (BoardsHandler.Instance.PieceIsWhite(board[i, j]) != BoardsHandler.Instance.PieceIsWhite(board[piecePosition.x, piecePosition.y]) && moves.Contains(piecePosition))
-            //         {
-            //             isCheck = true;
-            //         }
-            //     }
-            // }
-            //
-            // // Stocker dans le cache pour accélérer les prochaines vérifications
-            // _moveCache[board] = new MoveData(whiteMoves, blackMoves);
-            //
-            // return isCheck;
-            
-            
-            // USE CACHE WITH HASHER : depth : 4 => 2700ms
-            // bool isCheck = false;
-            // string boardHasherVersion = TranspositionTableHandler.BoardsHasher(board);
-            //
-            // if (_moveCache.TryGetValue(boardHasherVersion, out MoveData moveData))
-            // {
-            //     Debug.Log("Use Hash Cache");
-            //     return BoardsHandler.Instance.PieceIsWhite(board[piecePosition.x, piecePosition.y]) ? moveData.BlackMoves.Contains(piecePosition) : moveData.WhiteMoves.Contains(piecePosition);
-            // }
-            //
-            // List<Vector2Int> whiteMoves = new List<Vector2Int>();
-            // List<Vector2Int> blackMoves = new List<Vector2Int>();
-            //
-            // // Collecte des mouvements des pièces
-            // for (int i = 0; i < board.GetLength(0); i++)
-            // {
-            //     for (int j = 0; j < board.GetLength(1); j++)
-            //     {
-            //         if (board[i, j] == 0) continue;
-            //
-            //         List<Vector2Int> moves = BoardsHandler.Instance.PiecesDictionary[board[i, j]].AvailableMovements(board, new Vector2Int(i, j), false);
-            //
-            //         if (BoardsHandler.Instance.PieceIsWhite(board[i, j]))
-            //         {
-            //             whiteMoves.AddRange(moves);
-            //         }
-            //         else
-            //         {
-            //             blackMoves.AddRange(moves);
-            //         }
-            //
-            //         // Vérification de la mise en échec sans interrompre l'accumulation des mouvements
-            //         if (BoardsHandler.Instance.PieceIsWhite(board[i, j]) != BoardsHandler.Instance.PieceIsWhite(board[piecePosition.x, piecePosition.y]) && moves.Contains(piecePosition))
-            //         {
-            //             isCheck = true;
-            //         }
-            //     }
-            // }
-            //
-            // // Stocker dans le cache pour accélérer les prochaines vérifications
-            // _moveCache[boardHasherVersion] = new MoveData(whiteMoves, blackMoves);
-            //
-            // return isCheck;
+            return isCheck;
         }
 
         public static bool IsCheckMate(int[,] board, int pieceIndex, Vector2Int position)
         {
+            var boardHandler = BoardsHandler.Instance;
             List<Vector2Int> movementsInCheck = new List<Vector2Int>();
 
             if (IsCheck(board, position))
             {
-                List<Vector2Int> currentPieceAvailableMovements = BoardsHandler.Instance.PiecesDictionary[pieceIndex].AvailableMovements(board, position, false);
+                var currentPieceAvailableMovements = boardHandler.PiecesDictionary[pieceIndex].AvailableMovements(board, position, false);
                 foreach (Vector2Int currentPieceMovement in currentPieceAvailableMovements)
                 {
                     int[,] testBoard = (int[,]) board.Clone();
@@ -236,6 +199,12 @@ namespace Utils
                 GameManager.Instance.EndGamePanel.SetActive(true);
                 GameManager.Instance.GameOverText.text = " CHECKMATE : Victory Black Player ! ";
             }
+        }
+        
+        // Utils
+        public static bool PieceIsWhite(int pieceIndex)
+        {
+            return pieceIndex <= 6 && pieceIndex != 0;
         }
     }
 }

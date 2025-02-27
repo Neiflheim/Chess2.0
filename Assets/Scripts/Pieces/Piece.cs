@@ -13,7 +13,7 @@ namespace Pieces
 
         public abstract List<Vector2Int> AvailableMovements(int[,] board, Vector2Int position, bool verifyKingIsCheck);
 
-        public bool CanPlayThisMovement(int[,] pieces, Piece piece, Vector2Int oldPosition, Vector2Int newPosition)
+        public bool CanPlayThisMovement(int[,] pieces, Vector2Int oldPosition, Vector2Int newPosition)
         {
             bool canPlayThisMovement = true;
             
