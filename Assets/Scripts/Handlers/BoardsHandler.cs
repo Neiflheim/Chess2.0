@@ -62,7 +62,6 @@ namespace Handlers
             PiecesDictionary.Add(12, _blackKing);
 
             BoardData = BoardTemplates.GetBoard(_board);
-            
             BoardLength = BoardData.GetLength(0);
             
             DisplayMatrix(true);

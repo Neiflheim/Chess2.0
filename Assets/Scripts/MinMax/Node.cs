@@ -41,6 +41,8 @@ namespace MinMax
             bool isWhiteKingCheckMate = false;
             bool isBlackKingCheckMate = false;
             
+            var boardHandler = BoardsHandler.Instance;
+            
             for (int i = 0; i < _boardLenght; i++)
             {
                 for (int j = 0; j < _boardLenght; j++)
@@ -53,7 +55,7 @@ namespace MinMax
                             int [,] matrix = ValueDependOnPositionData.GetMatrix(Board[i, j]);
                             valueDependingOnPosition = matrix[i,j];
                             
-                            whiteHeuristicValue += BoardsHandler.Instance.PiecesDictionary[Board[i, j]].BaseValue + valueDependingOnPosition;
+                            whiteHeuristicValue += boardHandler.PiecesDictionary[Board[i, j]].BaseValue + valueDependingOnPosition;
 
                             if (Board[i,j] == 6 && Rules.IsCheckMate(Board, Board[i,j], new Vector2Int(i,j)))
                             {
@@ -65,7 +67,7 @@ namespace MinMax
                             int [,] matrix = ValueDependOnPositionData.GetMatrix(Board[i, j]);
                             valueDependingOnPosition = matrix[i,j];
                             
-                            blackHeuristicValue += BoardsHandler.Instance.PiecesDictionary[Board[i, j]].BaseValue + valueDependingOnPosition;
+                            blackHeuristicValue += boardHandler.PiecesDictionary[Board[i, j]].BaseValue + valueDependingOnPosition;
                             
                             if (Board[i,j] == 12 && Rules.IsCheckMate(Board, Board[i,j], new Vector2Int(i,j)))
                             {
