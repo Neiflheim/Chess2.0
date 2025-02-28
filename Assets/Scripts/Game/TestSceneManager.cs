@@ -100,6 +100,9 @@ namespace Game
                 
                 if (bestChildNode != null)
                 {
+                    // Update LastBoardData
+                    BoardsHandler.Instance.LastBoardData = (int[,]) BoardsHandler.Instance.BoardData.Clone();
+                    
                     BoardsHandler.Instance.BoardData = bestChildNode.Board;
                 }
                 
@@ -146,6 +149,9 @@ namespace Game
                 
                 if (bestChildNode != null)
                 {
+                    // Update LastBoardData
+                    BoardsHandler.Instance.LastBoardData = (int[,]) BoardsHandler.Instance.BoardData.Clone();
+                    
                     BoardsHandler.Instance.BoardData = bestChildNode.Board;
                 }
                 
@@ -198,6 +204,9 @@ namespace Game
                 
             if (bestChildNode != null)
             {
+                // Update LastBoardData
+                BoardsHandler.Instance.LastBoardData = (int[,]) BoardsHandler.Instance.BoardData.Clone();
+                
                 BoardsHandler.Instance.BoardData = bestChildNode.Board;
             }
                 

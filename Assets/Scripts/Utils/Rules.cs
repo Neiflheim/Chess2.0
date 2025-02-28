@@ -7,6 +7,12 @@ namespace Utils
 {
     public static class Rules
     {
+        // Castling
+        public static bool WhiteKingAndWhiteNearestRookHaveNotMoved = true;
+        public static bool WhiteKingAndWhiteFarthestRookHaveNotMoved = true;
+        public static bool BlackKingAndBlackNearestRookHaveNotMoved = true;
+        public static bool BlackKingAndBlackFarthestRookHaveNotMoved = true;
+        
         // ThreefoldRepetition
         private static List<string> _oldPieces = new List<string>();
         
@@ -88,6 +94,68 @@ namespace Utils
             }
             
             return false;
+        }
+
+        public static void CheckNotMoved(int[,] board)
+        {
+            // Black
+            if (board[0, 4] != 12 && BlackKingAndBlackNearestRookHaveNotMoved || board[0, 4] != 12 && BlackKingAndBlackFarthestRookHaveNotMoved)
+            {
+                BlackKingAndBlackNearestRookHaveNotMoved = false;
+                BlackKingAndBlackFarthestRookHaveNotMoved = false;
+            }
+            else if (board[0, 7] != 10 && BlackKingAndBlackNearestRookHaveNotMoved)
+            {
+                BlackKingAndBlackNearestRookHaveNotMoved = false;
+            }
+            else if (board[0, 0] != 10 && BlackKingAndBlackFarthestRookHaveNotMoved)
+            {
+                BlackKingAndBlackFarthestRookHaveNotMoved = false;
+            }
+                
+            // White
+            if (board[7, 4] != 6 && WhiteKingAndWhiteNearestRookHaveNotMoved || board[7, 4] != 6 && WhiteKingAndWhiteFarthestRookHaveNotMoved)
+            {
+                WhiteKingAndWhiteNearestRookHaveNotMoved = false;
+                WhiteKingAndWhiteFarthestRookHaveNotMoved = false;
+            }
+            else if (board[7, 7] != 4 && WhiteKingAndWhiteNearestRookHaveNotMoved)
+            {
+                WhiteKingAndWhiteNearestRookHaveNotMoved = false;
+            }
+            else if (board[7, 0] != 4 && WhiteKingAndWhiteFarthestRookHaveNotMoved)
+            {
+                WhiteKingAndWhiteFarthestRookHaveNotMoved = false;
+            }
+        }
+
+        public static void Castling(int[,] board, int[,] lastBoard)
+        {
+            // Black
+            if (lastBoard[0, 4] == 12 && board[0, 6] == 12)
+            {
+                board[0, 5] = 10;
+                board[0, 7] = 0;
+            }
+            
+            if (lastBoard[0, 4] == 12 && board[0, 2] == 12)
+            {
+                board[0, 3] = 10;
+                board[0, 0] = 0;
+            }
+            
+            // White
+            if (lastBoard[7, 4] == 6 && board[7, 6] == 6)
+            {
+                board[7, 5] = 4;
+                board[7, 7] = 0;
+            }
+            
+            if (lastBoard[7, 4] == 6 && board[7, 2] == 6)
+            {
+                board[7, 3] = 4;
+                board[7, 0] = 0;
+            }
         }
 
         public static void ThreefoldRepetition(int[,] board)

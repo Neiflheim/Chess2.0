@@ -66,6 +66,20 @@ namespace Utils
                     };
                     break;
                 
+                case Boards.TestCastling:
+                    _board = new int[,]
+                    {
+                        { 10, 0, 0, 0,12, 0, 0,10 },
+                        {  7, 7, 7, 7, 7, 7, 7, 7 },
+                        {  0, 0, 0, 0, 0, 0, 0, 0 },
+                        {  0, 0, 0, 0, 0, 0, 0, 0 },
+                        {  0, 0, 0, 0, 0, 0, 0, 0 },
+                        {  0, 0, 0, 0, 0, 0, 0, 0 },
+                        {  1, 1, 1, 1, 1, 1, 1, 1 },
+                        {  4, 0, 0, 0, 6, 0, 0, 4 }
+                    };
+                    break;
+                
                 case Boards.WeirdChoice:
                     _board = new int[,]
                     {

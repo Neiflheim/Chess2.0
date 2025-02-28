@@ -56,6 +56,9 @@ namespace Handlers
             
             if (_isMovement)
             {
+                // Update LastBoardData
+                BoardsHandler.Instance.LastBoardData = (int[,]) BoardsHandler.Instance.BoardData.Clone();
+                
                 // Movement
                 Vector2Int lastPosition = BoardsHandler.Instance.LastClickGameObject.Position;
                 BoardsHandler.Instance.BoardData[Position.x, Position.y] = BoardsHandler.Instance.BoardData[lastPosition.x, lastPosition.y];

@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using Pieces;
 using UnityEngine;
@@ -30,6 +31,7 @@ namespace Handlers
         [SerializeField] private Transform _gridParent;
 
         [Header("Matrix")]
+        public int[,] LastBoardData;
         public int[,] BoardData;
         public GameObject[,] PiecesDisplay;
         
@@ -63,6 +65,7 @@ namespace Handlers
 
             BoardData = BoardTemplates.GetBoard(_board);
             BoardLength = BoardData.GetLength(0);
+            LastBoardData = (int[,]) BoardData.Clone();
             
             DisplayMatrix(true);
         }
@@ -72,6 +75,7 @@ namespace Handlers
             PiecesDisplay = new GameObject[BoardLength, BoardLength];
             
             Rules.PawnPromotion(BoardData);
+            Rules.Castling(BoardData, LastBoardData);
             
             for (int i = 0; i < BoardLength; i++)
             {
@@ -107,6 +111,7 @@ namespace Handlers
             if (changeTurn)
             {
                 Rules.ThreefoldRepetition(BoardData);
+                Rules.CheckNotMoved(BoardData);
             
                 if (IsBlackKingCheckMate)
                 {
@@ -134,6 +139,7 @@ namespace Handlers
         BasicChoice,
         CheckMateInTwoMoves1,
         CheckMateInTwoMoves2,
+        TestCastling,
         WeirdChoice
     }
 }
