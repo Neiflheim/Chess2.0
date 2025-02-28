@@ -16,7 +16,6 @@ namespace Game
         public GameObject EndGamePanel;
         public TextMeshProUGUI GameOverText;
         
-        
         [Header("Selected Piece")]
         [SerializeField] private float _delayMinMax;
         [SerializeField] private int _depthFirstAi;

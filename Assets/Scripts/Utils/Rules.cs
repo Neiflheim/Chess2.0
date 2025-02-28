@@ -7,21 +7,6 @@ namespace Utils
 {
     public static class Rules
     {
-        // IsCheck
-        public struct MoveData
-        {
-            public List<Vector2Int> WhiteMoves;
-            public List<Vector2Int> BlackMoves;
-
-            public MoveData(List<Vector2Int> whiteMoves, List<Vector2Int> blackMoves)
-            {
-                WhiteMoves = whiteMoves;
-                BlackMoves = blackMoves;
-            }
-        }
-        private static Dictionary<ulong, MoveData> _moveCache = new Dictionary<ulong, MoveData>();
-        
-        
         // ThreefoldRepetition
         private static List<string> _oldPieces = new List<string>();
         
@@ -74,55 +59,6 @@ namespace Utils
             }
             
             return false;
-            
-            
-            // USE CACHE AND ZOBRISTHASHER
-            // ulong hashingBoard = ZobristHashing.ComputeBoardHash(board);
-            //
-            // if (_moveCache.TryGetValue(hashingBoard, out MoveData moveData))
-            // {
-            //     return PieceIsWhite(board[piecePosition.x, piecePosition.y]) ? moveData.BlackMoves.Contains(piecePosition) : moveData.WhiteMoves.Contains(piecePosition);
-            // }
-            //
-            // bool isCheck = false;
-            //
-            // var whiteMoves = new List<Vector2Int>();
-            // var blackMoves = new List<Vector2Int>();
-            //
-            // bool pieceIsWhite = PieceIsWhite(board[piecePosition.x, piecePosition.y]);
-            //
-            // // Collecte des mouvements des pièces
-            // for (int i = 0; i < boardLength; i++)
-            // {
-            //     for (int j = 0; j < boardLength; j++)
-            //     {
-            //         int pieceIndex = board[i, j];
-            //         if (pieceIndex == 0) continue;
-            //
-            //         bool isWhite = PieceIsWhite(pieceIndex);
-            //         List<Vector2Int> moves = boardHandler.PiecesDictionary[pieceIndex].AvailableMovements(board, new Vector2Int(i, j), false);
-            //
-            //         if (isWhite)
-            //         {
-            //             whiteMoves.AddRange(moves);
-            //         }
-            //         else
-            //         {
-            //             blackMoves.AddRange(moves);
-            //         }
-            //
-            //         // Vérification de la mise en échec sans interrompre l'accumulation des mouvements
-            //         if (isWhite != pieceIsWhite && moves.Contains(piecePosition))
-            //         {
-            //             isCheck = true;
-            //         }
-            //     }
-            // }
-            //
-            // // Stocker dans le cache pour accélérer les prochaines vérifications
-            // _moveCache[hashingBoard] = new MoveData(whiteMoves, blackMoves);
-            //
-            // return isCheck;
         }
 
         public static bool IsCheckMate(int[,] board, int pieceIndex, Vector2Int position)

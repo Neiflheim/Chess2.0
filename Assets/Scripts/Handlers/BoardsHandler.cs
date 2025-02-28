@@ -65,7 +65,6 @@ namespace Handlers
             BoardLength = BoardData.GetLength(0);
             
             DisplayMatrix(true);
-            ZobristHashing.InitializeZobristTable();
         }
 
         public void DisplayMatrix(bool changeTurn)
