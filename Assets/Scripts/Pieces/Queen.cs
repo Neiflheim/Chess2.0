@@ -1,5 +1,7 @@
 using System.Collections.Generic;
+using Handlers;
 using UnityEngine;
+using Utils;
 
 namespace Pieces
 {
@@ -11,7 +13,7 @@ namespace Pieces
             new Vector2Int(1, 1), new Vector2Int(1, -1), new Vector2Int(-1, 1), new Vector2Int(-1, -1)
         };
         
-        public override List<Vector2Int> AvailableMovements(Piece[,] pieces, Vector2Int position, bool firstCall)
+        public override List<Vector2Int> AvailableMovements(int[,] board, Vector2Int position, bool verifyKingIsCheck)
         {
             List<Vector2Int> movements = new List<Vector2Int>();
             
@@ -20,13 +22,13 @@ namespace Pieces
             
             for (i = position.x + 1; i <= 7; i++) 
             { 
-                if (!pieces[i, position.y])
+                if (board[i, position.y] == 0)
                 { 
                     movements.Add(new Vector2Int(i, position.y));
                 }
                 else
                 {
-                    if (pieces[i, position.y].IsWhite != IsWhite)
+                    if (Rules.AreDifferentColors(board[position.x, position.y], board[i, position.y], false))
                     { 
                         movements.Add(new Vector2Int(i, position.y)); 
                     }
@@ -36,13 +38,13 @@ namespace Pieces
             
             for (i = position.x - 1; i >= 0; i--) 
             { 
-                if (!pieces[i, position.y]) 
+                if (board[i, position.y] == 0) 
                 { 
                     movements.Add(new Vector2Int(i, position.y));
                 }
                 else
                 {
-                    if (pieces[i, position.y].IsWhite != IsWhite) 
+                    if (Rules.AreDifferentColors(board[position.x, position.y], board[i, position.y], false)) 
                     { 
                         movements.Add(new Vector2Int(i, position.y)); 
                     }
@@ -52,13 +54,13 @@ namespace Pieces
             
             for (i = position.y + 1; i <= 7; i++) 
             { 
-                if (!pieces[position.x, i])
+                if (board[position.x, i] == 0)
                 { 
                     movements.Add(new Vector2Int(position.x, i));
                 }
                 else
                 {
-                    if (pieces[position.x, i].IsWhite != IsWhite) 
+                    if (Rules.AreDifferentColors(board[position.x, position.y], board[position.x, i], false)) 
                     { 
                         movements.Add(new Vector2Int(position.x, i));
                     }
@@ -68,13 +70,13 @@ namespace Pieces
             
             for (i = position.y - 1; i >= 0; i--) 
             { 
-                if (!pieces[position.x, i]) 
+                if (board[position.x, i] == 0) 
                 { 
                     movements.Add(new Vector2Int(position.x, i));
                 }
                 else
                 {
-                    if (pieces[position.x, i].IsWhite != IsWhite) 
+                    if (Rules.AreDifferentColors(board[position.x, position.y], board[position.x, i], false)) 
                     { 
                         movements.Add(new Vector2Int(position.x, i));
                     }
@@ -93,24 +95,24 @@ namespace Pieces
 
                     if ((uint)testDirection.x > 7 || (uint)testDirection.y > 7) break;
 
-                    if (!pieces[testDirection.x, testDirection.y])
+                    if (board[testDirection.x, testDirection.y] == 0)
                     { 
                         movements.Add(testDirection);
                     }
                     else
                     {
-                        if (pieces[testDirection.x, testDirection.y].IsWhite != IsWhite)
+                        if (Rules.AreDifferentColors(board[position.x, position.y], board[testDirection.x, testDirection.y], false))
                         { 
-                            movements.Add(testDirection); 
+                            movements.Add(testDirection);
                         }
                         break;
                     }
                 }
             }
             
-            if (firstCall)
+            if (verifyKingIsCheck)
             {
-                movements.RemoveAll(movement => !CanPlayThisMovement(pieces, this, position, movement));
+                movements.RemoveAll(movement => !CanPlayThisMovement(board, position, movement));
             }
             
             return movements;

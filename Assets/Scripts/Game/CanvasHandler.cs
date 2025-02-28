@@ -2,18 +2,21 @@ using UnityEngine;
 
 namespace Game
 {
-    public class CanvasManagerScene0 : MonoBehaviour
+    public class CanvasHandler : MonoBehaviour
     {
-        // Changer de Scene
         public void ChangeSceneByIndex(int sceneIndex)
         {
             UnityEngine.SceneManagement.SceneManager.LoadScene(sceneIndex);
         }
 
-        // Quit Game
         public void QuitGame()
         {
             Application.Quit();
+        }
+
+        public void TimeScale(float timeScale)
+        {
+            Time.timeScale = timeScale;
         }
     }
 }

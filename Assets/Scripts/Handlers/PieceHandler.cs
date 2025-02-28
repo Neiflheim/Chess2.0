@@ -1,11 +1,9 @@
 using System.Collections.Generic;
 using Game;
-using MinMax;
 using Pieces;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
-using Utils;
 
 namespace Handlers
 {
@@ -35,23 +33,23 @@ namespace Handlers
 
         public void OnPointerClick(PointerEventData eventData)
         {
-            if (Piece != null && GameManager.Instance.IsWhiteTurn == Piece.IsWhite)
+            if (Piece != null && BoardsHandler.Instance.IsWhiteTurn == Piece.IsWhite)
             {
                 if (_isMovement == false)
                 {
-                    GameManager.Instance.LastClickGameObject = gameObject.GetComponent<PieceHandler>();
+                    BoardsHandler.Instance.LastClickGameObject = gameObject.GetComponent<PieceHandler>();
                 
                     BoardsHandler.Instance.ResetMatrix();
                     BoardsHandler.Instance.DisplayMatrix(false);
             
-                    List<Vector2Int> availableMovements = Piece.AvailableMovements(BoardsHandler.Instance.Pieces, Position, true);
-            
+                    List<Vector2Int> availableMovements = Piece.AvailableMovements(BoardsHandler.Instance.BoardData, Position, true);
+                    
                     foreach (Vector2Int availableMovement in availableMovements)
                     {
                         BoardsHandler.Instance.PiecesDisplay[availableMovement.x, availableMovement.y].GetComponent<PieceHandler>()._isMovement = true;
                         BoardsHandler.Instance.PiecesDisplay[availableMovement.x, availableMovement.y].GetComponent<Image>().color = new Color(1, 1, 0, 0.5f);
                     }
-                
+                    
                     availableMovements.Clear();
                 }
             }
@@ -59,14 +57,19 @@ namespace Handlers
             if (_isMovement)
             {
                 // Movement
-                Vector2Int lastPosition = GameManager.Instance.LastClickGameObject.Position;
-                BoardsHandler.Instance.Pieces[lastPosition.x, lastPosition.y] = null;
-                BoardsHandler.Instance.Pieces[Position.x, Position.y] = GameManager.Instance.LastClickGameObject.Piece;
+                Vector2Int lastPosition = BoardsHandler.Instance.LastClickGameObject.Position;
+                BoardsHandler.Instance.BoardData[Position.x, Position.y] = BoardsHandler.Instance.BoardData[lastPosition.x, lastPosition.y];
+                BoardsHandler.Instance.BoardData[lastPosition.x, lastPosition.y] = 0;
                 
                 // Update matrix and change player
                 BoardsHandler.Instance.ResetMatrix();
                 BoardsHandler.Instance.DisplayMatrix(true);
-                GameManager.Instance.IsWhiteTurn = !GameManager.Instance.IsWhiteTurn;
+                BoardsHandler.Instance.IsWhiteTurn = !BoardsHandler.Instance.IsWhiteTurn;
+
+                if (GameSettings.GameMode == 2)
+                {
+                    GameManager.Instance.StartCoroutineAiTurn();
+                }
             }
         }
     }

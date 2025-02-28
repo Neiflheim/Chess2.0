@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 using Game;
-using Pieces;
+using Handlers;
 using UnityEngine;
 
 namespace Utils
@@ -25,46 +25,46 @@ namespace Utils
         // ThreefoldRepetition
         private static List<string> _oldPieces = new List<string>();
         
-        public static void PawnPromotion(Piece[,] pieces, Piece whiteQueen, Piece blackQueen)
+        // Rules
+        public static void PawnPromotion(int[,] board)
         {
-            for (int i = 0; i < pieces.GetLength(0); i++)
+            int boardLength = board.GetLength(0);
+            for (int i = 0; i < boardLength; i++)
             {
-                if (pieces[0, i])
+                if (board[0, i] == 1)
                 {
-                    if (pieces[0, i].name == "WhitePawn")
-                    {
-                        pieces[0, i] = whiteQueen;
-                    }
+                    board[0, i] = 5;
                 }
 
-                if (pieces[7, i])
+                if (board[7, i] == 7)
                 {
-                    if (pieces[7, i].name == "BlackPawn")
-                    {
-                        pieces[7, i] = blackQueen;
-                    }
+                    board[7, i] = 11;
                 }
                 
             }
         }
         
-        public static bool IsCheck(Piece[,] pieces, Piece currentPiece, Vector2Int position)
+        public static bool IsCheck(int[,] board, Vector2Int piecePosition)
         {
-            List<Vector2Int> availableMovements = new List<Vector2Int>();
+            int boardLength = board.GetLength(0);
+            var boardHandler = BoardsHandler.Instance;
             
-            for (int i = 0; i < pieces.GetLength(0); i++)
+            // DON'T USE CACHE
+            List<Vector2Int> availableMovements;
+            
+            for (int i = 0; i < boardLength; i++)
             {
-                for (int j = 0; j < pieces.GetLength(1); j++)
+                for (int j = 0; j < boardLength; j++)
                 {
-                    if (pieces[i,j] && pieces[i,j].IsWhite != currentPiece.IsWhite)
+                    if (AreDifferentColors(board[piecePosition.x, piecePosition.y], board[i, j], false))
                     {
-                        availableMovements = pieces[i,j].AvailableMovements(pieces, new Vector2Int(i, j), false);
+                        availableMovements = boardHandler.PiecesDictionary[board[i,j]].AvailableMovements(board, new Vector2Int(i, j), false);
                         
                         if (availableMovements.Count == 0) continue;
                     
                         foreach (Vector2Int movement in availableMovements)
                         {
-                            if (movement == position)
+                            if (movement == piecePosition)
                             {
                                 return true;
                             }
@@ -75,31 +75,34 @@ namespace Utils
             
             return false;
             
-            // USING ZOBRISTHASHING => SLOWER
             
-            // bool isCheck = false;
-            // ulong zobristHash = ZobristHashing.ComputeBoardHash(pieces);
+            // USE CACHE AND ZOBRISTHASHER
+            // ulong hashingBoard = ZobristHashing.ComputeBoardHash(board);
             //
-            // // Vérification du cache
-            // if (_moveCache.TryGetValue(zobristHash, out MoveData moveData))
+            // if (_moveCache.TryGetValue(hashingBoard, out MoveData moveData))
             // {
-            //     Debug.Log("Use Zobrist Hash Cache");
-            //     return currentPiece.IsWhite ? moveData.BlackMoves.Contains(position) : moveData.WhiteMoves.Contains(position);
+            //     return PieceIsWhite(board[piecePosition.x, piecePosition.y]) ? moveData.BlackMoves.Contains(piecePosition) : moveData.WhiteMoves.Contains(piecePosition);
             // }
             //
-            // List<Vector2Int> whiteMoves = new List<Vector2Int>();
-            // List<Vector2Int> blackMoves = new List<Vector2Int>();
+            // bool isCheck = false;
+            //
+            // var whiteMoves = new List<Vector2Int>();
+            // var blackMoves = new List<Vector2Int>();
+            //
+            // bool pieceIsWhite = PieceIsWhite(board[piecePosition.x, piecePosition.y]);
             //
             // // Collecte des mouvements des pièces
-            // for (int i = 0; i < pieces.GetLength(0); i++)
+            // for (int i = 0; i < boardLength; i++)
             // {
-            //     for (int j = 0; j < pieces.GetLength(1); j++)
+            //     for (int j = 0; j < boardLength; j++)
             //     {
-            //         if (pieces[i, j] == null) continue;
+            //         int pieceIndex = board[i, j];
+            //         if (pieceIndex == 0) continue;
             //
-            //         List<Vector2Int> moves = pieces[i, j].AvailableMovements(pieces, new Vector2Int(i, j), false);
+            //         bool isWhite = PieceIsWhite(pieceIndex);
+            //         List<Vector2Int> moves = boardHandler.PiecesDictionary[pieceIndex].AvailableMovements(board, new Vector2Int(i, j), false);
             //
-            //         if (pieces[i, j].IsWhite)
+            //         if (isWhite)
             //         {
             //             whiteMoves.AddRange(moves);
             //         }
@@ -109,7 +112,7 @@ namespace Utils
             //         }
             //
             //         // Vérification de la mise en échec sans interrompre l'accumulation des mouvements
-            //         if (pieces[i, j].IsWhite != currentPiece.IsWhite && moves.Contains(position))
+            //         if (isWhite != pieceIsWhite && moves.Contains(piecePosition))
             //         {
             //             isCheck = true;
             //         }
@@ -117,30 +120,31 @@ namespace Utils
             // }
             //
             // // Stocker dans le cache pour accélérer les prochaines vérifications
-            // _moveCache[zobristHash] = new MoveData(whiteMoves, blackMoves);
+            // _moveCache[hashingBoard] = new MoveData(whiteMoves, blackMoves);
             //
             // return isCheck;
         }
 
-        public static bool IsCheckMate(Piece[,] pieces, Piece currentPiece, Vector2Int position)
+        public static bool IsCheckMate(int[,] board, int pieceIndex, Vector2Int position)
         {
+            var boardHandler = BoardsHandler.Instance;
             List<Vector2Int> movementsInCheck = new List<Vector2Int>();
 
-            if (IsCheck(pieces, currentPiece, position))
+            if (IsCheck(board, position))
             {
-                List<Vector2Int> currentPieceAvailableMovements = currentPiece.AvailableMovements(pieces, position, false);
+                var currentPieceAvailableMovements = boardHandler.PiecesDictionary[pieceIndex].AvailableMovements(board, position, false);
                 foreach (Vector2Int currentPieceMovement in currentPieceAvailableMovements)
                 {
-                    Piece[,] testPieces = (Piece[,]) pieces.Clone();
-                    testPieces[currentPieceMovement.x, currentPieceMovement.y] = currentPiece;
-                    testPieces[position.x, position.y] = null;
-
-                    if (IsCheck(testPieces, currentPiece, currentPieceMovement))
+                    int[,] testBoard = (int[,]) board.Clone();
+                    testBoard[currentPieceMovement.x, currentPieceMovement.y] = pieceIndex;
+                    testBoard[position.x, position.y] = 0;
+            
+                    if (IsCheck(testBoard, currentPieceMovement))
                     {
                         movementsInCheck.Add(currentPieceMovement);
                     }
                 }
-
+            
                 if (currentPieceAvailableMovements.Count == movementsInCheck.Count)
                 {
                     return true;
@@ -150,17 +154,18 @@ namespace Utils
             return false;
         }
 
-        public static void ThreefoldRepetition(Piece[,] pieces)
+        public static void ThreefoldRepetition(int[,] board)
         {
             int count = 0;
 
-            string piecesHasher = TranspositionTableHandler.PiecesComputeSHA256(pieces);
+            string piecesHasher = TranspositionTableHandler.PiecesComputeSHA256(board);
             
             foreach (string piece in _oldPieces)
             {
                 if (piece == piecesHasher)
                 {
                     count++;
+                    Debug.Log(count);
                 }
             }
             
@@ -194,6 +199,25 @@ namespace Utils
                 GameManager.Instance.EndGamePanel.SetActive(true);
                 GameManager.Instance.GameOverText.text = " CHECKMATE : Victory Black Player ! ";
             }
+        }
+        
+        // Utils
+        public static bool PieceIsWhite(int pieceIndex)
+        {
+            return pieceIndex <= 6 && pieceIndex != 0;
+        }
+        
+        public static bool AreDifferentColors(int pieceOne, int pieceTwo, bool emptyVerification)
+        {
+            if (emptyVerification)
+            {
+                if (pieceTwo == 0)
+                {
+                    return true;
+                }
+            }
+            
+            return (pieceOne <= 6 && pieceTwo > 6) || (pieceOne > 6 && pieceTwo <= 6 && pieceTwo >= 1);
         }
     }
 }

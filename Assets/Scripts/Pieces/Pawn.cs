@@ -1,5 +1,8 @@
 using System.Collections.Generic;
+using Handlers;
+using Unity.VisualScripting;
 using UnityEngine;
+using Utils;
 
 namespace Pieces
 {
@@ -16,7 +19,7 @@ namespace Pieces
             new Vector2Int(-1, 1), new Vector2Int(-1, -1)
         };
 
-        public override List<Vector2Int> AvailableMovements(Piece[,] pieces, Vector2Int position, bool firstCall)
+        public override List<Vector2Int> AvailableMovements(int[,] board, Vector2Int position, bool verifyKingIsCheck)
         {
             List<Vector2Int> movements = new List<Vector2Int>();
 
@@ -30,17 +33,24 @@ namespace Pieces
                     {
                         if (i < 0 || i > 7) continue;
                         
-                        if (!pieces[i, position.y])
+                        if (board[i, position.y] == 0)
                         {
                             movements.Add(new Vector2Int(i, position.y));
+                        }
+                        else
+                        {
+                            break;
                         }
                     }
                 }
                 else
                 {
-                    if (!pieces[position.x + 1, position.y])
+                    if (board[position.x + 1, position.y] == 0)
                     {
-                        movements.Add(new Vector2Int(position.x + 1, position.y));
+                        if (position.x + 1 >= 0 && position.x + 1 <= 7)
+                        {
+                            movements.Add(new Vector2Int(position.x + 1, position.y));
+                        }
                     }
                 }
 
@@ -50,7 +60,7 @@ namespace Pieces
 
                     if ((uint)testDirection.x > 7 || (uint)testDirection.y > 7) continue;
 
-                    if (pieces[testDirection.x, testDirection.y] && pieces[testDirection.x, testDirection.y].IsWhite != IsWhite)
+                    if (Rules.AreDifferentColors(board[position.x, position.y], board[testDirection.x, testDirection.y], false))
                     {
                         movements.Add(new Vector2Int(testDirection.x, testDirection.y));
                     }
@@ -64,17 +74,24 @@ namespace Pieces
                     {
                         if (i < 0 || i > 7) continue;
                         
-                        if (!pieces[i, position.y])
+                        if (board[i, position.y] == 0)
                         {
                             movements.Add(new Vector2Int(i, position.y));
+                        }
+                        else
+                        {
+                            break;
                         }
                     }
                 }
                 else
                 {
-                    if (!pieces[position.x - 1, position.y])
+                    if (board[position.x - 1, position.y] == 0)
                     {
-                        movements.Add(new Vector2Int(position.x - 1, position.y));
+                        if (position.x - 1 >= 0 && position.x - 1 <= 7)
+                        {
+                            movements.Add(new Vector2Int(position.x - 1, position.y));
+                        }
                     }
                 }
 
@@ -84,16 +101,16 @@ namespace Pieces
 
                     if ((uint)testDirection.x > 7 || (uint)testDirection.y > 7) continue;
 
-                    if (pieces[testDirection.x, testDirection.y] && pieces[testDirection.x, testDirection.y].IsWhite != IsWhite)
+                    if (Rules.AreDifferentColors(board[position.x, position.y], board[testDirection.x, testDirection.y], false))
                     {
                         movements.Add(new Vector2Int(testDirection.x, testDirection.y));
                     }
                 }
             }
             
-            if (firstCall)
+            if (verifyKingIsCheck)
             {
-                movements.RemoveAll(movement => !CanPlayThisMovement(pieces, this, position, movement));
+                movements.RemoveAll(movement => !CanPlayThisMovement(board, position, movement));
             }
 
             return movements;

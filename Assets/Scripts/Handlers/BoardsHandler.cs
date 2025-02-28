@@ -1,4 +1,4 @@
-using Game;
+using System.Collections.Generic;
 using Pieces;
 using UnityEngine;
 using Utils;
@@ -7,103 +7,97 @@ namespace Handlers
 {
     public class BoardsHandler : MonoBehaviourSingleton<BoardsHandler>
     {
+        [Header("Board")]
+        [SerializeField] private Boards _board;
+        
         [Header("Pieces Data")]
-        [SerializeField] private Piece blackPawn;
-        [SerializeField] private Piece whitePawn;
-        [SerializeField] private Piece blackRook;
-        [SerializeField] private Piece whiteRook;
-        [SerializeField] private Piece blackKnight;
-        [SerializeField] private Piece whiteKnight;
-        [SerializeField] private Piece blackBishop;
-        [SerializeField] private Piece whiteBishop;
-        [SerializeField] private Piece blackKing;
-        [SerializeField] private Piece whiteKing;
-        public Piece BlackQueen;
-        public Piece WhiteQueen;
+        [SerializeField] private Piece _blackPawn;
+        [SerializeField] private Piece _whitePawn;
+        [SerializeField] private Piece _blackRook;
+        [SerializeField] private Piece _whiteRook;
+        [SerializeField] private Piece _blackKnight;
+        [SerializeField] private Piece _whiteKnight;
+        [SerializeField] private Piece _blackBishop;
+        [SerializeField] private Piece _whiteBishop;
+        [SerializeField] private Piece _blackQueen;
+        [SerializeField] private Piece _whiteQueen;
+        [SerializeField] private Piece _blackKing;
+        [SerializeField] private Piece _whiteKing;
         
         [Header("References")]
-        [SerializeField] private GameObject piecePrefab;
-        [SerializeField] private GameObject transparentPrefab;
-        [SerializeField] private Transform gridParent;
+        [SerializeField] private GameObject _piecePrefab;
+        [SerializeField] private GameObject _transparentPrefab;
+        [SerializeField] private Transform _gridParent;
 
         [Header("Matrix")]
-        public Piece[,] Pieces;
+        public int[,] BoardData;
         public GameObject[,] PiecesDisplay;
+        
+        [Header("Selected Piece")]
+        public PieceHandler LastClickGameObject;
+        
+        [Header("Data")]
+        public bool IsWhiteTurn = true;
+        public bool IsBlackKingCheckMate;
+        public bool IsWhiteKingCheckMate;
 
-        private void Start()
+        public int BoardLength;
+        public Dictionary< int, Piece> PiecesDictionary = new Dictionary< int, Piece>();
+        
+        private void Awake()
         {
             Time.timeScale = 1;
+            
+            PiecesDictionary.Add(1, _whitePawn);
+            PiecesDictionary.Add(2, _whiteKnight);
+            PiecesDictionary.Add(3, _whiteBishop);
+            PiecesDictionary.Add(4, _whiteRook);
+            PiecesDictionary.Add(5, _whiteQueen);
+            PiecesDictionary.Add(6, _whiteKing);
+            PiecesDictionary.Add(7, _blackPawn);
+            PiecesDictionary.Add(8, _blackKnight);
+            PiecesDictionary.Add(9, _blackBishop);
+            PiecesDictionary.Add(10, _blackRook);
+            PiecesDictionary.Add(11, _blackQueen);
+            PiecesDictionary.Add(12, _blackKing);
 
-            Pieces = new Piece[,]
-            {
-                { blackRook, blackKnight, blackBishop, BlackQueen, blackKing, blackBishop, blackKnight, blackRook },
-                { blackPawn, blackPawn, blackPawn, blackPawn, blackPawn, blackPawn, blackPawn, blackPawn },
-                { null, null, null, null, null, null, null, null },
-                { null, null, null, null, null, null, null, null },
-                { null, null, null, null, null, null, null, null },
-                { null, null, null, null, null, null, null, null },
-                { whitePawn, whitePawn, whitePawn, whitePawn, whitePawn, whitePawn, whitePawn, whitePawn },
-                { whiteRook, whiteKnight, whiteBishop, WhiteQueen, whiteKing, whiteBishop, whiteKnight, whiteRook }
-            };
+            BoardData = BoardTemplates.GetBoard(_board);
+            BoardLength = BoardData.GetLength(0);
             
-            // Pieces = new Piece[,]
-            // {
-            //     { null, null, null, null, null, null, null, blackRook },
-            //     { null, null, null, blackKing, blackBishop, blackPawn, null, blackPawn },
-            //     { null, WhiteQueen, null, null, null, whiteRook, null, null },
-            //     { null, null, null, blackPawn, null, null, null, BlackQueen },
-            //     { blackPawn, null, null, whitePawn, null, null, null, whiteBishop },
-            //     { null, whitePawn, null, null, null, null, null, whiteKing },
-            //     { whitePawn, null, null, null, null, null, null, whitePawn },
-            //     { null, null, null, null, null, null, null, null }
-            // };
-            
-            // Pieces = new Piece[,]
-            // {
-            //     { null, null, null, null, null, null, null, null },
-            //     { null, null, null, null, null, null, null, null },
-            //     { null, null, null, null, null, null, null, null },
-            //     { null, null, null, null, null, null, null, null },
-            //     { null, whiteBishop, null, null, null, null, null, null },
-            //     { whiteKnight, whiteKnight, null, null, null, null, null, null },
-            //     { blackPawn, blackKing, null, whiteKing, null, null, null, null },
-            //     { null, null, null, null, null, null, null, null }
-            // };
-            
-            ZobristHashing.InitializeZobristTable();
             DisplayMatrix(true);
+            ZobristHashing.InitializeZobristTable();
         }
 
         public void DisplayMatrix(bool changeTurn)
         {
-            PiecesDisplay = new GameObject[Pieces.GetLength(0), Pieces.GetLength(1)];
+            PiecesDisplay = new GameObject[BoardLength, BoardLength];
             
-            Rules.PawnPromotion(Pieces, WhiteQueen, BlackQueen);
+            Rules.PawnPromotion(BoardData);
             
-            for (int i = 0; i < Pieces.GetLength(0); i++)
+            for (int i = 0; i < BoardLength; i++)
             {
-                for (int j = 0; j < Pieces.GetLength(1); j++)
+                for (int j = 0; j < BoardLength; j++)
                 {
                     GameObject newPiece;
                     
-                    if (Pieces[i, j] != null)
+                    if (BoardData[i, j] != 0)
                     {
                         // Instancier un prefab Image pour chaque élément
-                        newPiece = Instantiate(piecePrefab, gridParent);
-                        newPiece.GetComponent<PieceHandler>().Setup(Pieces[i, j], new Vector2Int(i, j));
+                        newPiece = Instantiate(_piecePrefab, _gridParent);
+                        newPiece.GetComponent<PieceHandler>().Setup(PiecesDictionary[BoardData[i, j]], new Vector2Int(i, j));
                         
-                        if (Pieces[i, j] == blackKing && Rules.IsCheckMate(Pieces, Pieces[i, j], new Vector2Int(i, j)))
+                        if (BoardData[i, j] == 12 && Rules.IsCheckMate(BoardData, BoardData[i, j], new Vector2Int(i, j)))
                         {
-                            GameManager.Instance.IsBlackKingCheckMate = true;
+                            IsBlackKingCheckMate = true;
                         }
-                        if (Pieces[i, j] == whiteKing && Rules.IsCheckMate(Pieces, Pieces[i, j], new Vector2Int(i, j)))
+                        if (BoardData[i, j] == 6 && Rules.IsCheckMate(BoardData, BoardData[i, j], new Vector2Int(i, j)))
                         {
-                            GameManager.Instance.IsWhiteKingCheckMate = true;
+                            IsWhiteKingCheckMate = true;
                         }
                     }
                     else
                     {
-                        newPiece = Instantiate(transparentPrefab, gridParent);
+                        newPiece = Instantiate(_transparentPrefab, _gridParent);
                         newPiece.GetComponent<PieceHandler>().SetupTransparent(new Vector2Int(i, j));
                     }
                     
@@ -113,13 +107,13 @@ namespace Handlers
 
             if (changeTurn)
             {
-                Rules.ThreefoldRepetition(Pieces);
-
-                if (GameManager.Instance.IsBlackKingCheckMate)
+                Rules.ThreefoldRepetition(BoardData);
+            
+                if (IsBlackKingCheckMate)
                 {
                     Rules.IsGameOver(true);
                 }
-                else if (GameManager.Instance.IsWhiteKingCheckMate)
+                else if (IsWhiteKingCheckMate)
                 {
                     Rules.IsGameOver(false);
                 }
@@ -128,10 +122,19 @@ namespace Handlers
 
         public void ResetMatrix()
         {
-            foreach (Transform child in gridParent.transform)
+            foreach (Transform child in _gridParent.transform)
             {
                 Destroy(child.gameObject);
             }
         }
+    }
+    
+    public enum Boards
+    {
+        BaseBoard,
+        BasicChoice,
+        CheckMateInTwoMoves1,
+        CheckMateInTwoMoves2,
+        WeirdChoice
     }
 }
